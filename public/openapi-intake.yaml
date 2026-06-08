@@ -1,0 +1,116 @@
+openapi: 3.1.0
+info:
+  title: Mindloom Intake API
+  version: 1.0.0
+  description: Accepts incoming materials from a GPT for Mindloom analysis.
+servers:
+  - url: https://mindloom.edagency.ru
+    description: Production
+paths:
+  /api/mindloom/intake:
+    post:
+      operationId: submitMindloomIntake
+      summary: Submit material for Mindloom analysis
+      description: Stores original Mindloom intake material. For uploaded transcripts, submit full verbatim text only. Never submit summaries, outlines, extracted topics, structured recaps, or placeholders.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              properties:
+                source:
+                  type: string
+                  example: mindloom_custom_gpt
+                  description: >
+                    Source identifier. Use "mindloom_custom_gpt" for requests submitted from the Custom GPT.
+                input_type:
+                  type: string
+                  description: Type of submitted material. For files, transcripts, and documents, send the extracted plain text in extracted_text.
+                  enum:
+                    - text
+                    - file_extracted_text
+                    - transcript
+                    - document
+                  example: file_extracted_text
+                user_message:
+                  type: string
+                  description: "Full verbatim user text. For .txt transcripts: send complete word-for-word content; preserve speaker labels, timestamps, repetitions. Do not summarize, shorten, or restructure. Do not use placeholders like extracted_text_from_large_file. If text cannot fit, do not call this action."
+                extracted_text:
+                  type: string
+                  description: Full plain text extracted from an uploaded file, transcript, or document. This is the primary field for file_extracted_text, transcript, and document payloads.
+                filename:
+                  type: string
+                  description: Original filename when the source is a file.
+                  example: session-transcript.txt
+                file_type:
+                  type: string
+                  description: MIME type or file type when known.
+                  example: text/plain
+                metadata:
+                  type: object
+                  description: Optional additional metadata from the Custom GPT or file extraction step.
+                  additionalProperties: true
+            example:
+              source: mindloom_custom_gpt
+              input_type: file_extracted_text
+              user_message: Пользователь приложил файл для анализа.
+              filename: session-transcript.txt
+              file_type: text/plain
+              extracted_text: Полный извлечённый текст файла для анализа Mindloom.
+              metadata:
+                extraction_method: custom_gpt
+      responses:
+        '201':
+          description: Intake record saved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  intake_id:
+                    type: string
+                    example: V1StGXR8_Z5jdHi6B-myT
+                  admin_url:
+                    type: string
+                    example: https://mindloom.edagency.ru/admin/intake/V1StGXR8_Z5jdHi6B-myT
+        '400':
+          description: Invalid JSON body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid or missing Bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: MINDLOOM_WEBHOOK_SECRET from server .env.production
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: Unauthorized

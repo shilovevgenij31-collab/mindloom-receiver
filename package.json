@@ -1,0 +1,36 @@
+{
+  "name": "mindloom",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "submit:sample": "node scripts/submit-sample-report.mjs",
+    "submit:intake": "node scripts/submit-sample-intake.mjs",
+    "submit:intake:file": "node scripts/submit-file-intake.mjs",
+    "submit:rich": "node scripts/submit-rich-report.mjs",
+    "submit:fixed": "node scripts/submit-fixed-blocks-report.mjs",
+    "submit:v2": "node scripts/submit-v2-report.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "nanoid": "^5.1.11",
+    "next": "14.2.35",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

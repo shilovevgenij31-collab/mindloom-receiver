@@ -1,0 +1,83 @@
+{
+  "schema_version": "mindloom_report_v2_fixed_blocks",
+  "participant": {
+    "name": "Участник"
+  },
+  "source": {
+    "type": "text",
+    "language": "ru",
+    "source_summary": "Краткое сообщение без достаточного материала для анализа."
+  },
+  "report": {
+    "title": "",
+    "blocks": {
+      "main_insight": {
+        "title": "Главный вывод",
+        "text": "Нет данных."
+      },
+      "executive_summary": {
+        "title": "Краткое резюме",
+        "text": ""
+      },
+      "core_pattern": {
+        "title": "Ключевой паттерн",
+        "text": "Паттерн не определён.",
+        "quotes": [],
+        "markers": [],
+        "recommendations": []
+      },
+      "emotional_map": {
+        "title": "Эмоциональная карта",
+        "text": "",
+        "items": [],
+        "markers": []
+      },
+      "strengths_resources": {
+        "title": "Сильные стороны и ресурсы",
+        "text": "Нет.",
+        "items": [],
+        "recommendations": []
+      },
+      "limitations_risks": {
+        "title": "Ограничения и риски",
+        "text": "Нет данных.",
+        "items": [],
+        "recommendations": []
+      },
+      "defenses_distortions": {
+        "title": "Защиты и когнитивные искажения",
+        "text": "",
+        "items": [],
+        "markers": []
+      },
+      "growth_vector": {
+        "title": "Вектор роста",
+        "text": "Нет.",
+        "steps": [],
+        "markers": []
+      },
+      "practical_recommendations": {
+        "title": "Практические рекомендации",
+        "text": "",
+        "items": []
+      },
+      "reflection_practice": {
+        "title": "Вопросы для рефлексии и практика",
+        "text": "Нет.",
+        "questions": [],
+        "practice": {
+          "title": "",
+          "description": "",
+          "steps": []
+        }
+      }
+    },
+    "global_markers": [],
+    "disclaimer": "Это автоматический аналитический отчёт, не медицинский диагноз и не замена консультации специалиста."
+  },
+  "meta": {
+    "created_by": "mindloom_gpt",
+    "format": "fixed_10_blocks",
+    "language": "ru"
+  }
+}

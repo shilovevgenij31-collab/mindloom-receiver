@@ -1,0 +1,224 @@
+{
+  "meta": {
+    "schema_version": "2.0",
+    "language": "ru",
+    "analysis_type": "deploy_qa"
+  },
+  "participant": {
+    "name": "Deploy QA"
+  },
+  "source": {
+    "type": "test",
+    "material_volume": "minimal",
+    "source_summary": "Минимальный тестовый отчёт для верификации V2 dashboard после деплоя. Если открывается через ReportV2Dashboard — деплой прошёл успешно."
+  },
+  "hero": {
+    "title": "Проверка деплоя V2 Dashboard",
+    "main_insight": "Этот отчёт создан автоматически для верификации того, что ReportV2Dashboard активирован в production.",
+    "one_sentence_summary": "Видите секции Speech Cloud, Heatmap и Node Graph — V2 dashboard работает корректно."
+  },
+  "target": {
+    "growth_blocker": "Нестабильный deployment process",
+    "central_knot": "Отсутствие git-based deploy flow",
+    "core_pain": "Риск деплоя неполного кода",
+    "short_explanation": "Тестовый отчёт создан для QA верификации после каждого деплоя"
+  },
+  "desired_state": {
+    "explicit_request": "Убедиться, что V2 dashboard работает на production",
+    "hidden_request": null,
+    "future_state": "Стабильный повторяемый deploy process"
+  },
+  "mechanism": {
+    "protective_logic": null,
+    "hidden_gain": null,
+    "perceived_threat": null,
+    "cost": null
+  },
+  "speech_layer": {
+    "key_phrases": ["деплой", "верификация", "git pull", "force-recreate"],
+    "central_meaning": "стабильный деплой",
+    "speech_patterns": [
+      {
+        "pattern": "Контроль деплоя",
+        "description": "Проверка того, что каждый деплой воспроизводим и верифицируем",
+        "evidence": ["git pull --ff-only", "docker compose build --pull", "npm run submit:v2"]
+      }
+    ]
+  },
+  "active_nodes": [
+    {
+      "id": "node_deploy",
+      "label": "Deploy Process",
+      "type": "process",
+      "description": "Контролируемый GitHub-based deployment flow",
+      "intensity": 0.85,
+      "confidence": 0.95,
+      "color": "green",
+      "evidence": ["git pull успешен", "docker build прошёл", "health endpoint вернул ok"],
+      "connected_to": ["node_qa"]
+    },
+    {
+      "id": "node_qa",
+      "label": "Post-Deploy QA",
+      "type": "check",
+      "description": "Верификация V2 dashboard через тестовый отчёт",
+      "intensity": 0.7,
+      "confidence": 0.9,
+      "color": "blue",
+      "evidence": ["report_url открывается", "ReportV2Dashboard активирован"],
+      "connected_to": []
+    }
+  ],
+  "heatmap": {
+    "scale": [
+      {"label": "Низкий риск", "color": "green", "min": 0.0, "max": 0.33},
+      {"label": "Средний риск", "color": "yellow", "min": 0.33, "max": 0.66},
+      {"label": "Высокий риск", "color": "red", "min": 0.66, "max": 1.0}
+    ],
+    "legend": [
+      {"color": "green", "meaning": "В норме"},
+      {"color": "blue", "meaning": "Требует внимания"},
+      {"color": "red", "meaning": "Критично"}
+    ],
+    "zones": [
+      {
+        "id": "zone_process",
+        "label": "Deploy Process",
+        "description": "Состояние deployment процесса",
+        "intensity": 0.15,
+        "color": "green",
+        "related_node_ids": ["node_deploy"]
+      },
+      {
+        "id": "zone_qa",
+        "label": "QA Coverage",
+        "description": "Покрытие post-deploy проверками",
+        "intensity": 0.35,
+        "color": "blue",
+        "related_node_ids": ["node_qa"]
+      }
+    ],
+    "callouts": [
+      {
+        "zone_id": "zone_process",
+        "text": "GitHub-based deploy flow восстановлен"
+      }
+    ]
+  },
+  "node_graph": {
+    "nodes": [
+      {
+        "id": "node_deploy",
+        "label": "Deploy",
+        "type": "root",
+        "intensity": 0.85
+      },
+      {
+        "id": "node_qa",
+        "label": "QA Check",
+        "type": "check",
+        "intensity": 0.7
+      }
+    ],
+    "edges": [
+      {
+        "from": "node_deploy",
+        "to": "node_qa",
+        "label": "triggers",
+        "strength": 0.9,
+        "type": "causal"
+      }
+    ],
+    "legend": [
+      {"color": "green", "meaning": "Успешно"},
+      {"color": "blue", "meaning": "В процессе"}
+    ],
+    "how_to_read": [
+      {
+        "step": "1",
+        "text": "Deploy узел — результат git pull + docker build"
+      },
+      {
+        "step": "2",
+        "text": "QA Check узел — верификация V2 dashboard через этот отчёт"
+      }
+    ]
+  },
+  "hypothesis_table": [
+    {
+      "node_id": "node_deploy",
+      "hypothesis": "Если этот отчёт открывается через V2 dashboard — весь pipeline работает корректно",
+      "confidence": 0.99,
+      "evidence": [
+        "API принял запрос (HTTP 200)",
+        "Отчёт сохранён в DB",
+        "report_url открывается",
+        "ReportV2Dashboard активирован (meta.schema_version === 2.0)"
+      ]
+    }
+  ],
+  "trajectory": {
+    "cycle": ["push to GitHub", "git pull on server", "docker build", "docker up --force-recreate", "health check", "submit:v2", "open report_url"],
+    "blocking_point": "Отсутствие git repo на сервере — deploy через scp",
+    "possible_exit": "git clone + настроенный deploy runbook"
+  },
+  "processing_dashboard": {
+    "active_nodes_count": 2,
+    "markers_detected": 4,
+    "overheat_level": 0.15,
+    "resource_level": 0.9,
+    "main_layer": "deploy_verification",
+    "priority": "high"
+  },
+  "mindloom_layers": [
+    {
+      "layer": "Deploy Infrastructure",
+      "description": "Git-based deployment flow с Docker Compose",
+      "manifestation": "git pull + docker build + up --force-recreate",
+      "intensity": 0.85,
+      "evidence": ["Dockerfile корректен", "docker-compose.production.yml корректен", ".dockerignore корректен"]
+    },
+    {
+      "layer": "QA Verification",
+      "description": "Post-deploy проверка через тестовый отчёт",
+      "manifestation": "npm run submit:v2 → report_url → V2 dashboard",
+      "intensity": 0.7,
+      "evidence": ["Этот отчёт", "health endpoint", "openapi endpoint"]
+    }
+  ],
+  "transformation_markers": [
+    {
+      "marker": "Git repo на сервере",
+      "description": "Переход от scp к git pull как основному методу деплоя",
+      "shift_signal": "git status / git log работают в /opt/mindloom-receiver"
+    },
+    {
+      "marker": "--force-recreate в команде up",
+      "description": "Гарантия пересоздания контейнера при каждом деплое",
+      "shift_signal": "Контейнер показывает Up N seconds, не Up N days"
+    }
+  ],
+  "recommended_practices": [
+    {
+      "title": "Canonical deploy command",
+      "purpose": "Единая повторяемая команда деплоя без ручного копирования файлов",
+      "how_to_do": "git pull --ff-only && docker compose -f docker-compose.production.yml build --pull && docker compose -f docker-compose.production.yml up -d --force-recreate",
+      "target_node": "node_deploy",
+      "layer": "Deploy Infrastructure",
+      "frequency": "при каждом деплое",
+      "observe": ["git log --oneline -3 показывает актуальный коммит", "docker ps показывает Up N seconds", "curl /api/health возвращает ok"],
+      "shift_signal": "Контейнер Up N seconds после каждого деплоя"
+    },
+    {
+      "title": "V2 Dashboard QA check",
+      "purpose": "Верификация что новый V2 dashboard активирован и рендерится корректно",
+      "how_to_do": "npm run submit:v2 на локальной машине → открыть report_url → проверить наличие секций Speech Cloud, Heatmap, Node Graph",
+      "target_node": "node_qa",
+      "layer": "QA Verification",
+      "frequency": "после каждого деплоя",
+      "observe": ["Speech Cloud секция присутствует", "Heatmap секция присутствует", "Node Graph секция присутствует", "Плашка 'Mindloom Report v2' видна"],
+      "shift_signal": "Все V2 секции видны без ошибок"
+    }
+  ],
+  "disclaimer": "Тестовый QA-отчёт для верификации production деплоя. Не является реальным аналитическим отчётом."
+}

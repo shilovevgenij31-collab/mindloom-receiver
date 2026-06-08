@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindloom — Image Moodboard</title>
+<style>
+  :root {
+    --ivory: #fffbf4;
+    --card: #fff8ef;
+    --border: #e8ddd0;
+    --text: #2a221a;
+    --muted: #9a8a7a;
+    --coral: #bf5147;
+    --amber: #c8892f;
+    --violet: #7c5fa0;
+    --green: #4a8c6f;
+    --teal: #3d7e8e;
+    --card-radius: 18px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--ivory);
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 40px 48px 28px;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+  .header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.6px; }
+  .header p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .header-meta {
+    display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;
+  }
+  .pill {
+    padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .pill-note { background: #fef3c7; color: #92400e; }
+  .pill-count { background: #dbeafe; color: #1e40af; }
+
+  /* SECTION */
+  .section { max-width: 1320px; margin: 0 auto; padding: 0 48px 60px; }
+  .section-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 20px 0 20px; border-top: 2px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
+  .section-head h2 { font-size: 21px; font-weight: 800; letter-spacing: -0.4px; }
+  .section-head p { font-size: 13px; color: var(--muted); }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+  .grid-wide {
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+    transform: translateY(-2px);
+  }
+
+  /* IMAGE AREA */
+  .img-wrap {
+    width: 100%;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    background: #f0ebe3;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .img-wrap img.contain { object-fit: contain; padding: 12px; }
+  /* CSS PREVIEW — used when no real screenshot available */
+  .css-preview {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+
+  /* CAPTION */
+  .caption {
+    padding: 14px 16px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+    flex: 1;
+  }
+  .caption-top {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  }
+  .caption h3 { font-size: 13px; font-weight: 700; flex: 1; }
+  .cat-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.4px;
+    padding: 2px 7px; border-radius: 8px; white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .cat-graph { background: #fce8e4; color: var(--coral); }
+  .cat-cloud { background: #fef3e0; color: var(--amber); }
+  .take {
+    font-size: 11.5px; color: #5a4c40; line-height: 1.5;
+  }
+  .take strong { color: var(--text); font-weight: 700; }
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; margin-top: auto; padding-top: 6px;
+  }
+  .risk { font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 6px; }
+  .risk-low { background: #d1fae5; color: #065f46; }
+  .risk-med { background: #fef3c7; color: #92400e; }
+  .src-link {
+    font-size: 10px; color: var(--muted); text-decoration: none;
+    border-bottom: 1px dashed var(--border);
+    transition: color 0.12s;
+  }
+  .src-link:hover { color: var(--coral); }
+
+  /* PICKS SECTION */
+  .picks { max-width: 1320px; margin: 0 auto; padding: 0 48px 80px; }
+  .picks-head {
+    border-top: 2px solid var(--border);
+    padding: 20px 0 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .picks-head h2 { font-size: 21px; font-weight: 800; letter-spacing: -0.4px; }
+  .picks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px) { .picks-grid { grid-template-columns: 1fr; } }
+  .pick-col h3 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 14px;
+  }
+  .pick-card {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 14px; margin-bottom: 10px;
+  }
+  .pick-medal { font-size: 22px; flex-shrink: 0; }
+  .pick-body h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .pick-body p { font-size: 12px; color: #5a4c40; line-height: 1.5; }
+  .copy-hint {
+    margin-top: 14px; background: #fffbef; border: 1.5px solid #e0d080;
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .copy-hint h4 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--amber); margin-bottom: 6px;
+  }
+  .copy-hint ul { padding-left: 16px; font-size: 12px; color: var(--text); line-height: 1.7; }
+
+  /* SPEECH CLOUD CSS PREVIEWS */
+  .blob-preview {
+    position: relative;
+    width: 90%; max-width: 260px;
+    background: #fff8ef;
+    border-radius: 50% 45% 55% 48% / 46% 52% 48% 54%;
+    padding: 28px 20px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .blob-center {
+    font-size: 13px; font-weight: 700; color: var(--text);
+    text-align: center; margin-bottom: 4px;
+  }
+  .blob-chips { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+  .chip {
+    padding: 3px 9px; border-radius: 20px;
+    font-size: 10.5px; font-weight: 600; white-space: nowrap;
+  }
+  .chip-r { background: #fde8e4; color: #9a3020; }
+  .chip-a { background: #fef3d8; color: #7a4a10; }
+  .chip-v { background: #ede4f8; color: #5a3880; }
+  .chip-g { background: #d8f0e4; color: #1a5a38; }
+  .chip-t { background: #d8eef4; color: #1a4858; }
+
+  .bubble-preview {
+    width: 90%; max-width: 260px;
+    background: #fff8ef;
+    border-radius: 28px 28px 28px 28px;
+    padding: 24px 18px 20px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .bubble-bumps {
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px;
+  }
+  .bump {
+    width: 18px; height: 18px;
+    background: #fff8ef; border-radius: 50%;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.07);
+  }
+  .bump:nth-child(2) { width: 24px; height: 24px; top: -3px; position: relative; }
+  .bubble-center {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: radial-gradient(circle, #f8d5c8 0%, #f0a891 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; text-align: center;
+    color: #5a2a20; padding: 8px;
+  }
+
+  .tag-cloud-preview {
+    width: 90%; max-width: 260px;
+    background: #fff8ef;
+    border-radius: 16px;
+    padding: 18px;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .tc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+  .tc-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tc-chip-lg { padding: 5px 12px; font-size: 12.5px; font-weight: 700; }
+  .tc-chip-md { padding: 4px 10px; font-size: 11px; font-weight: 600; }
+  .tc-chip-sm { padding: 3px 8px; font-size: 10px; font-weight: 500; }
+
+  .bubble-chart-preview {
+    width: 90%; max-width: 260px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+    align-items: center; justify-content: center;
+    padding: 10px;
+  }
+  .bc-bubble {
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600; text-align: center;
+    color: rgba(40,30,20,0.75);
+    flex-shrink: 0;
+  }
+  .bc-xl { width: 80px; height: 80px; font-size: 11px; }
+  .bc-lg { width: 60px; height: 60px; }
+  .bc-md { width: 46px; height: 46px; font-size: 9.5px; }
+  .bc-sm { width: 34px; height: 34px; font-size: 9px; }
+
+  .radial-preview {
+    width: 90%; max-width: 240px; height: 200px;
+    position: relative;
+  }
+  .rn {
+    position: absolute;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9.5px; font-weight: 700; text-align: center;
+    color: rgba(255,255,255,0.9);
+  }
+  .rn-center {
+    width: 64px; height: 64px;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #d06055 0%, #a83828 100%);
+    font-size: 10.5px;
+    box-shadow: 0 0 0 6px rgba(191,81,71,0.15);
+  }
+  .rn-sat {
+    width: 42px; height: 42px;
+  }
+
+  /* Error/fallback for broken images */
+  img { background: #f0ebe3; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Mindloom — Image Moodboard</h1>
+  <p>Patch 4P · Research Only · No code · No implementation · Только визуальные референсы</p>
+  <div class="header-meta">
+    <span class="pill pill-note">Research Only</span>
+    <span class="pill pill-count">20+ визуальных референсов</span>
+    <span class="pill pill-count">2 категории</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1: GRAPH / NODE MAP
+     ═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="dot" style="background:var(--coral)"></div>
+    <div>
+      <h2>Graph / Node Map</h2>
+      <p>Soft bubble graph · Causal map · Radial node map · Knowledge graph · Semantic network</p>
+    </div>
+  </div>
+
+  <div class="grid grid-wide">
+
+    <!-- KUMU 1 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://assets.kumu.io/production/public/assets/marketing/screenshots/first-look-madison-1504edb5fcb0657c2f5d2dfb225a5489d68b24e4e08fd8298a367ab9bc73dc13.jpg"
+             alt="Kumu system map — bubble nodes stakeholder visualization"
+             onerror="this.style.display='none';this.parentNode.style.background='#f5ede8'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Kumu — Bubble Stakeholder Map</h3>
+          <span class="cat-tag cat-graph">Bubble Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Разный размер bubble = интенсивность. Тёплые цвета. Ощущение живой системы, не диаграммы.</p>
+        <div class="card-footer">
+          <span class="risk risk-med">🟡 Средний</span>
+          <a class="src-link" href="https://kumu.io" target="_blank">kumu.io</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- KUMU 2 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://assets.kumu.io/production/public/assets/marketing/screenshots/austin-social-innovation-07082e355daad1c52319c9aaaffb66f6ce54c30b75122ac0e6b045028ce8ddd4.jpg"
+             alt="Kumu Austin social innovation network map"
+             onerror="this.style.display='none';this.parentNode.style.background='#f5ede8'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Kumu — Social Network Map</h3>
+          <span class="cat-tag cat-graph">Cluster Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Кластеры по цвету. Тонкие связи. Force-layout без overlap при правильных параметрах.</p>
+        <div class="card-footer">
+          <span class="risk risk-med">🟡 Средний</span>
+          <a class="src-link" href="https://kumu.io" target="_blank">kumu.io</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- KUMU 3 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://assets.kumu.io/production/public/assets/marketing/screenshots/celebrity-ice-bucket-d94cad40458742c4c3bda39c18450fe629b16028d4ac03227f7c61e978b65114.jpg"
+             alt="Kumu celebrity ice bucket challenge map"
+             onerror="this.style.display='none';this.parentNode.style.background='#f5ede8'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Kumu — Radial Force Network</h3>
+          <span class="cat-tag cat-graph">Network Map</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Central node dominant. Satellite nodes по кругу. Цветовые семейства.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://kumu.io" target="_blank">kumu.io</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- KUMU 4 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://assets.kumu.io/production/public/assets/marketing/screenshots/sticky-studio-16e712356380e9886ead9ef1e92d5efadb164390c5c6745e9c049ba4ff2a2444.jpg"
+             alt="Kumu sticky studio collaboration map"
+             onerror="this.style.display='none';this.parentNode.style.background='#f5ede8'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Kumu — Warm Collaboration Map</h3>
+          <span class="cat-tag cat-graph">Soft Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Тёплый фон. Node labels хорошо читаются. Цветные семейства.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://kumu.io" target="_blank">kumu.io</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFRANODUS 1 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://infranodus.com/images/front/infranodus-overview.jpg"
+             alt="InfraNodus text network graph overview"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8e0f0'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>InfraNodus — Semantic Network</h3>
+          <span class="cat-tag cat-graph">Neural Map</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Цветные кластеры по топикам. Node size = betweenness. Glow effect. Compact, reads beautifully.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://infranodus.com" target="_blank">infranodus.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFRANODUS 2 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://infranodus.com/images/front/infranodus-brainstorming-tool-app-500.webp"
+             alt="InfraNodus brainstorming tool app"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8e0f0'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>InfraNodus — Brainstorm View</h3>
+          <span class="cat-tag cat-graph">Neural Map</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Sidebar + graph side-by-side. Node detail panel pattern = sheets в Mindloom.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://infranodus.com" target="_blank">infranodus.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFRANODUS 3 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://infranodus.com/images/front/infranodus-topics.jpg"
+             alt="InfraNodus topics visualization"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8e0f0'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>InfraNodus — Topic Clusters</h3>
+          <span class="cat-tag cat-graph">Cluster Map</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Soft cluster halos. Semantic grouping by color = психологические типы.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://infranodus.com" target="_blank">infranodus.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHIMSICAL MIND MAP HERO -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://whimsical.com/_astro/mind-maps-hero@1440x820@2x.Bw4Wo3Ob.webp"
+             alt="Whimsical mind maps hero screenshot"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8f5ee'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Whimsical — Mind Map Interface</h3>
+          <span class="cat-tag cat-graph">Card Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Rounded rect nodes с цветными бордерами. Clean edges. Тёплый фон. Mobile-friendly layout.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://whimsical.com/mind-maps" target="_blank">whimsical.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHIMSICAL AI MIND MAP -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://whimsical.com/_astro/mind-map@620x560@2x.COChWKav.webp"
+             alt="Whimsical AI-generated mind map"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8f5ee'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Whimsical — AI Mind Map</h3>
+          <span class="cat-tag cat-graph">Radial Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Auto-layout без overlap. Central node dominant. Color-by-type branches.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://whimsical.com/ai/ai-mind-maps" target="_blank">whimsical.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHIMSICAL SIMPLE MAP -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://whimsical.com/_astro/simple-map@650x290@2x.DMrnJuZD.webp"
+             alt="Whimsical simple mind map example"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8f5ee'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Whimsical — Simple Map Structure</h3>
+          <span class="cat-tag cat-graph">Simple Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Минималистичный layout. 5–7 nodes идеально читаются. Этот масштаб = Mindloom.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://whimsical.com/mind-maps" target="_blank">whimsical.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOURISH CLASSIC NETWORK -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://public.flourish.studio/uploads/654906/7363ddc2-d5b3-4120-9296-35a13d18e157.png"
+             alt="Flourish classic network chart"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8eef5'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Flourish — Classic Network</h3>
+          <span class="cat-tag cat-graph">Network Chart</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Editorial quality. Thin clean arrows. Image nodes. Hover ring highlight.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://flourish.studio/visualisations/network-charts/" target="_blank">flourish.studio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOURISH RADIAL NETWORK -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://public.flourish.studio/uploads/654906/bcc5839a-a632-46c3-9c33-93ec5df5995c.png"
+             alt="Flourish radial network chart"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8eef5'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Flourish — Radial Network</h3>
+          <span class="cat-tag cat-graph">Radial Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Radial layout = нет overlap. Равномерное расположение = всегда читаемо. Это должно быть в Mindloom.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://flourish.studio/visualisations/network-charts/" target="_blank">flourish.studio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOURISH DIRECTIONAL -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://public.flourish.studio/uploads/654906/b26ec5d3-13d5-4876-a21b-7e8e3638b9c1.png"
+             alt="Flourish directional network chart"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8eef5'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Flourish — Directional Edges</h3>
+          <span class="cat-tag cat-graph">Directed Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Directed arrows — thin, clear. Без излишней декорации. Стиль стрелок для causal map.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://flourish.studio/visualisations/network-charts/" target="_blank">flourish.studio</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIRO MIND MAP 1 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://images.ctfassets.net/w6r2i5d8q73s/6Ku4dIXRkJRWOgM7CJAJQN/400ff0082724d3eb96f8ec01068b30b9/mindmapping_01_social_media_strategies_product_image_EN_standard_4_3_2x.png?fm=webp&q=75"
+             alt="Miro mind map social media strategies"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8f5ee'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Miro — Mind Map Soft Style</h3>
+          <span class="cat-tag cat-graph">Bubble Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Warm soft rounded nodes. Color families. Readable text inside nodes. Good mobile scale.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://miro.com/mind-map/" target="_blank">miro.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIRO MIND MAP 2 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://images.ctfassets.net/w6r2i5d8q73s/3zIjdlsd7fP6siNtZN0joZ/022a660df7b89fb8c28dafb977b6a85c/mindmapping_02_product_image_EN_standard_4_3_2x.png?fm=webp&q=75"
+             alt="Miro mind map complex breakdown"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8f5ee'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Miro — Complex Problem Map</h3>
+          <span class="cat-tag cat-graph">Cluster Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Multi-level hierarchy. Цвет = type. Ощущение "brain map", не flowchart.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://miro.com/mind-map/" target="_blank">miro.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIRO MIND MAP 3 -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://images.ctfassets.net/w6r2i5d8q73s/GZ6hM9avZvRbr05T5uPCS/81994b37a4d6df8aa03cbe555e5dac6e/mindmapping_03_agile_practice_product_image_EN_standard_4_3_2x.png?fm=webp&q=75"
+             alt="Miro mind map agile practice"
+             onerror="this.style.display='none';this.parentNode.style.background='#e8f5ee'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Miro — Agile Practice Map</h3>
+          <span class="cat-tag cat-graph">Process Graph</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Professional warm aesthetic. Rounded rect nodes + connector style.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://miro.com/mind-map/" target="_blank">miro.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS PREVIEW: Radial Organic Bubble — "Mindloom direction" -->
+    <div class="card">
+      <div class="img-wrap" style="background: linear-gradient(135deg, #fff8ef 0%, #fdf4e6 100%)">
+        <div class="css-preview">
+          <div class="radial-preview">
+            <!-- SVG radial graph approximation -->
+            <svg viewBox="0 0 240 200" width="100%" height="100%">
+              <!-- Edges -->
+              <path d="M120,100 Q80,60 68,52" stroke="#bf5147" stroke-width="1.5" fill="none" opacity="0.7"/>
+              <path d="M120,100 Q148,55 158,48" stroke="#7c5fa0" stroke-width="1.2" fill="none" opacity="0.6"/>
+              <path d="M120,100 Q168,100 178,98" stroke="#4a8c6f" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity="0.6"/>
+              <path d="M120,100 Q145,148 148,158" stroke="#c8892f" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.55"/>
+              <path d="M120,100 Q88,148 80,158" stroke="#3d7e8e" stroke-width="1" fill="none" opacity="0.5"/>
+              <path d="M120,100 Q62,100 52,98" stroke="#c8892f" stroke-width="1" fill="none" opacity="0.5"/>
+              <!-- Arrowheads -->
+              <polygon points="65,50 72,56 60,58" fill="#bf5147" opacity="0.7"/>
+              <polygon points="156,46 161,54 152,54" fill="#7c5fa0" opacity="0.6"/>
+              <polygon points="176,95 180,103 172,103" fill="#4a8c6f" opacity="0.6"/>
+              <!-- Satellite nodes -->
+              <circle cx="62" cy="48" r="20" fill="url(#g-violet)" filter="url(#glow)"/>
+              <text x="62" y="52" font-size="7" text-anchor="middle" fill="white" font-weight="700">Контроль</text>
+              <circle cx="160" cy="44" r="20" fill="url(#g-amber)" filter="url(#glow)"/>
+              <text x="160" y="48" font-size="7" text-anchor="middle" fill="white" font-weight="700">Избегание</text>
+              <circle cx="182" cy="98" r="20" fill="url(#g-green)" filter="url(#glow)"/>
+              <text x="182" y="102" font-size="7" text-anchor="middle" fill="white" font-weight="700">Ресурс</text>
+              <circle cx="148" cy="162" r="18" fill="url(#g-teal)" filter="url(#glow)"/>
+              <text x="148" y="166" font-size="7" text-anchor="middle" fill="white" font-weight="700">Тело</text>
+              <circle cx="78" cy="162" r="18" fill="url(#g-violet)" filter="url(#glow)"/>
+              <text x="78" y="166" font-size="7" text-anchor="middle" fill="white" font-weight="700">Ценность</text>
+              <circle cx="50" cy="98" r="18" fill="url(#g-amber)" filter="url(#glow)"/>
+              <text x="50" y="102" font-size="7" text-anchor="middle" fill="white" font-weight="700">Эмоция</text>
+              <!-- Central node -->
+              <circle cx="120" cy="100" r="28" fill="url(#g-coral)" filter="url(#glow-center)"/>
+              <text x="120" y="97" font-size="8.5" text-anchor="middle" fill="white" font-weight="800">Ключевой</text>
+              <text x="120" y="108" font-size="8.5" text-anchor="middle" fill="white" font-weight="800">паттерн</text>
+              <!-- Gradients -->
+              <defs>
+                <radialGradient id="g-coral" cx="40%" cy="35%"><stop offset="0%" stop-color="#e06860"/><stop offset="100%" stop-color="#a83828"/></radialGradient>
+                <radialGradient id="g-violet" cx="40%" cy="35%"><stop offset="0%" stop-color="#9a7cc0"/><stop offset="100%" stop-color="#5a3888"/></radialGradient>
+                <radialGradient id="g-amber" cx="40%" cy="35%"><stop offset="0%" stop-color="#e0a050"/><stop offset="100%" stop-color="#9a5818"/></radialGradient>
+                <radialGradient id="g-green" cx="40%" cy="35%"><stop offset="0%" stop-color="#60a880"/><stop offset="100%" stop-color="#2a6840"/></radialGradient>
+                <radialGradient id="g-teal" cx="40%" cy="35%"><stop offset="0%" stop-color="#50a0b8"/><stop offset="100%" stop-color="#1a6878"/></radialGradient>
+                <filter id="glow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+                <filter id="glow-center"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Mindloom Direction — Radial Organic Bubble</h3>
+          <span class="cat-tag cat-graph">⭐ TOP PICK</span>
+        </div>
+        <p class="take"><strong>Это:</strong> визуализация того, как должен выглядеть граф Mindloom. Радиальный, bubble nodes, цвета по типу, glow на центральном узле.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Реализуется</span>
+          <span style="font-size:10px;color:var(--muted)">CSS/SVG preview</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2: SPEECH CLOUD / PHRASE CLOUD
+     ═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="dot" style="background:var(--amber)"></div>
+    <div>
+      <h2>Speech Cloud / Phrase Cloud</h2>
+      <p>Organic blob · Chips cloud · Tag card · Bubble chart · Emotional bubble</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- BLOBMAKER SCREENSHOT -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://designerup.co/blog/content/images/2020/06/Screen-Shot-2020-06-09-at-1.54.23-AM.png"
+             alt="Blobmaker organic SVG blob shape tool"
+             onerror="this.style.display='none';this.parentNode.style.background='#fef3e0'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Blobmaker — Organic SVG Shape Tool</h3>
+          <span class="cat-tag cat-cloud">Blob Tool</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Готовый SVG path для blob background под chips. Warm ivory fill. Static = нет зависимостей.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://www.blobmaker.app" target="_blank">blobmaker.app</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORDART WORD CLOUD -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://cdn.wordart.com/static/img/home/jm4lph3v1zl1_e74af2da666de95c0e834ac0e9f1296b.webp"
+             alt="WordArt word cloud visualization"
+             class="contain"
+             onerror="this.style.display='none';this.parentNode.style.background='#fef3e0'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>WordArt — Shaped Word Cloud</h3>
+          <span class="cat-tag cat-cloud">Word Cloud</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Shape-based layout. Size = frequency. Но: настоящий wordcloud algorithm — не то что нужно Mindloom.</p>
+        <div class="card-footer">
+          <span class="risk risk-med">🟡 Ограничено</span>
+          <a class="src-link" href="https://wordart.com" target="_blank">wordart.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS PREVIEW: SVG BLOB + CHIPS -->
+    <div class="card">
+      <div class="img-wrap" style="background: linear-gradient(135deg, #fff8ef 0%, #fdf4e6 100%);">
+        <div class="css-preview">
+          <div class="blob-preview">
+            <div class="blob-center">Всё нужно контролировать</div>
+            <div class="blob-chips">
+              <span class="chip chip-r">я должна</span>
+              <span class="chip chip-a">иначе всё рухнет</span>
+              <span class="chip chip-v">нельзя ошибаться</span>
+              <span class="chip chip-r">я виновата</span>
+              <span class="chip chip-g">я справлюсь</span>
+              <span class="chip chip-t">нужно держаться</span>
+              <span class="chip chip-a">только я могу</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>SVG Organic Blob + HTML Chips</h3>
+          <span class="cat-tag cat-cloud">⭐ TOP PICK</span>
+        </div>
+        <p class="take"><strong>Это:</strong> Blobmaker shape как background, chips поверх. Warm ivory blob, breathing animation. Нет зависимостей.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Реализуется</span>
+          <span style="font-size:10px;color:var(--muted)">CSS preview</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS PREVIEW: CARD-CLOUD HYBRID -->
+    <div class="card">
+      <div class="img-wrap" style="background: linear-gradient(135deg, #fdf4f8 0%, #f8eef4 100%);">
+        <div class="css-preview">
+          <div class="bubble-preview">
+            <div class="bubble-bumps">
+              <div class="bump"></div>
+              <div class="bump"></div>
+              <div class="bump"></div>
+            </div>
+            <div class="bubble-center">Страх<br>потерять<br>контроль</div>
+            <div class="blob-chips" style="max-width:220px">
+              <span class="chip chip-r">тревога</span>
+              <span class="chip chip-a">напряжение</span>
+              <span class="chip chip-v">ответственность</span>
+              <span class="chip chip-r">угроза</span>
+              <span class="chip chip-g">безопасность</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Card-Cloud + Emotion Bubble Center</h3>
+          <span class="cat-tag cat-cloud">⭐ TOP PICK</span>
+        </div>
+        <p class="take"><strong>Это:</strong> Карточка с bumps + soft circle center. Breathing animation. Максимально надёжно, нет deps, mobile-first.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Реализуется</span>
+          <span style="font-size:10px;color:var(--muted)">CSS preview</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS PREVIEW: TAG CLOUD CARD -->
+    <div class="card">
+      <div class="img-wrap" style="background: linear-gradient(135deg, #f8f4ff 0%, #f0eafc 100%);">
+        <div class="css-preview">
+          <div class="tag-cloud-preview">
+            <span class="tc-label">Речевые паттерны</span>
+            <div class="tc-chips">
+              <span class="chip chip-r tc-chip-lg">я должна</span>
+              <span class="chip chip-v tc-chip-md">нужно контролировать</span>
+              <span class="chip chip-a tc-chip-sm">иначе</span>
+              <span class="chip chip-r tc-chip-md">я виновата</span>
+              <span class="chip chip-v tc-chip-sm">ошибка</span>
+              <span class="chip chip-g tc-chip-lg">я справлюсь</span>
+              <span class="chip chip-a tc-chip-sm">только я</span>
+              <span class="chip chip-t tc-chip-md">держаться</span>
+              <span class="chip chip-r tc-chip-sm">нельзя</span>
+              <span class="chip chip-g tc-chip-sm">ресурс</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Tag Cloud Card — Size by Weight</h3>
+          <span class="cat-tag cat-cloud">Tag Card</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Chip size = weight. Color = тип паттерна. Flex-wrap layout. Без cloud-формы, но visually clear.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Реализуется</span>
+          <span style="font-size:10px;color:var(--muted)">CSS preview</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS PREVIEW: BUBBLE CHART OF PHRASES -->
+    <div class="card">
+      <div class="img-wrap" style="background: linear-gradient(135deg, #f4fbf8 0%, #e8f5f0 100%);">
+        <div class="css-preview">
+          <div class="bubble-chart-preview">
+            <div class="bc-bubble bc-xl" style="background:radial-gradient(circle at 35% 35%,#f0c0b0,#d07060)">я должна</div>
+            <div class="bc-bubble bc-lg" style="background:radial-gradient(circle at 35% 35%,#e0d0f0,#a080d0)">контроль</div>
+            <div class="bc-bubble bc-lg" style="background:radial-gradient(circle at 35% 35%,#f0e0c0,#c09040)">избегать</div>
+            <div class="bc-bubble bc-md" style="background:radial-gradient(circle at 35% 35%,#c8e8d8,#70b888)">ресурс</div>
+            <div class="bc-bubble bc-md" style="background:radial-gradient(circle at 35% 35%,#f0c8c0,#c05848)">вина</div>
+            <div class="bc-bubble bc-sm" style="background:radial-gradient(circle at 35% 35%,#d0e8f0,#5898b8)">тело</div>
+            <div class="bc-bubble bc-sm" style="background:radial-gradient(circle at 35% 35%,#e8d8f0,#9068c0)">страх</div>
+            <div class="bc-bubble bc-sm" style="background:radial-gradient(circle at 35% 35%,#d8f0e4,#4a8c68)">сила</div>
+          </div>
+        </div>
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Semantic Bubble Chart of Phrases</h3>
+          <span class="cat-tag cat-cloud">Bubble Chart</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Bubble size = значимость. Color = тип. Самый семантически богатый вариант.</p>
+        <div class="card-footer">
+          <span class="risk risk-med">🟡 Средний</span>
+          <span style="font-size:10px;color:var(--muted)">CSS preview</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS PREVIEW: BREATHING EMOTIONAL BUBBLE -->
+    <div class="card">
+      <div class="img-wrap" style="background: linear-gradient(135deg, #fdf8ff 0%, #f5eefa 100%);">
+        <div class="css-preview">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:10px">
+            <div style="width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 38% 35%,#f0d8f8,#c090e0);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;text-align:center;color:#4a2068;padding:14px;box-shadow:0 0 0 8px rgba(192,144,224,0.12),0 0 0 16px rgba(192,144,224,0.06)">
+              Я должна всё держать под контролем
+            </div>
+            <div class="blob-chips" style="max-width:240px;justify-content:center">
+              <span class="chip chip-r">я виновата</span>
+              <span class="chip chip-v">не ошибаться</span>
+              <span class="chip chip-a">нельзя показать слабость</span>
+              <span class="chip chip-g">я справлюсь</span>
+              <span class="chip chip-t">нужно держаться</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>HealBubble — Emotional Bubble Center</h3>
+          <span class="cat-tag cat-cloud">Emotion Bubble</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Дышащий soft circle (HealBubble inspired). Pulsing box-shadow ring. Chips вокруг. Therapeutic и intimate.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Реализуется</span>
+          <a class="src-link" href="https://dl.acm.org/doi/10.1145/3770445.3770497" target="_blank">HealBubble 2025</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS PREVIEW: CSS CLOUD BUMPS SHAPE -->
+    <div class="card">
+      <div class="img-wrap" style="background: linear-gradient(135deg, #fffaf0 0%, #fdf5e4 100%);">
+        <div class="css-preview">
+          <div style="position:relative;padding:14px 18px 18px;width:240px">
+            <!-- Cloud bumps via absolute divs -->
+            <div style="position:absolute;top:-14px;left:28px;width:30px;height:30px;border-radius:50%;background:#fff8ef;box-shadow:0 -2px 8px rgba(0,0,0,0.07)"></div>
+            <div style="position:absolute;top:-20px;left:68px;width:42px;height:42px;border-radius:50%;background:#fff8ef;box-shadow:0 -2px 8px rgba(0,0,0,0.07)"></div>
+            <div style="position:absolute;top:-14px;left:118px;width:32px;height:32px;border-radius:50%;background:#fff8ef;box-shadow:0 -2px 8px rgba(0,0,0,0.07)"></div>
+            <div style="position:absolute;top:-10px;left:156px;width:22px;height:22px;border-radius:50%;background:#fff8ef;box-shadow:0 -2px 8px rgba(0,0,0,0.07)"></div>
+            <div style="background:#fff8ef;border-radius:20px;padding:16px 14px;box-shadow:0 4px 16px rgba(0,0,0,0.07);display:flex;flex-direction:column;gap:8px;align-items:center">
+              <div style="font-size:12.5px;font-weight:800;color:#3a2a1a;text-align:center">Всё нужно контролировать</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center">
+                <span class="chip chip-r">я должна</span>
+                <span class="chip chip-a">иначе рухнет</span>
+                <span class="chip chip-v">ошибаться нельзя</span>
+                <span class="chip chip-r">вина</span>
+                <span class="chip chip-g">справлюсь</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>CSS Cloud Card с Bumps</h3>
+          <span class="cat-tag cat-cloud">Cloud Card</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Bumps через absolute div circles. Organic без SVG. Нет зависимостей. Warm ivory card. Уже близко к существующему коду.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://freefrontend.com/css-speech-bubbles/" target="_blank">CSS speech bubbles</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS PREVIEW: NAPKIN.AI STYLE DIAGRAM -->
+    <div class="card">
+      <div class="img-wrap">
+        <img src="https://napkin.ai/assets/v5/use-cases/presentations.png?v=3"
+             alt="Napkin.ai text-to-visual diagram"
+             class="contain"
+             onerror="this.style.display='none';this.parentNode.style.background='#f0eef8'">
+      </div>
+      <div class="caption">
+        <div class="caption-top">
+          <h3>Napkin.ai — AI Diagram Visual</h3>
+          <span class="cat-tag cat-cloud">AI Visual</span>
+        </div>
+        <p class="take"><strong>Взять:</strong> Icon + label visual language. Premium "intelligent tool" feel. Minimal text per node.</p>
+        <div class="card-footer">
+          <span class="risk risk-low">🟢 Низкий</span>
+          <a class="src-link" href="https://napkin.ai" target="_blank">napkin.ai</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FINAL PICKS
+     ═══════════════════════════════════════════ -->
+<div class="picks">
+  <div class="picks-head">
+    <div class="dot" style="background:#c8892f"></div>
+    <h2>Финальные выводы — что копировать в Mindloom</h2>
+  </div>
+
+  <div class="picks-grid">
+
+    <div class="pick-col">
+      <h3 style="color:var(--coral)">Top 3 — Graph направления</h3>
+
+      <div class="pick-card">
+        <div class="pick-medal">🥇</div>
+        <div class="pick-body">
+          <h4>Radial Organic Bubble (Kumu + Flourish + Mindloom preview)</h4>
+          <p>Статичный radial layout: центральный coral bubble (28px) + 6 satellite (20px) по кругу равномерно. Gradient fill per type. Glow на central. 5 типов рёбер через цвет и dash. <strong>Нет overlap, нет physics, нет новых deps.</strong></p>
+        </div>
+      </div>
+
+      <div class="pick-card">
+        <div class="pick-medal">🥈</div>
+        <div class="pick-body">
+          <h4>Semantic Cluster Map (InfraNodus aesthetic)</h4>
+          <p>Кластерные halos по психологическому типу. Glow-nodes (уже частично есть). Subtle background wash на кластер. Пульсирующий central node.</p>
+        </div>
+      </div>
+
+      <div class="pick-card">
+        <div class="pick-medal">🥉</div>
+        <div class="pick-body">
+          <h4>Directed Edge Network (Flourish Directional style)</h4>
+          <p>Thin clean arrows. No decoration. Clear arrowheads. Можно улучшить текущий SVG renderer — только поменять стиль стрелок и добавить radial layout.</p>
+        </div>
+      </div>
+
+      <div class="copy-hint">
+        <h4>Что реально копировать прямо сейчас</h4>
+        <ul>
+          <li>Radial layout: <code>angle = 2π × i / n</code>, radius=constant</li>
+          <li>Node gradient: <code>radial-gradient(circle at 35% 35%, lighter, darker)</code></li>
+          <li>Edge colors: coral=hard, violet=normal, amber=soft dashed</li>
+          <li>Glow filter: <code>feGaussianBlur stdDeviation="2"</code> уже в коде</li>
+          <li>Hover: <code>scale(1.07)</code> на node SVG element</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pick-col">
+      <h3 style="color:var(--amber)">Top 3 — Speech Cloud направления</h3>
+
+      <div class="pick-card">
+        <div class="pick-medal">🥇</div>
+        <div class="pick-body">
+          <h4>SVG Organic Blob + HTML Chips (Blobmaker style)</h4>
+          <p>Static SVG blob path (warm ivory fill) как background. Поверх — flex-wrapped HTML chips. В центре blob — central phrase крупным шрифтом. <strong>Нет deps, нет JS.</strong></p>
+        </div>
+      </div>
+
+      <div class="pick-card">
+        <div class="pick-medal">🥈</div>
+        <div class="pick-body">
+          <h4>Card-Cloud + Emotional Bubble (HealBubble style)</h4>
+          <p>Карточка с CSS bumps сверху. Большой soft circle с central phrase. Breathing animation (scale keyframe). Chips под circle. Mobile-first, <strong>максимально надёжно.</strong></p>
+        </div>
+      </div>
+
+      <div class="pick-card">
+        <div class="pick-medal">🥉</div>
+        <div class="pick-body">
+          <h4>Semantic Bubble Chart (size = significance)</h4>
+          <p>Каждая phrase = bubble разного размера. Gradient fill per type. Floating layout. Самый богатый семантически.</p>
+        </div>
+      </div>
+
+      <div class="copy-hint">
+        <h4>Что реально копировать прямо сейчас</h4>
+        <ul>
+          <li>CSS cloud card: <code>border-radius: 50% 45% 55% 48% / 46% 52% 48% 54%</code></li>
+          <li>Bumps: absolute div circles над карточкой</li>
+          <li>Breathing: <code>@keyframes breathe { scale(1) ↔ scale(1.04) }</code></li>
+          <li>Chip semantic colors: red=heavy, amber=avoidance, violet=belief, green=resource</li>
+          <li>Center phrase: 15–17px, font-weight 740, text-align center</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer style="text-align:center;padding:20px 48px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">
+  Mindloom Image Moodboard · Patch 4P · Research Only · No production code changes · 20 visual references
+</footer>
+
+</body>
+</html>

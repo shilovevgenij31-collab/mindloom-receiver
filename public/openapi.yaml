@@ -1,0 +1,117 @@
+openapi: 3.1.0
+info:
+  title: Mindloom Receiver API
+  version: 1.0.0
+  description: Принимает результат анализа от Mindloom GPT и возвращает публичную ссылку на отчёт.
+servers:
+  - url: https://mindloom.edagency.ru
+    description: Production
+  - url: http://localhost:3000
+    description: Local development
+paths:
+  /api/mindloom/reports:
+    post:
+      operationId: submitReport
+      summary: Отправить результат анализа
+      description: Принимает любой JSON, сохраняет как отчёт и возвращает публичную ссылку.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Результат анализа Mindloom (любой JSON)
+            example:
+              participant:
+                name: Анна
+              session:
+                source: mindloom_gpt
+                date: "2026-05-18T10:00:00Z"
+                language: ru
+                version: "1.0"
+              report:
+                title: Нейропсихологический анализ
+                summary: Краткое резюме
+                blocks:
+                  - id: identity
+                    title: Идентичность
+                    text: Текст анализа
+                    quotes: []
+                    recommendations: []
+                markers: []
+                layers: []
+              meta:
+                schema_version: "1.0"
+      responses:
+        '201':
+          description: Отчёт успешно сохранён
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  report_id:
+                    type: string
+                    example: V1StGXR8_Z5jdHi6B-myT
+                  report_url:
+                    type: string
+                    example: https://mindloom.edagency.ru/r/dGhpcyBpcyBhIHRlc3Q
+        '400':
+          description: Невалидный JSON
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Неверный токен авторизации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/health:
+    get:
+      operationId: healthCheck
+      summary: Проверка состояния сервиса
+      responses:
+        '200':
+          description: Сервис работает
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  db:
+                    type: string
+                    enum: [ok, error]
+                  timestamp:
+                    type: string
+                    format: date-time
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: MINDLOOM_WEBHOOK_SECRET — секретный ключ из env
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: Unauthorized

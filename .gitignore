@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# next
+.next/
+out/
+.next-dev.log
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# env / secrets
+.env
+.env.local
+.env.production
+.env.*.local
+
+# runtime data / sqlite
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# temp / local tool state
+.codex-temp/
+.playwright-mcp/
+
+# logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

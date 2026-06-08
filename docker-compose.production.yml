@@ -1,0 +1,35 @@
+services:
+  mindloom-receiver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mindloom-receiver
+    restart: unless-stopped
+    env_file: .env.production
+    volumes:
+      - /opt/mindloom-receiver/data:/app/data
+    expose:
+      - "3000"
+    networks:
+      - traefik-net
+    labels:
+      # Указываем Traefik, какую сеть использовать для routing
+      - "traefik.docker.network=n8n_default"
+      # HTTPS router
+      - "traefik.enable=true"
+      - "traefik.http.routers.mindloom-receiver.rule=Host(`mindloom.edagency.ru`)"
+      - "traefik.http.routers.mindloom-receiver.entrypoints=websecure"
+      - "traefik.http.routers.mindloom-receiver.tls=true"
+      - "traefik.http.routers.mindloom-receiver.tls.certresolver=mytlschallenge"
+      - "traefik.http.services.mindloom-receiver.loadbalancer.server.port=3000"
+      # HTTP → HTTPS redirect
+      - "traefik.http.routers.mindloom-receiver-http.rule=Host(`mindloom.edagency.ru`)"
+      - "traefik.http.routers.mindloom-receiver-http.entrypoints=web"
+      - "traefik.http.routers.mindloom-receiver-http.middlewares=mindloom-https-redirect"
+      - "traefik.http.middlewares.mindloom-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.mindloom-https-redirect.redirectscheme.permanent=true"
+
+networks:
+  traefik-net:
+    external: true
+    name: n8n_default

@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindloom — Visual Reference Gallery</title>
+<style>
+  :root {
+    --ivory: #fffbf4;
+    --card-bg: #fff8ef;
+    --border: #e8ddd0;
+    --text: #2a221a;
+    --muted: #8a7a6c;
+    --coral: #bf5147;
+    --amber: #c8892f;
+    --violet: #7c5fa0;
+    --green: #4a8c6f;
+    --teal: #3d7e8e;
+
+    --cat-1: #f5ede8;
+    --cat-2: #ede8f5;
+    --cat-3: #e8f0f5;
+    --cat-4: #f5ede8;
+    --cat-5: #eef5e8;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--ivory);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  header {
+    padding: 48px 40px 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  header p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  header .badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .badge-note { background: #fef3c7; color: #92400e; }
+  .badge-refs { background: #dbeafe; color: #1e40af; }
+  .badge-cats { background: #d1fae5; color: #065f46; }
+
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .nav-btn:hover { border-color: var(--coral); color: var(--coral); }
+  .nav-btn.c1:hover { border-color: var(--coral); color: var(--coral); }
+  .nav-btn.c2:hover { border-color: var(--violet); color: var(--violet); }
+  .nav-btn.c3:hover { border-color: var(--teal); color: var(--teal); }
+  .nav-btn.c4:hover { border-color: var(--amber); color: var(--amber); }
+  .nav-btn.c5:hover { border-color: var(--green); color: var(--green); }
+
+  .section { margin-bottom: 60px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .section-header .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    flex: 1;
+  }
+  .section-count {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.06);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+  .card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .card-id {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: var(--muted);
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    flex: 1;
+  }
+  .card-url {
+    font-size: 11px;
+    color: var(--muted);
+    word-break: break-all;
+    text-decoration: none;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 2px;
+    transition: color 0.12s;
+  }
+  .card-url:hover { color: var(--coral); }
+  .card-desc {
+    font-size: 12.5px;
+    color: #5a4c40;
+    line-height: 1.6;
+  }
+  .card-take {
+    background: rgba(0,0,0,0.03);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .card-take strong {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .card-risk {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 8px;
+    align-self: flex-start;
+  }
+  .risk-low { background: #d1fae5; color: #065f46; }
+  .risk-med { background: #fef3c7; color: #92400e; }
+
+  /* Category colors */
+  .c1 .card { border-color: #f0d5cb; }
+  .c1 .card:hover { border-color: var(--coral); }
+  .c1 .section-dot { background: var(--coral); }
+
+  .c2 .card { border-color: #ddd0ed; }
+  .c2 .card:hover { border-color: var(--violet); }
+  .c2 .section-dot { background: var(--violet); }
+
+  .c3 .card { border-color: #cddde3; }
+  .c3 .card:hover { border-color: var(--teal); }
+  .c3 .section-dot { background: var(--teal); }
+
+  .c4 .card { border-color: #f0e0c8; }
+  .c4 .card:hover { border-color: var(--amber); }
+  .c4 .section-dot { background: var(--amber); }
+
+  .c5 .card { border-color: #cce5d8; }
+  .c5 .card:hover { border-color: var(--green); }
+  .c5 .section-dot { background: var(--green); }
+
+  /* Recommendations */
+  .recs {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-top: 60px;
+  }
+  .recs h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: -0.3px;
+  }
+  .rec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 700px) { .rec-grid { grid-template-columns: 1fr; } }
+  .rec-card {
+    border-radius: 14px;
+    padding: 18px;
+    border: 1.5px solid;
+  }
+  .rec-card.gold { background: #fffbf0; border-color: #f0d070; }
+  .rec-card.silver { background: #f8f8fb; border-color: #c8c0e0; }
+  .rec-card.bronze { background: #fbf5f0; border-color: #d0b8a0; }
+  .rec-card .medal { font-size: 20px; margin-bottom: 6px; }
+  .rec-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .rec-card p { font-size: 12.5px; color: #5a4c40; line-height: 1.55; }
+
+  .rec-first {
+    background: linear-gradient(135deg, #fff8ef, #fdf3e8);
+    border-radius: 14px;
+    padding: 18px 22px;
+    border: 1.5px solid var(--amber);
+    margin-bottom: 16px;
+  }
+  .rec-first h3 { font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .rec-first p { font-size: 13.5px; color: var(--text); }
+
+  .avoid-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .avoid-item {
+    background: #fff0ee;
+    border: 1px solid #f0c8c0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: #7a3025;
+  }
+  .avoid-item strong { display: block; font-weight: 700; margin-bottom: 2px; }
+
+  footer {
+    text-align: center;
+    padding: 24px 40px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Mindloom — Visual Reference Gallery</h1>
+  <p>Patch 4P · Research Only · No code · No production changes</p>
+  <div class="badges">
+    <span class="badge badge-note">Research Only — No Implementation</span>
+    <span class="badge badge-refs">28 References</span>
+    <span class="badge badge-cats">5 Categories</span>
+  </div>
+</header>
+
+<main>
+
+  <nav class="nav">
+    <a class="nav-btn c1" href="#cat1">1. Soft Bubble Causal Graph</a>
+    <a class="nav-btn c2" href="#cat2">2. Premium Knowledge Graph</a>
+    <a class="nav-btn c3" href="#cat3">3. Neural Heat / Node Map</a>
+    <a class="nav-btn c4" href="#cat4">4. Organic Speech Cloud</a>
+    <a class="nav-btn c5" href="#cat5">5. Bento Explanatory Cards</a>
+    <a class="nav-btn" href="#recs">Рекомендации</a>
+  </nav>
+
+  <!-- CATEGORY 1 -->
+  <section class="section c1" id="cat1">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <h2>1. Soft Bubble Causal Graph</h2>
+      <span class="section-sub">Органические пузыри, тёплые цвета, мягкие связи — живая карта отношений</span>
+      <span class="section-count">6 refs</span>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-01</span>
+          <span class="card-title">Kumu.io Stakeholder Map</span>
+        </div>
+        <a class="card-url" href="https://kumu.io" target="_blank">kumu.io</a>
+        <p class="card-desc">Круглые "пузырьки" разного размера, force-directed layout, цветные группы. Ощущение живой карты территории, а не схемы архитектуры.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Размер bubble = интенсивность узла. Мягкая группировка по цвету. "Карта", не "диаграмма".
+        </div>
+        <span class="card-risk risk-med">🟡 Риск: средний</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-02</span>
+          <span class="card-title">Whimsical Mind Maps</span>
+        </div>
+        <a class="card-url" href="https://whimsical.com/mind-maps" target="_blank">whimsical.com/mind-maps</a>
+        <p class="card-desc">Чистые rounded-rectangle карточки. Мягкие изогнутые линии без стрелок. Цветные бордеры для различения типов. Очень readable на mobile.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Скруглённые карточки-узлы. Кривые без стрелок → ощущение "мысли". Иерархия через размер и цвет.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-03</span>
+          <span class="card-title">Coggle Radial Mind Map</span>
+        </div>
+        <a class="card-url" href="https://coggle.it/gallery" target="_blank">coggle.it/gallery</a>
+        <p class="card-desc">Радиальная структура с органическими кривыми ветвями "как реки". Яркие soft цвета — coral, violet, amber. Текст живёт на ветке, не в рамке. Живое и поэтическое.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Органические кривые edges. Цветовые семейства веток. Ощущение "расходящейся системы".
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-04</span>
+          <span class="card-title">FigJam Causal Loop Template</span>
+        </div>
+        <a class="card-url" href="https://www.figma.com/templates/causal-loop-diagram/" target="_blank">figma.com/templates/causal-loop-diagram</a>
+        <p class="card-desc">Мягкий off-white фон. Rounded rect узлы с читаемой типографикой. Curved arrows с метками типов (+/-). Объяснительный, образовательный стиль.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Подписи типов связей. Rounded nodes с явным label. Compact legend с примерами.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-05</span>
+          <span class="card-title">Miro Bubble Map Template</span>
+        </div>
+        <a class="card-url" href="https://miro.com/templates/bubble-map/" target="_blank">miro.com/templates/bubble-map</a>
+        <p class="card-desc">Varying-size circles как основная visual hierarchy. Gradient fill внутри bubbles. Тонкие линии связей без декораций. Интуитивное, "мыслительное" ощущение.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Разный размер bubbles = готовая иерархия intensity. Gradient fill per type. Центральный bubble заметно крупнее.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-06</span>
+          <span class="card-title">mymap.ai Causal Loop</span>
+        </div>
+        <a class="card-url" href="https://www.mymap.ai/template/causal-loop-diagram" target="_blank">mymap.ai/template/causal-loop-diagram</a>
+        <p class="card-desc">AI-генерированные CLD с modern SaaS aesthetics. Soft background, rounded nodes, цветные arrows. Stрелки с явным типом: solid vs dashed.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Цветные стрелки = тип связи без клика. Subtle shadow под nodes. Auto-layout без overlap.
+        </div>
+        <span class="card-risk risk-med">🟡 Риск: средний</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CATEGORY 2 -->
+  <section class="section c2" id="cat2">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <h2>2. Premium Knowledge Graph</h2>
+      <span class="section-sub">Умный, изысканный — живая карта знания, не схема для презентации</span>
+      <span class="section-count">6 refs</span>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-07</span>
+          <span class="card-title">Heptabase Knowledge Graph</span>
+        </div>
+        <a class="card-url" href="https://heptabase.com" target="_blank">heptabase.com</a>
+        <p class="card-desc">Cards на бесконечном whiteboard. Белые карточки на светло-сером canvas. Связи без стрелок — ощущение organic network. Whiteboard dot-grid texture. Thinking tool, не dashboard.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Card-style nodes с контентом. Dot-grid background texture. "Фокус на одном узле" — клик = раскрытие карточки.
+        </div>
+        <span class="card-risk risk-med">🟡 Риск: средний</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-08</span>
+          <span class="card-title">Napkin.ai Visual Diagrams</span>
+        </div>
+        <a class="card-url" href="https://www.napkin.ai" target="_blank">napkin.ai</a>
+        <p class="card-desc">AI text-to-visual диаграммы. Professional, clean, цветные accent nodes с иконками. Premium feel через тонкую типографику внутри node. "Intelligent tool" framing.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Иконка + label внутри узла (уже есть!). Premium типографика в node. "AI tool" эстетика.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-09</span>
+          <span class="card-title">InfraNodus Text Network</span>
+        </div>
+        <a class="card-url" href="https://infranodus.com/graphs" target="_blank">infranodus.com/graphs</a>
+        <p class="card-desc">Цветные кластеры по топикам. Nodes разного размера (betweenness centrality). Glowing nodes на dark background. Light version: soft пастельные clusters. Как карта мозга.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Glow-эффект на важных узлах (уже частично есть!). Semantic cluster = психологические типы через цвет. Size = intensity.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-10</span>
+          <span class="card-title">Figma Causal Loop Community File</span>
+        </div>
+        <a class="card-url" href="https://www.figma.com/community/file/1118686468186768017" target="_blank">figma.com/community/file/1118686468186768017</a>
+        <p class="card-desc">Профессиональный FigJam-темплейт с тёплыми neutral тонами. Узлы как карточки с заголовком. Directed curved arrows с цветом = тип. Consultant-quality.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Warm neutral tones. Directed arrows цветом = тип связи. Compact legend с image-samples.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-11</span>
+          <span class="card-title">Neo4j LLM Graph Builder</span>
+        </div>
+        <a class="card-url" href="https://neo4j.com/blog/developer/llm-knowledge-graph-builder-release/" target="_blank">neo4j.com/llm-graph-builder</a>
+        <p class="card-desc">Interactive knowledge graph на dark background. Entity-type coloring. Curved directed edges. Node detail panel справа при клике. Click-to-detail pattern.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Detail panel = sheet при клике (уже реализовано!). Entity-type coloring = психологические типы.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-12</span>
+          <span class="card-title">Obsidian + Juggl Extended Graph</span>
+        </div>
+        <a class="card-url" href="https://github.com/HEmile/juggl" target="_blank">github.com/HEmile/juggl</a>
+        <p class="card-desc">Obsidian graph view. Dark: светящиеся nodes, тонкие серые connections. Juggl: customizable shapes, colors, icons — warm theme возможна. Glow-nodes с мягкими shadows.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Glow-nodes (уже в коде). Force-radius для central node. Hover reveal для деталей.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CATEGORY 3 -->
+  <section class="section c3" id="cat3">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <h2>3. Neural Heat / Node Map</h2>
+      <span class="section-sub">Узлы как светящиеся точки — ощущение scan, heatmap, нейронной активности</span>
+      <span class="section-count">5 refs</span>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-13</span>
+          <span class="card-title">HealBubble Emotion Visualization</span>
+        </div>
+        <a class="card-url" href="https://dl.acm.org/doi/10.1145/3770445.3770497" target="_blank">acm.org — HealBubble 2025</a>
+        <p class="card-desc">Trauma-informed emotion bubbles — органические пузыри с цветом, формой и движением. Каждый bubble = эмоция. Анимированные, дышащие. Пастельные тона. Очень safe aesthetic.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Органическая форма bubble. Дышащий пульсирующий central node. Non-verbal visual metaphors.
+        </div>
+        <span class="card-risk risk-med">🟡 Риск: средний</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-14</span>
+          <span class="card-title">InfraNodus Cluster Color Map</span>
+        </div>
+        <a class="card-url" href="https://help.infranodus.com/kb/read-interpret-text-graph-network" target="_blank">help.infranodus.com/kb/read-interpret</a>
+        <p class="card-desc">Кластерная логика: одна группа = один тон. Nodes одного кластера притягиваются. Force-Atlas → organic clustering. Карта смыслов, brain map.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Цветовая семантика: control=coral, emotion=amber, body=green. Soft glow вокруг группы.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-15</span>
+          <span class="card-title">open-mindmap iOS-style Component</span>
+        </div>
+        <a class="card-url" href="https://mindmap.u14.app" target="_blank">mindmap.u14.app</a>
+        <p class="card-desc">iOS-style UI: frosted glass controls, rounded corners, smooth animations. Warm background. Rounded rectangle nodes с мягкими shadows. Нативный Apple iOS feel.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Frosted glass панели (backdrop-filter blur). iOS-level rounded corners. Smooth entrance animation.
+        </div>
+        <span class="card-risk risk-med">🟡 Риск: средний</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-16</span>
+          <span class="card-title">Flourish Radial Network Charts</span>
+        </div>
+        <a class="card-url" href="https://flourish.studio/visualisations/network-charts/" target="_blank">flourish.studio/network-charts</a>
+        <p class="card-desc">Radial network: узлы равномерно вокруг центра. Image nodes с кастомными иконками. Clean, editorial look. Responsive. Data journalism, Premium Economist-style.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Radial layout = no overlap (главный improvement!). Editorial quality arrows. Hover: subtle ring.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-17</span>
+          <span class="card-title">Miro Brain Map Template</span>
+        </div>
+        <a class="card-url" href="https://miro.com/templates/brain-map/" target="_blank">miro.com/templates/brain-map</a>
+        <p class="card-desc">Radial brain map: центральный concept, ветви по направлениям. Цветные мягкие карточки-узлы. Ассоциативная структура. "Ваша система", не "техническая схема".</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          "Brain map" framing. Ветви по ассоциативным направлениям. Центральный concept = "ядро паттерна".
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CATEGORY 4 -->
+  <section class="section c4" id="cat4">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <h2>4. Organic Speech Cloud / Phrase Cloud</h2>
+      <span class="section-sub">Речь как форма — слова живут внутри облака, которое само является визуальной метафорой</span>
+      <span class="section-count">5 refs</span>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-18</span>
+          <span class="card-title">Blobmaker Organic SVG Shapes</span>
+        </div>
+        <a class="card-url" href="https://www.blobmaker.app" target="_blank">blobmaker.app</a>
+        <p class="card-desc">Генератор абсолютно органических SVG blob-форм. Не симметричные, не геометрические. Настройка complexity, contrast, color. Чистый SVG path output. Природные, живые формы.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Статичный blob path как background под chips. Warm ivory fill. Blob = визуальная метафора "пузыря речи".
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-19</span>
+          <span class="card-title">CSS Speech Bubble Collections</span>
+        </div>
+        <a class="card-url" href="https://freefrontend.com/css-speech-bubbles/" target="_blank">freefrontend.com/css-speech-bubbles</a>
+        <p class="card-desc">Pure CSS speech bubbles разных форм через border-radius + pseudo-elements. Облачная форма без хвостика. Soft box-shadow вместо border. No dependencies, SSR-safe.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Облако без хвостика через large border-radius. ::before / ::after bumps. Парящее ощущение через shadow.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-20</span>
+          <span class="card-title">Figma Tags / Chips UI Kit</span>
+        </div>
+        <a class="card-url" href="https://www.figma.com/community/file/1223445741730414477" target="_blank">figma.com/community/file/1223445741730414477</a>
+        <p class="card-desc">Коллекция chip-компонентов: soft filled, outlined, with icon. Warm color variants: amber, coral, teal, violet, cream. Rounded pill shape. Polished, accessible.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Подтверждение текущего pill chip дизайна. Color semantic: chip-red = тяжёлые паттерны, chip-green = ресурсы.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-21</span>
+          <span class="card-title">Displayr Word Cloud Alternatives</span>
+        </div>
+        <a class="card-url" href="https://www.displayr.com/alternatives-word-cloud/" target="_blank">displayr.com/alternatives-word-cloud</a>
+        <p class="card-desc">Bubble chart: каждая фраза = bubble по частоте. Sentiment color: тревожные = warm red/amber. Scatter подход: chips по значимости, не по алфавиту. Semantic positioning.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Bigger chip/bubble = более значимая фраза. Sentiment tinting. Treemap как вариант для категоризации.
+        </div>
+        <span class="card-risk risk-med">🟡 Риск: средний</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-22</span>
+          <span class="card-title">HealBubble Emotion Bubbles (concept)</span>
+        </div>
+        <a class="card-url" href="https://dl.acm.org/doi/10.1145/3770445.3770497" target="_blank">acm.org — HealBubble 2025</a>
+        <p class="card-desc">Emotion bubbles как visual metaphor. Органические blobs с дышащей анимацией (scale 1→1.05). Пастельные тона: лавандовый, персиковый, мятный. Тихие, therapeutic, safe space.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Дышащий blob для central phrase (CSS keyframe). Пастельный fill. Therapeutic color palette рядом с Mindloom tones.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CATEGORY 5 -->
+  <section class="section c5" id="cat5">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <h2>5. Bento Explanatory Graph Cards</h2>
+      <span class="section-sub">Модульные карточки — mini-graph внутри card, human text рядом</span>
+      <span class="section-count">6 refs</span>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-23</span>
+          <span class="card-title">Bento UI Design Trend (Apple style)</span>
+        </div>
+        <a class="card-url" href="https://www.stan.vision/journal/revolutionizing-ui-ux-in-2024-with-bento-ui-grid-design-trend" target="_blank">stan.vision / bento-ui-grid-design-trend</a>
+        <p class="card-desc">Сетка модульных карточек разного размера (1×1, 2×1, 1×2). Apple popularized. Warm neutral backgrounds. Rounded corners 24–32px. Subtle shadows. Organized chaos, breathing room.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Mini-graph tile в bento cell. Card + text рядом = объяснительный контекст. Bento shell уже есть!
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-24</span>
+          <span class="card-title">Mindify AI Mental Health UI Kit</span>
+        </div>
+        <a class="card-url" href="https://www.behance.net/gallery/197098729/Mindify-AI-Mental-Health-App-UI-Kit" target="_blank">behance.net — Mindify AI UI Kit</a>
+        <p class="card-desc">275+ screens для mental health AI app. Mood tracking: soft circular progress, emotion bubbles, trend cards. Мягкая wellness palette. Non-alarming, encouraging data presentation.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Emotion indicator cards. Progress/intensity bars: тонкие, тёплые. Non-alarming presentation без red alerts.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-25</span>
+          <span class="card-title">Design Patterns for Mental Health</span>
+        </div>
+        <a class="card-url" href="https://designpatternsformentalhealth.org/" target="_blank">designpatternsformentalhealth.org</a>
+        <p class="card-desc">Best practices UI/UX для mental health products. Safe disclosure, progressive reveal, non-judgmental framing, calm palettes. "Safe container" aesthetic. Принципы дизайна, не просто визуал.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Non-judgmental labels: "паттерн", "наблюдение". Calm visual rhythm. Progressive disclosure (уже реализовано!).
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-26</span>
+          <span class="card-title">Figma Dependency Mapping Template</span>
+        </div>
+        <a class="card-url" href="https://www.figma.com/templates/dependency-mapping/" target="_blank">figma.com/templates/dependency-mapping</a>
+        <p class="card-desc">Color-coded pill nodes, curved directed arrows. Мягкий кремовый background. Compact legend. SaaS-quality, объяснительное, accessible. Pill nodes с цветным fill.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Pill nodes с type colors = Mindloom visual language. Curved arrows без перегруза. Hover tooltip = mini explanation.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-27</span>
+          <span class="card-title">Whimsical AI Mind Map</span>
+        </div>
+        <a class="card-url" href="https://whimsical.com/ai/ai-mind-maps" target="_blank">whimsical.com/ai/ai-mind-maps</a>
+        <p class="card-desc">AI-генерируемые mind maps. Центральный блок яркий и крупный. Satellite nodes цветные по типу. Auto-layout без overlap. Instant readability. "Умный инструмент" feel.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          Auto-layout = no overlap (главный improvement). Central block prominence. Color-by-type cards.
+        </div>
+        <span class="card-risk risk-med">🟡 Риск: средний</span>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-id">REF-28</span>
+          <span class="card-title">VisMe Data Story Cards</span>
+        </div>
+        <a class="card-url" href="https://visme.co/blog/data-visualization/" target="_blank">visme.co/blog/data-visualization</a>
+        <p class="card-desc">Бизнес data stories: одна метрика = одна карточка. Иконка + число + context. Warm palettes. Organic shapes как decorative elements в corner. Infographic-style explanatory design.</p>
+        <div class="card-take">
+          <strong>Взять для Mindloom</strong>
+          "One insight per card" = bento tile (уже есть!). Icon + number + brief context. Organic shapes как corner decoration.
+        </div>
+        <span class="card-risk risk-low">🟢 Риск: низкий</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="recs" id="recs">
+    <h2>Финальные рекомендации</h2>
+
+    <h3 style="font-size:14px; font-weight:700; margin-bottom:12px; color:var(--coral);">TOP-3 направления для Graph</h3>
+    <div class="rec-grid">
+      <div class="rec-card gold">
+        <div class="medal">🥇</div>
+        <h3>Radial Organic Bubble Map</h3>
+        <p>Coggle + Kumu hybrid. Статичный radial layout: центральный coral bubble + 6–7 satellite пузырей по кругу. Gradient fill по типу узла. Органические кривые edges с цветом и dash = тип связи. Subtle glow на central node. <strong>Решает overlap, нет новых зависимостей.</strong></p>
+      </div>
+      <div class="rec-card silver">
+        <div class="medal">🥈</div>
+        <h3>Card-Node Explanatory Map</h3>
+        <p>Heptabase + FigJam hybrid. Nodes = mini-карточки: тип (eyebrow) + label (bold) + intensity bar. Curved arrows с цветом. Click → detail sheet. <strong>Больше информации без клика.</strong></p>
+      </div>
+    </div>
+    <div class="rec-grid" style="margin-bottom:0;">
+      <div class="rec-card bronze">
+        <div class="medal">🥉</div>
+        <h3>Neural Cluster Map</h3>
+        <p>InfraNodus aesthetic. Glow-nodes с halo по психологическому типу. Subtle background wash по кластерам. Пульсирующий central node. <strong>Самое "психологическое" ощущение, но риск выглядеть медицинским.</strong></p>
+      </div>
+      <div style="flex:1;"></div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid var(--border); margin: 28px 0;">
+
+    <h3 style="font-size:14px; font-weight:700; margin-bottom:12px; color:var(--amber);">TOP-3 направления для Speech Cloud</h3>
+    <div class="rec-grid">
+      <div class="rec-card gold">
+        <div class="medal">🥇</div>
+        <h3>SVG Organic Blob + HTML Chips</h3>
+        <p>Blobmaker blob как background, chips поверх, central phrase в центре. Breathing animation на blob. <strong>Нет зависимостей, наиболее "облачное" ощущение.</strong></p>
+      </div>
+      <div class="rec-card silver">
+        <div class="medal">🥈</div>
+        <h3>Card-Cloud Hybrid + Emotion Bubble</h3>
+        <p>Карточка с bumps сверху. Большой soft circle в centre с central phrase + дыхание. Chips вокруг. <strong>Максимально надёжно на mobile, нет зависимостей.</strong></p>
+      </div>
+    </div>
+    <div class="rec-grid" style="margin-bottom:0;">
+      <div class="rec-card bronze">
+        <div class="medal">🥉</div>
+        <h3>Semantic Bubble Chart</h3>
+        <p>Каждая phrase = bubble по значимости. Floating layout. Цвет = sentiment. <strong>Самый семантически богатый, но сложнее в реализации.</strong></p>
+      </div>
+      <div style="flex:1;"></div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid var(--border); margin: 28px 0;">
+
+    <div class="rec-first">
+      <h3>Что выбрать первым</h3>
+      <p><strong>Graph:</strong> Radial Organic Bubble Map — решает реальную проблему overlap, нет новых deps, близко к текущему коду, визуально сильнее всего.<br>
+      <strong>Speech Cloud:</strong> Card-Cloud Hybrid с Emotion Bubble center — самое надёжное, нет deps, mobile-first, легко как отдельный компонент.</p>
+    </div>
+
+    <h3 style="font-size:13px; font-weight:700; margin-bottom:10px; color:#7a3025;">Что НЕ выбирать</h3>
+    <div class="avoid-grid">
+      <div class="avoid-item">
+        <strong>Dark InfraNodus theme</strong>
+        Не совпадает с warm ivory Mindloom palette
+      </div>
+      <div class="avoid-item">
+        <strong>Force-directed physics</strong>
+        Нестабильность при 5–8 узлах, "прыгает"
+      </div>
+      <div class="avoid-item">
+        <strong>True wordcloud algorithm</strong>
+        Не тот UX, что нужен для speech patterns
+      </div>
+      <div class="avoid-item">
+        <strong>Technical graph aesthetic</strong>
+        Neo4j/engineering look — не психологический
+      </div>
+      <div class="avoid-item">
+        <strong>3D graph visualization</strong>
+        Overkill, accessibility проблемы, mobile риск
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  Mindloom Visual Reference Gallery · Patch 4P · Research Only · No code · No production changes · 28 refs / 5 categories
+</footer>
+
+</body>
+</html>
