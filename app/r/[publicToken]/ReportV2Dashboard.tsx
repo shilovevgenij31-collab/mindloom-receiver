@@ -13,6 +13,7 @@ import type {
   MindloomReportV2ProtectedNeed,
   MindloomReportV2Snapshot,
 } from '@/lib/normalize-report';
+import { SpeechCloud, type SpeechCloudItem } from '@/components/SpeechCloud';
 
 // ── Visual System Tokens ──────────────────────────────────────────────────────
 // Unified design constants — applied across all sections for consistency.
@@ -707,23 +708,6 @@ function getShortLabel(label: string | null | undefined): string {
   if (words.length <= 1) return cleaned;
   const first = words[0];
   return first.length <= 13 ? first : first.slice(0, 12) + '…';
-}
-
-function phraseSemantic(phrase: string): { bg: string; border: string; text: string } {
-  const lower = phrase.toLowerCase();
-  if (/контрол|вина|обязан|долж|страх|тревог|нельз|запрет|критик/.test(lower)) {
-    return { bg: '#fff0ec', border: 'rgba(228,111,97,0.28)', text: '#9a3020' };
-  }
-  if (/избег|напряж|невозмож|тяжел|перегруз|сложно/.test(lower)) {
-    return { bg: '#fff9ea', border: 'rgba(228,166,52,0.28)', text: '#8a6012' };
-  }
-  if (/хочу|могу|ресурс|изменен|лучше|свобод|возможн/.test(lower)) {
-    return { bg: '#edf9f3', border: 'rgba(104,169,141,0.28)', text: '#2f7c61' };
-  }
-  if (/тело|устал|пауза|отдых|остановит|телес/.test(lower)) {
-    return { bg: '#edf6ff', border: 'rgba(74,149,211,0.28)', text: '#326ea6' };
-  }
-  return { bg: '#f2efff', border: 'rgba(127,104,217,0.22)', text: '#5244a8' };
 }
 
 function shortCentralText(text: string | null | undefined, maxWords = 5): string | null {
@@ -1455,8 +1439,7 @@ function KeyPhrasesSupportSection({ phrases, centralMeaning, analyticalThemes }:
   );
 }
 
-function MindloomSpeechCloud({ phrases, centralMeaning, analyticalThemes }: { phrases: string[]; centralMeaning?: string | null; analyticalThemes?: string[] }) {
-  const [showAll, setShowAll] = useState(false);
+function MindloomPhraseCloud({ phrases, centralMeaning, analyticalThemes }: { phrases: string[]; centralMeaning?: string | null; analyticalThemes?: string[] }) {
   const normalized = uniqueStrings(phrases.filter(has));
   if (normalized.length < 2) {
     return <KeyPhrasesSupportSection phrases={phrases} centralMeaning={centralMeaning} analyticalThemes={analyticalThemes} />;
@@ -1467,140 +1450,45 @@ function MindloomSpeechCloud({ phrases, centralMeaning, analyticalThemes }: { ph
     centralMeaning,
   ) ?? normalized[0];
   const centralText = shortCentralText(rawCentral, 5) ?? rawCentral;
+  const themes = uniqueStrings((analyticalThemes ?? []).filter(has));
 
-  const INITIAL = 6;
-  const visiblePhrases = showAll ? normalized : normalized.slice(0, INITIAL);
-  const hiddenCount = normalized.length - INITIAL;
-
-  const renderChip = (phrase: string, idx: number) => {
-    const sem = phraseSemantic(phrase);
-    const isFirst = idx === 0;
-    const isProminent = idx <= 2;
-    return (
-      <span key={`sc-${idx}`} className="mlm-chip-float" style={{
-        display: 'inline-flex', alignItems: 'center',
-        padding: isFirst ? '6px 14px' : isProminent ? '5px 11px' : '4px 9px',
-        borderRadius: 999,
-        fontSize: isFirst ? 13.5 : isProminent ? 12 : 11,
-        lineHeight: 1.4,
-        fontWeight: isFirst ? 650 : isProminent ? 610 : 570,
-        background: sem.bg, color: sem.text,
-        border: `1px solid ${sem.border}`,
-        boxShadow: isFirst
-          ? '0 2px 8px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04)'
-          : isProminent
-            ? '0 1px 5px rgba(0,0,0,0.05)'
-            : '0 1px 3px rgba(0,0,0,0.03)',
-        maxWidth: 'calc(100% - 8px)',
-      }}>
-        {phrase}
-      </span>
-    );
-  };
+  const TONE_CYCLE = [
+    'warm', 'peach', 'rose', 'blush', 'sand', 'sage', 'sky', 'lavender', 'neutral',
+  ] as const;
+  const cloudItems: SpeechCloudItem[] = normalized.map((text, i) => ({
+    id: String(i),
+    text,
+    tone: TONE_CYCLE[i % TONE_CYCLE.length],
+  }));
 
   return (
-    <SectionShell title="Что повторяется в речи" icon="speech"
-      intro="Здесь собраны повторяющиеся слова и темы. Они помогают увидеть, вокруг чего чаще всего собирается паттерн.">
-      <div style={{
-        position: 'relative',
-        background: 'linear-gradient(155deg, #fffefc 0%, #fdfaf5 52%, #fbf6ee 100%)',
-        border: '1px solid rgba(118,92,68,0.11)',
-        borderRadius: '26px 30px 28px 24px / 28px 26px 30px 26px',
-        boxShadow: '0 4px 20px rgba(70,53,35,0.058), 0 14px 40px rgba(70,53,35,0.042)',
-        padding: '1.5rem 1.2rem',
-        overflow: 'hidden',
-      }}>
-        {/* Blob decorations — clipped by overflow:hidden, pointer-events:none */}
-        <div aria-hidden="true" style={{
-          position: 'absolute', top: -44, right: -32,
-          width: 200, height: 200, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(127,104,217,0.07) 0%, transparent 70%)',
-          filter: 'blur(44px)', pointerEvents: 'none', zIndex: 0,
-        }} />
-        <div aria-hidden="true" style={{
-          position: 'absolute', bottom: -28, left: -24,
-          width: 180, height: 180, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(228,111,97,0.05) 0%, transparent 70%)',
-          filter: 'blur(36px)', pointerEvents: 'none', zIndex: 0,
-        }} />
-
-        {/* Central bubble */}
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          marginBottom: '0.75rem', position: 'relative', zIndex: 1,
-        }}>
-          <div className="mlm-speech-center" style={{
-            width: 148, height: 148, borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            textAlign: 'center', padding: '1rem',
-            background: 'linear-gradient(148deg, #f0edff 0%, #e8e2ff 55%, #ddd5ff 100%)',
-            border: '2px solid rgba(127,104,217,0.20)',
-            boxShadow: '0 4px 16px rgba(127,104,217,0.11), 0 0 0 8px rgba(127,104,217,0.05), 0 0 0 16px rgba(127,104,217,0.02)',
+    <SectionShell
+      title="Что повторяется в речи"
+      icon="speech"
+      intro="Здесь собраны повторяющиеся слова и темы. Они помогают увидеть, вокруг чего чаще всего собирается паттерн."
+    >
+      <SpeechCloud items={cloudItems} centerText={centralText} centerLabel="центральная тема" />
+      {themes.length > 0 && (
+        <div style={{ marginTop: '0.65rem' }}>
+          <div style={{
+            fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase',
+            fontWeight: 700, color: '#7d746b', marginBottom: '0.38rem',
           }}>
-            <strong style={{ fontSize: '12px', lineHeight: 1.35, color: '#3a2e5e', fontWeight: 720, letterSpacing: '-0.02em' }}>
-              {centralText}
-            </strong>
+            Темы, которые заметил отчёт
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+            {themes.map((theme, i) => (
+              <span key={i} style={{
+                padding: '4px 10px', borderRadius: 8, fontSize: 11, lineHeight: 1.4,
+                background: '#f5f5f0', color: '#7d746b',
+                border: '1px solid rgba(118,92,68,0.18)', fontWeight: 560,
+              }}>
+                {theme}
+              </span>
+            ))}
           </div>
         </div>
-
-        {/* Chips below bubble in flex-wrap */}
-        {visiblePhrases.length > 0 && (
-          <div style={{
-            display: 'flex', flexWrap: 'wrap', gap: '0.42rem 0.46rem',
-            justifyContent: 'center',
-            position: 'relative', zIndex: 1,
-          }}>
-            {visiblePhrases.map((phrase, i) => renderChip(phrase, i))}
-          </div>
-        )}
-
-        {/* Expand button */}
-        {!showAll && hiddenCount > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0.9rem', position: 'relative', zIndex: 1 }}>
-            <button
-              type="button"
-              onClick={() => setShowAll(true)}
-              className="mlm-interactive-card"
-              style={{
-                background: 'rgba(127,104,217,0.08)',
-                border: '1px solid rgba(127,104,217,0.20)',
-                cursor: 'pointer',
-                fontSize: '0.77rem', color: '#6658b8', fontWeight: 650,
-                padding: '0.32rem 0.9rem', borderRadius: 999,
-                display: 'inline-flex', alignItems: 'center', gap: '0.28rem',
-              }}
-            >
-              + ещё {hiddenCount}
-            </button>
-          </div>
-        )}
-
-        {/* Analytical themes group */}
-        {analyticalThemes && analyticalThemes.length > 0 && (
-          <div style={{
-            marginTop: '0.85rem', paddingTop: '0.75rem',
-            borderTop: '1px solid rgba(127,104,217,0.12)',
-            position: 'relative', zIndex: 1,
-          }}>
-            <div style={{ fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#9d9890', marginBottom: '0.45rem', textAlign: 'center' }}>
-              Темы, которые заметил отчёт
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.38rem 0.46rem', justifyContent: 'center' }}>
-              {analyticalThemes.map((theme, i) => (
-                <span key={`analytic-${i}`} style={{
-                  display: 'inline-flex', alignItems: 'center',
-                  padding: '4px 11px', borderRadius: 999,
-                  fontSize: 11.5, lineHeight: 1.4, fontWeight: 570,
-                  background: '#f5f4f0', color: '#7d746b',
-                  border: '1px solid rgba(118,92,68,0.18)',
-                }}>
-                  {theme}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </SectionShell>
   );
 }
@@ -4193,7 +4081,7 @@ export function ReportV2Dashboard({ report, createdAt }: {
       {honestTranslationData && <HonestTranslationSectionExact ht={honestTranslationData} />}
 
       {/* 8 — Key phrases / speech cloud */}
-      <MindloomSpeechCloud phrases={directPhrases} analyticalThemes={analyticalThemes} centralMeaning={phraseMicroscopeData?.summary ?? report.hero.title ?? null} />
+      <MindloomPhraseCloud phrases={directPhrases} analyticalThemes={analyticalThemes} centralMeaning={phraseMicroscopeData?.summary ?? report.hero.title ?? null} />
 
       {/* 9 — Heatmap */}
       <HeatmapSection heatmap={report.heatmap} activeNodes={activeNodes} graphNodes={report.node_graph.nodes} keyPhrases={keyPhrases} />
