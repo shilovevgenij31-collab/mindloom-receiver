@@ -134,11 +134,10 @@ function assignChipsToSlots(items: SpeechCloudItem[]): ChipAssignment[] {
 // on .sc-chip is a separate cascade property and is never clobbered by this.
 //
 // Mobile strategy (≤480px):
-//   Desktop aspect-ratio 1080/690 makes the stage only ~234px tall on a 366px
-//   canvas — not enough room for 6 chips + central bubble without collision.
-//   Solution: override to 3/4 portrait ratio (→ ~488px tall), then reposition
-//   all 6 active slots into 4 clean rows with x values 26%/50%/74% that stay
-//   safely inside the cloud lobes. Slots 3/4 (extreme side bumps) stay hidden.
+//   aspect-ratio 5/4 → ~293px tall on a 366px canvas (was 3/4 = 488px — too tall).
+//   6 chips in a compact hexagonal arrangement: chip centers at y 9%/26%/74%/91%
+//   with x spread 26%/50%/74%. Bubble at 50% has ≥28px clear gap to nearest chips.
+//   All 6 chip centers verified inside cloud lobe boundaries at this ratio.
 const CSS = `
 @keyframes sc-drift-a{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0.5px,-2.5px,0)}}
 @keyframes sc-drift-b{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-0.5px,-2px,0)}}
@@ -167,23 +166,23 @@ const CSS = `
 @media(prefers-reduced-motion:reduce){.sc-chip,.sc-center{animation:none!important}}
 
 @media(max-width:480px){
-  /* Portrait stage — !important overrides the inline aspect-ratio */
-  .sc-cloud-stage{aspect-ratio:3/4!important}
+  /* Compact stage: 5/4 ratio → ~293px tall on 366px canvas.
+     !important overrides the inline aspect-ratio. */
+  .sc-cloud-stage{aspect-ratio:5/4!important}
 
   /* Extreme side bumps stay hidden */
   .sc-slot-3,.sc-slot-4{display:none}
 
-  /* 4-row mobile layout — !important overrides inline top/left/width */
-  /* Row 1 — top center */
-  .sc-slot-1{top:8%!important;left:50%!important;width:148px!important}
-  /* Row 2 — left + right arc */
-  .sc-slot-0{top:23%!important;left:26%!important;width:135px!important}
-  .sc-slot-2{top:23%!important;left:74%!important;width:135px!important}
-  /* Row 3 — left + right arc */
-  .sc-slot-5{top:71%!important;left:26%!important;width:135px!important}
-  .sc-slot-7{top:71%!important;left:74%!important;width:135px!important}
-  /* Row 4 — bottom center */
-  .sc-slot-6{top:86%!important;left:50%!important;width:148px!important}
+  /* Hexagonal 6-chip layout.
+     Centers: top-center y=9%, upper-arc y=26%, lower-arc y=74%, bottom-center y=91%.
+     x spread 26%/50%/74% fills horizontal space without overflowing.
+     Bubble at y=50%=147px has ≥28px gap to nearest chip edges. */
+  .sc-slot-1{top:9%!important;left:50%!important;width:148px!important}
+  .sc-slot-0{top:26%!important;left:26%!important;width:130px!important}
+  .sc-slot-2{top:26%!important;left:74%!important;width:130px!important}
+  .sc-slot-5{top:74%!important;left:26%!important;width:130px!important}
+  .sc-slot-7{top:74%!important;left:74%!important;width:130px!important}
+  .sc-slot-6{top:91%!important;left:50%!important;width:148px!important}
 
   .sc-chip{font-size:0.65rem;padding:6px 10px}
 }
