@@ -1429,7 +1429,7 @@ export default async function ReportPage({ params }: PageProps) {
         {/* Footer */}
         <div style={{ paddingTop: '1.5rem', borderTop: '1px solid #e8e3db', textAlign: 'center', marginTop: '0.5rem', display: usesV2Dashboard ? 'none' : 'block' }}>
           <p style={{ margin: 0, fontSize: '0.78rem', color: '#c5c0bb' }}>
-            Mindloom{v2?.meta.schema_version ? ` · schema ${v2.meta.schema_version}` : nr.schemaVersion ? ` · schema ${nr.schemaVersion}` : ''}
+            Mindloom · аналитический отчёт
           </p>
         </div>
 

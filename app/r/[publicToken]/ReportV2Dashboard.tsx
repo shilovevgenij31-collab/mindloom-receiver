@@ -79,7 +79,7 @@ function SnapshotSectionExact({ snap }: { snap: NonNullable<MindloomReportV2['sn
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.72rem' }}>
                   <div style={{ width: 28, textAlign: 'right', fontSize: 17, lineHeight: 1, fontWeight: 720, color: '#e46f61' }}>{String(i + 1)}</div>
                   <div style={{ width: 1, height: 20, background: 'rgba(118,92,68,0.14)' }} />
-                  <p style={{ margin: 0, fontSize: '13.5px', color: '#2e2820', lineHeight: 1.4, fontWeight: 550 }}>{sig}</p>
+                  <p style={{ margin: 0, fontSize: '13.5px', color: '#2e2820', lineHeight: 1.4, fontWeight: 550 }}>{sanitizeUserText(sig) ?? sig}</p>
                 </div>
               ))}
             </div>
@@ -91,7 +91,7 @@ function SnapshotSectionExact({ snap }: { snap: NonNullable<MindloomReportV2['sn
           <MLIcon name="leaf" tone="green" size={18} />
           <div>
             <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Что можно начать замечать</div>
-            <p style={{ margin: '0.35rem 0 0', fontSize: '14px', fontWeight: 650, color: '#201d1b', lineHeight: 1.4 }}>{first_step}</p>
+            <p style={{ margin: '0.35rem 0 0', fontSize: '14px', fontWeight: 650, color: '#201d1b', lineHeight: 1.4 }}>{sanitizeUserText(first_step) ?? first_step}</p>
             <p style={{ margin: '0.4rem 0 0', fontSize: '11.5px', color: '#4a7a62', lineHeight: 1.5 }}>Не нужно менять всё сразу. Начните замечать момент, когда паттерн включается автоматически.</p>
           </div>
         </div>
@@ -123,7 +123,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
             <MLIcon name="warning" tone="red" size={16} />
             <div>
               <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#a8392c' }}>Что включает паттерн</div>
-              <div style={{ marginTop: 4, fontSize: '14px', fontWeight: 650, lineHeight: 1.45, color: '#3a241d' }}>{blocker}</div>
+              <div style={{ marginTop: 4, fontSize: '14px', fontWeight: 650, lineHeight: 1.45, color: '#3a241d' }}>{sanitizeUserText(blocker)}</div>
             </div>
           </div>
         )}
@@ -131,14 +131,14 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
           <div style={{ borderRadius: VS.r.md, padding: '1rem', background: '#f5f3ff', border: '1px solid rgba(127,104,217,0.16)' }}>
             <MLIcon name="cycle" tone="purple" size={16} />
             <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#4d3aa6' }}>Что помогает почувствовать</div>
-            <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#4a4060' }}>{repeat}</div>
+            <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#4a4060' }}>{sanitizeUserText(repeat)}</div>
           </div>
         )}
         {has(systemGoal) && (
           <div style={{ borderRadius: VS.r.md, padding: '1rem', background: 'linear-gradient(135deg, #eef9f4, #e6f3ec)', border: '1px solid rgba(104,169,141,0.20)' }}>
             <MLIcon name="compass" tone="green" size={16} />
             <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Куда можно двигаться</div>
-            <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#315a49' }}>{systemGoal}</div>
+            <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#315a49' }}>{sanitizeUserText(systemGoal)}</div>
           </div>
         )}
       </div>
@@ -171,7 +171,7 @@ function ProtectedNeedSectionExact({ pn }: { pn: NonNullable<MindloomReportV2['p
       {has(interpretation) && (
         <div style={{ marginTop: '0.9rem', paddingInline: '0.1rem', fontSize: '13.5px', lineHeight: 1.6, color: '#7d746b', fontStyle: 'italic' }}>
           <span style={{ display: 'inline-block', width: 18, height: 1, background: '#e46f61', verticalAlign: 'middle', marginRight: 8 }} />
-          {interpretation}
+          {sanitizeUserText(interpretation)}
         </div>
       )}
     </SectionShell>
@@ -194,7 +194,6 @@ function PhraseMicroscopeSectionExact({ pm }: {
         <div style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
           {visibleFragments.map((frag, i) => {
             const accent = i === 0 ? '#e46f61' : i === 1 ? '#7f68d9' : '#e4a634';
-            const accentText = i === 0 ? '#a8392c' : i === 1 ? '#4d3aa6' : '#7a5816';
             const bg = i === 0 ? '#fff6f4' : i === 1 ? '#f5f3ff' : '#fffbef';
             const border = i === 0 ? 'rgba(228,111,97,0.13)' : i === 1 ? 'rgba(127,104,217,0.13)' : 'rgba(228,166,52,0.13)';
             return (
@@ -204,15 +203,17 @@ function PhraseMicroscopeSectionExact({ pm }: {
                   <div style={{ fontSize: 11, fontWeight: 740, color: '#7d746b' }}>{String(i + 1)}</div>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  {has(frag.text) && <div style={{ fontSize: '13px', fontWeight: 650, lineHeight: 1.35 }}>{`«${frag.text}»`}</div>}
-                  {has(frag.meaning) && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.42rem', marginTop: 4 }}>
-                      <div style={{ width: 12, height: 1, background: accent }} />
-                      <div style={{ fontSize: '11.5px', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700, color: accentText }}>{frag.meaning}</div>
-                    </div>
+                  {has(frag.text) && <div style={{ fontSize: '13.5px', fontWeight: 660, lineHeight: 1.35, color: '#201d1b' }}>{`«${frag.text}»`}</div>}
+                  {[frag.meaning, frag.pattern, frag.explanation].filter(has).length > 0 && (
+                    <ul style={{ margin: '6px 0 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                      {[frag.meaning, frag.pattern, frag.explanation].filter(has).map((item, j) => (
+                        <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.45rem', fontSize: '13px', color: '#3a3228', lineHeight: 1.55 }}>
+                          <div style={{ width: 6, height: 6, borderRadius: 999, background: accent, flexShrink: 0, marginTop: '0.45em' }} />
+                          <span>{sanitizeUserText(item) ?? item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   )}
-                  {has(frag.pattern) && <div style={{ marginTop: 5, fontSize: '12.5px', color: '#7d746b', lineHeight: 1.5 }}>{frag.pattern}</div>}
-                  {has(frag.explanation) && <div style={{ marginTop: 5, fontSize: '12.5px', color: '#7d746b', lineHeight: 1.5 }}>{frag.explanation}</div>}
                 </div>
               </div>
             );
@@ -221,7 +222,7 @@ function PhraseMicroscopeSectionExact({ pm }: {
       )}
       {has(pm.summary ?? undefined) && (
         <div style={{ marginTop: '0.75rem', borderRadius: 18, padding: '0.9rem 1rem', background: '#fbf5ec', border: '1px solid rgba(118,92,68,0.14)', color: '#5d564f', fontSize: '13px', lineHeight: 1.6 }}>
-          {pm.summary}
+          {sanitizeUserText(pm.summary) ?? pm.summary}
         </div>
       )}
     </SectionShell>
@@ -236,19 +237,19 @@ function HonestTranslationSectionExact({ ht }: { ht: NonNullable<MindloomReportV
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {visible.map((item, i) => (
           <div key={i} style={{ borderRadius: VS.r.lg, overflow: 'hidden', border: '1px solid rgba(118,92,68,0.13)', background: '#fffdf8', boxShadow: VS.shadow.card }}>
-            <div style={{ padding: '0.9rem 1rem', display: 'flex', alignItems: 'flex-start', gap: '0.7rem', background: '#faf6ef' }}>
-              <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#7d746b', flexShrink: 0, marginTop: 3 }}>Фраза</div>
+            <div className="mlm-translation-row" style={{ padding: '0.9rem 1rem', display: 'flex', alignItems: 'flex-start', gap: '0.7rem', background: '#faf6ef' }}>
+              <div className="mlm-translation-label" style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#7d746b', flexShrink: 0, marginTop: 3 }}>Фраза</div>
               {has(item.as_said) && <div style={{ fontSize: '14px', color: '#7d746b', lineHeight: 1.58, fontStyle: 'italic' }}>{`«${item.as_said}»`}</div>}
             </div>
             <div style={{ position: 'relative', height: 0 }}>
               <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: -12, width: 24, height: 24, borderRadius: 999, display: 'grid', placeItems: 'center', background: '#edf9f3', border: '1px solid rgba(104,169,141,0.25)', color: '#68a98d', fontSize: 11, opacity: 0.82 }}>↓</div>
             </div>
-            <div style={{ padding: '1.1rem 1rem 0.95rem', display: 'flex', alignItems: 'flex-start', gap: '0.7rem', background: 'linear-gradient(135deg, #edf9f3, #e3f2eb)' }}>
-              <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a', flexShrink: 0, marginTop: 3 }}>Что может за этим стоять</div>
+            <div className="mlm-translation-row" style={{ padding: '1.1rem 1rem 0.95rem', display: 'flex', alignItems: 'flex-start', gap: '0.7rem', background: 'linear-gradient(135deg, #edf9f3, #e3f2eb)' }}>
+              <div className="mlm-translation-label" style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a', flexShrink: 0, marginTop: 3 }}>Что может за этим стоять</div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                {has(item.more_honest) && <div style={{ fontSize: '13.5px', fontWeight: 620, color: '#1e3e30', lineHeight: 1.58 }}>{item.more_honest}</div>}
+                {has(item.more_honest) && <div style={{ fontSize: '13.5px', fontWeight: 620, color: '#1e3e30', lineHeight: 1.58 }}>{sanitizeUserText(item.more_honest) ?? item.more_honest}</div>}
                 {has(item.explanation) && item.explanation !== item.more_honest && item.explanation.trim().toLowerCase() !== item.more_honest?.trim().toLowerCase() && (
-                  <div style={{ marginTop: 7, fontSize: '12px', color: '#5f7369', lineHeight: 1.55, borderTop: '1px solid rgba(104,169,141,0.18)', paddingTop: 7 }}>{item.explanation}</div>
+                  <div style={{ marginTop: 7, fontSize: '12px', color: '#5f7369', lineHeight: 1.55, borderTop: '1px solid rgba(104,169,141,0.18)', paddingTop: 7 }}>{sanitizeUserText(item.explanation) ?? item.explanation}</div>
                 )}
               </div>
             </div>
@@ -313,12 +314,59 @@ function softClampText(text: string | null | undefined, max = 180): string | nul
 function sanitizeUserText(text: string | null | undefined): string | null {
   if (!has(text)) return null;
   return text
+    // "Система привыкла/привык X" → "Вы можете X"
+    .replace(/(?<![а-яёА-ЯЁ])[Сс]истема привык[а-яёА-ЯЁ]*/g, m => m[0] === 'С' ? 'Вы можете' : 'вы можете')
+    // "Паттерн привыкла/привык X" → "Вы можете X"
+    .replace(/(?<![а-яёА-ЯЁ])[Пп]аттерн привык[а-яёА-ЯЁ]*/g, m => m[0] === 'П' ? 'Вы можете' : 'вы можете')
+    // Full-phrase copy fixes (must come before general replacements)
+    .replace(/[Сс]истема воспринимает зависимость и поддержку как риск слабости\.?/g, 'Просить помощь ощущается слишком уязвимо и небезопасно.')
+    .replace(/[Сс]истема заранее предполагает ухудшение[^.]*\./g, 'Расслабление кажется небезопасным.')
+    .replace(/[Аа]втоматическая связка между отдыхом и потерей ценности\.?/g, 'Отдых начинает восприниматься как риск потерять ценность.')
+    .replace(/[Аа]втоматическая связка между[^.]*\./g, m => {
+      const rest = m.replace(/^[Аа]втоматическая связка между\s*/i, '');
+      return (m[0] === 'А' ? 'Внутренняя связь: ' : 'внутренняя связь: ') + rest;
+    })
+    // "Текущая стратегия" / "Эта стратегия" → human wording
+    .replace(/[Тт]екущая стратегия/g, m => m[0] === 'Т' ? 'Привычный способ' : 'привычный способ')
+    .replace(/[Ээ]та стратегия/g, m => m[0] === 'Э' ? 'Этот способ' : 'этот способ')
+    .replace(/[Сс]тратегия/g, m => m[0] === 'С' ? 'Способ' : 'способ')
+    // Compound Mindloom system terms (before single-word replacements)
+    .replace(/[Аа]ктивные узлы/g, m => m[0] === 'А' ? 'Активные темы' : 'активные темы')
+    .replace(/[Gg]лавный перегрев/gi, 'самый заметный паттерн')
+    .replace(/[Гг]лавный перегрев/g, m => m[0] === 'Г' ? 'Самый заметный паттерн' : 'самый заметный паттерн')
+    // узел/узлы forms → тема/темы
+    .replace(/(?<![а-яёА-ЯЁ])([Уу])злами(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'У' ? 'Темами' : 'темами')
+    .replace(/(?<![а-яёА-ЯЁ])([Уу])злом(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'У' ? 'Темой' : 'темой')
+    .replace(/(?<![а-яёА-ЯЁ])([Уу])злу(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'У' ? 'Теме' : 'теме')
+    .replace(/(?<![а-яёА-ЯЁ])([Уу])зла(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'У' ? 'Темы' : 'темы')
+    .replace(/(?<![а-яёА-ЯЁ])([Уу])злов(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'У' ? 'Тем' : 'тем')
+    .replace(/(?<![а-яёА-ЯЁ])([Уу])злы(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'У' ? 'Темы' : 'темы')
+    .replace(/(?<![а-яёА-ЯЁ])([Уу])зел(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'У' ? 'Тема' : 'тема')
+    .replace(/[Сс]лои обработки/g, m => m[0] === 'С' ? 'Уровни' : 'уровни')
+    .replace(/[Сс]лой обработки/g, m => m[0] === 'С' ? 'Уровень' : 'уровень')
+    .replace(/[Сс]мысловые точки/g, m => m[0] === 'С' ? 'Повторяющиеся фразы' : 'повторяющиеся фразы')
+    .replace(/[Сс]мысловая точка/g, m => m[0] === 'С' ? 'Повторяющаяся фраза' : 'повторяющаяся фраза')
+    .replace(/[Рр]ечевые признаки/g, m => m[0] === 'Р' ? 'Фразы из материала' : 'фразы из материала')
+    .replace(/[Рр]ечевой признак/g, m => m[0] === 'Р' ? 'Фраза из материала' : 'фраза из материала')
+    .replace(/[Вв]ыраженность/g, m => m[0] === 'В' ? 'Насколько сильно это проявилось' : 'насколько сильно это проявилось')
+    // "внутренняя система" → "внутренний механизм" (must come before general система rule)
+    .replace(/[Вв]нутренняя система/g, m => m[0] === 'В' ? 'Внутренний механизм' : 'внутренний механизм')
+    .replace(/[Вв]нутренней системы/g, m => m[0] === 'В' ? 'Внутреннего механизма' : 'внутреннего механизма')
+    .replace(/[Вв]нутренней системе/g, m => m[0] === 'В' ? 'Внутреннему механизму' : 'внутреннему механизму')
+    .replace(/[Вв]нутреннюю систему/g, m => m[0] === 'В' ? 'Внутренний механизм' : 'внутренний механизм')
+    .replace(/[Вв]нутренней системой/g, m => m[0] === 'В' ? 'Внутренним механизмом' : 'внутренним механизмом')
+    // General система → паттерн replacements
     .replace(/(?<![а-яёА-ЯЁ])([Сс])истема(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерн' : 'паттерн')
     .replace(/(?<![а-яёА-ЯЁ])([Сс])истемы(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерна' : 'паттерна')
     .replace(/(?<![а-яёА-ЯЁ])([Сс])истеме(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерне' : 'паттерне')
     .replace(/(?<![а-яёА-ЯЁ])([Сс])истему(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерн' : 'паттерн')
     .replace(/(?<![а-яёА-ЯЁ])([Сс])истемой(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерном' : 'паттерном')
-    .replace(/[Аа]втоматическая связка/g, m => m[0] === 'А' ? 'Внутренняя связь' : 'внутренняя связь');
+    .replace(/[Аа]втоматическая связка/g, m => m[0] === 'А' ? 'Внутренняя связь' : 'внутренняя связь')
+    // Strip redundant disclaimer sentences from body text
+    .replace(/\s*Это не диагноз и не медицинская оценка\.\s*/g, ' ')
+    .replace(/\s*Это гипотеза по вашему материалу\.\s*/g, ' ')
+    .replace(/\s*Это самый заметный повторяющийся паттерн в материале\.\s*/g, ' ')
+    .trim();
 }
 
 function humanizeGraphTitle(title: string | null | undefined): string {
@@ -609,16 +657,16 @@ function graphNodePalette(t: Tone): { light: string; base: string; deep: string;
 function graphEdgeStyle(type?: string): { color: string; strokeWidth: number; opacity: number; dasharray?: string; marker: boolean } {
   switch (type) {
     case 'hard':
-      return { color: '#b84840', strokeWidth: 0.62, opacity: 0.72, marker: true };
+      return { color: '#b84840', strokeWidth: 0.62, opacity: 0.84, marker: true };
     case 'choice_blocked':
-      return { color: '#b05850', strokeWidth: 0.50, opacity: 0.62, marker: true };
+      return { color: '#b05850', strokeWidth: 0.50, opacity: 0.74, marker: true };
     case 'soft':
-      return { color: '#a07c30', strokeWidth: 0.30, opacity: 0.38, dasharray: '2.5 5', marker: false };
+      return { color: '#a07c30', strokeWidth: 0.30, opacity: 0.50, dasharray: '2.5 5', marker: false };
     case 'choice_available':
-      return { color: '#3d8c60', strokeWidth: 0.34, opacity: 0.44, dasharray: '2 5', marker: true };
+      return { color: '#3d8c60', strokeWidth: 0.34, opacity: 0.56, dasharray: '2 5', marker: true };
     case 'normal':
     default:
-      return { color: '#6656a8', strokeWidth: 0.46, opacity: 0.54, marker: true };
+      return { color: '#6656a8', strokeWidth: 0.46, opacity: 0.68, marker: true };
   }
 }
 
@@ -1568,8 +1616,8 @@ type HeatPalette = {
 
 const DEFAULT_HEAT_SCALE = [
   { label: 'Слабее', range: '0-40%', description: 'слабое проявление', tone: 'blue' as Tone },
-  { label: 'Заметно', range: '40-65%', description: 'заметное проявление', tone: 'yellow' as Tone },
-  { label: 'Сильно', range: '65-88%', description: 'сильное проявление', tone: 'purple' as Tone },
+  { label: 'Заметно', range: '40-65%', description: 'заметное проявление', tone: 'green' as Tone },
+  { label: 'Сильно', range: '65-88%', description: 'сильное проявление', tone: 'yellow' as Tone },
   { label: 'Очень сильно', range: '88-100%', description: 'пик активности', tone: 'red' as Tone },
 ];
 
@@ -1679,9 +1727,6 @@ function ReportDetailSheet({ state, onClose }: {
         aria-hidden="true"
         style={{
           position: 'fixed', inset: 0, zIndex: 200,
-          background: 'rgba(30,26,22,0.44)',
-          backdropFilter: 'blur(3px)',
-          WebkitBackdropFilter: 'blur(3px)',
         }}
       />
       <div
@@ -1692,13 +1737,13 @@ function ReportDetailSheet({ state, onClose }: {
           position: 'fixed',
           top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 'min(560px, calc(100% - 32px))',
-          maxHeight: '80vh',
+          width: 'min(520px, calc(100% - 32px))',
+          maxHeight: '60vh',
           zIndex: 201,
           background: 'linear-gradient(160deg, #fffdf8 0%, #fbf5ec 100%)',
           borderRadius: 24,
-          border: '1px solid rgba(118,92,68,0.16)',
-          boxShadow: '0 8px 48px rgba(70,53,35,0.18)',
+          border: '1px solid rgba(118,92,68,0.22)',
+          boxShadow: '0 4px 32px rgba(70,53,35,0.16), 0 12px 48px rgba(70,53,35,0.10)',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -2573,9 +2618,9 @@ function HeatmapCanvasFirst({ points, heatmap, onNodeClick, activeNodesRef, grap
       </div>
 
       {/* 3 info cards below canvas */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', marginTop: '0.85rem' }}>
+      <div className="mlm-heatmap-info-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', marginTop: '0.85rem' }}>
         {/* Самые активные */}
-        <div style={{ borderRadius: 20, padding: '0.72rem 0.75rem', background: 'rgba(255,252,246,0.74)', border: '1px solid rgba(130,100,70,0.10)' }}>
+        <div className="mlm-heatmap-info-active" style={{ borderRadius: 20, padding: '0.72rem 0.75rem', background: 'rgba(255,252,246,0.74)', border: '1px solid rgba(130,100,70,0.10)' }}>
           <SmallLabel>Самые активные</SmallLabel>
           <div style={{ marginTop: '0.45rem', display: 'flex', flexDirection: 'column', gap: '0.28rem' }}>
             {[...positioned].sort((a, b) => (b.intensity ?? 0) - (a.intensity ?? 0)).slice(0, 3).map((pt, i) => {
@@ -2595,7 +2640,7 @@ function HeatmapCanvasFirst({ points, heatmap, onNodeClick, activeNodesRef, grap
         </div>
 
         {/* Что показывает */}
-        <div style={{ borderRadius: 20, padding: '0.72rem 0.75rem', background: 'rgba(255,252,246,0.74)', border: '1px solid rgba(130,100,70,0.10)' }}>
+        <div className="mlm-heatmap-info-focus" style={{ borderRadius: 20, padding: '0.72rem 0.75rem', background: 'rgba(255,252,246,0.74)', border: '1px solid rgba(130,100,70,0.10)' }}>
           <SmallLabel>Что показывает</SmallLabel>
           <p style={{ margin: '0.45rem 0 0', fontSize: '0.67rem', lineHeight: 1.46, color: '#70675e' }}>
             {focusText.length > 70 ? 'Показывает, какие зоны активированы сильнее всего и как они связаны.' : focusText}
@@ -2603,7 +2648,7 @@ function HeatmapCanvasFirst({ points, heatmap, onNodeClick, activeNodesRef, grap
         </div>
 
         {/* Шкала + Как читать */}
-        <div style={{ borderRadius: 20, padding: '0.72rem 0.75rem', background: 'rgba(255,252,246,0.74)', border: '1px solid rgba(130,100,70,0.10)' }}>
+        <div className="mlm-heatmap-info-scale" style={{ borderRadius: 20, padding: '0.72rem 0.75rem', background: 'rgba(255,252,246,0.74)', border: '1px solid rgba(130,100,70,0.10)' }}>
           <SmallLabel>Шкала активности</SmallLabel>
           <div style={{ marginTop: '0.45rem', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.18rem 0.3rem' }}>
             {scale.map((s, i) => {
@@ -2731,23 +2776,30 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
     })
     .slice(0, 6);
 
+  // Deterministic layout by node count — prevents floating/overlap for small counts.
+  // For 1-6 surrounding nodes use balanced fixed positions; 7+ fall back to semantic slots.
+  const deterministicLayouts: Record<number, Array<{ x: number; y: number }>> = {
+    1: [{ x: 50, y: 19 }],
+    2: [{ x: 75, y: 50 }, { x: 25, y: 50 }],
+    3: [{ x: 50, y: 17 }, { x: 78, y: 70 }, { x: 22, y: 70 }],
+    4: [{ x: 50, y: 15 }, { x: 82, y: 48 }, { x: 66, y: 81 }, { x: 18, y: 48 }],
+    5: [{ x: 50, y: 15 }, { x: 81, y: 38 }, { x: 75, y: 74 }, { x: 25, y: 74 }, { x: 19, y: 38 }],
+    6: [{ x: 50, y: 15 }, { x: 80, y: 33 }, { x: 80, y: 67 }, { x: 50, y: 83 }, { x: 20, y: 67 }, { x: 20, y: 33 }],
+  };
   const semanticPositions: Record<ReturnType<typeof graphSemanticSlot>, Array<{ x: number; y: number }>> = {
-    belief:  [{ x: 16, y: 24 }, { x: 20, y: 14 }],  // left — root beliefs
-    trigger: [{ x: 14, y: 68 }, { x: 20, y: 80 }],  // left-bottom — triggers
-    support: [{ x: 65, y: 14 }, { x: 78, y: 22 }],  // top-right — secondary gain
-    pattern: [{ x: 84, y: 44 }, { x: 76, y: 28 }],  // right — behavioral outputs
-    body:    [{ x: 80, y: 70 }, { x: 64, y: 82 }],  // right-bottom — somatic
+    belief:  [{ x: 16, y: 24 }, { x: 20, y: 14 }],
+    trigger: [{ x: 14, y: 68 }, { x: 20, y: 80 }],
+    support: [{ x: 65, y: 14 }, { x: 78, y: 22 }],
+    pattern: [{ x: 84, y: 44 }, { x: 76, y: 28 }],
+    body:    [{ x: 80, y: 70 }, { x: 64, y: 82 }],
     extra:   [{ x: 38, y: 14 }, { x: 34, y: 84 }, { x: 86, y: 62 }],
   };
   const usedSlots = new Map<ReturnType<typeof graphSemanticSlot>, number>();
   const fallbackPositions = [
-    { x: 16, y: 24 },
-    { x: 14, y: 68 },
-    { x: 65, y: 14 },
-    { x: 84, y: 44 },
-    { x: 80, y: 70 },
-    { x: 38, y: 14 },
+    { x: 16, y: 24 }, { x: 14, y: 68 }, { x: 65, y: 14 },
+    { x: 84, y: 44 }, { x: 80, y: 70 }, { x: 38, y: 14 },
   ];
+  const layoutPositions = deterministicLayouts[surrounding.length];
   const graphItems = [
     {
       ...central,
@@ -2756,10 +2808,15 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
       isCentral: true,
     },
     ...surrounding.map((n, idx) => {
-      const slot = graphSemanticSlot(n.displayLabel, n.type);
-      const slotIndex = usedSlots.get(slot) ?? 0;
-      usedSlots.set(slot, slotIndex + 1);
-      const position = semanticPositions[slot][slotIndex] ?? fallbackPositions[idx] ?? { x: 50, y: 50 };
+      let position: { x: number; y: number };
+      if (layoutPositions) {
+        position = layoutPositions[idx] ?? { x: 50, y: 50 };
+      } else {
+        const slot = graphSemanticSlot(n.displayLabel, n.type);
+        const slotIndex = usedSlots.get(slot) ?? 0;
+        usedSlots.set(slot, slotIndex + 1);
+        position = semanticPositions[slot][slotIndex] ?? fallbackPositions[idx] ?? { x: 50, y: 50 };
+      }
       return {
         ...n,
         x: position.x,
@@ -3272,7 +3329,8 @@ function OverheatTile({ report, activeNodes }: { report: MindloomReportV2; activ
 }
 
 function HeroSection({ report, createdAt }: { report: MindloomReportV2; createdAt: string }) {
-  const title = report.snapshot?.key_pattern ?? report.hero.title ?? 'Отчёт Mindloom';
+  const rawTitle = report.snapshot?.key_pattern ?? report.hero.title ?? 'Отчёт Mindloom';
+  const title = sanitizeUserText(rawTitle) ?? rawTitle;
   const subtitle = report.snapshot?.short_explanation ?? report.hero.main_insight ?? report.hero.one_sentence_summary;
   const activeCount = report.active_nodes.filter(n => n.label || n.description || n.id).length;
 
@@ -3398,7 +3456,7 @@ function NodeGraphSection({ nodeGraph, activeNodes }: {
         Нажмите на тему или связь — увидите короткое объяснение.
       </p>
       {has(nodeGraph.description) && (
-        <p style={{ margin: '0 0 0.75rem', fontSize: '0.87rem', color: '#5a5450', lineHeight: 1.65 }}>{nodeGraph.description}</p>
+        <p style={{ margin: '0 0 0.75rem', fontSize: '0.87rem', color: '#5a5450', lineHeight: 1.65 }}>{sanitizeUserText(nodeGraph.description) ?? nodeGraph.description}</p>
       )}
       <NeuroNodeGraph
         graphNodes={nodeGraph.nodes}
@@ -3440,7 +3498,7 @@ function TrajectorySection({ trajectory }: { trajectory: MindloomReportV2['traje
                 )}
               </div>
               <p style={{ margin: '0.35rem 0', paddingBottom: i < trajectory.cycle.length - 1 ? '0.2rem' : '0', fontSize: '0.9rem', color: '#2e2820', lineHeight: 1.6 }}>
-                {step}
+                {sanitizeUserText(step) ?? step}
               </p>
             </div>
           ))}
@@ -3453,12 +3511,12 @@ function TrajectorySection({ trajectory }: { trajectory: MindloomReportV2['traje
           {has(trajectory.blocking_point) && <BentoTile tone="red" padding="1rem 1rem">
             <MLIcon name="warning" tone="red" size={16} />
             <div style={{ marginTop: '0.6rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#a8392c' }}>Точка блокировки</div>
-            <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.55 }}>{trajectory.blocking_point}</div>
+            <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.55 }}>{sanitizeUserText(trajectory.blocking_point) ?? trajectory.blocking_point}</div>
           </BentoTile>}
           {has(trajectory.possible_exit) && <BentoTile tone="green" padding="1rem 1rem">
             <MLIcon name="compass" tone="green" size={16} />
             <div style={{ marginTop: '0.6rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Возможный выход</div>
-            <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.55 }}>{trajectory.possible_exit}</div>
+            <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.55 }}>{sanitizeUserText(trajectory.possible_exit) ?? trajectory.possible_exit}</div>
           </BentoTile>}
         </div>
       )}
@@ -3523,7 +3581,6 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
           {visibleNodes.map((node, i) => {
             const tone = toneFromColor(node.color);
             const hex = toneHex(tone !== 'gray' ? tone : 'purple');
-            const evidenceSnippet = node.evidence.slice(0, 1);
             const handleNodeOpen = onOpen ? () => onOpen({
               type: 'evidence-node',
               eyebrow: 'Основания отчёта',
@@ -3557,16 +3614,15 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
                     <div style={{ marginTop: '0.35rem', height: 4, borderRadius: 999, background: '#f1e8de', overflow: 'hidden' }}>
                       <div style={{ width: `${clampInt(node.intensity)}%`, height: '100%', borderRadius: 999, background: hex }} />
                     </div>
-                    {has(node.description) && <div style={{ marginTop: '0.45rem', fontSize: '12.5px', color: '#5d564f', lineHeight: 1.6 }}>{node.description}</div>}
-                    {evidenceSnippet.map((ev, ei) => <QuoteRow key={ei} text={ev} />)}
+                    {has(node.description) && <div style={{ marginTop: '0.45rem', fontSize: '12.5px', color: '#5d564f', lineHeight: 1.6 }}>{sanitizeUserText(node.description) ?? node.description}</div>}
+                    {node.evidence.slice(0, 2).map((ev, ei) => <QuoteRow key={ei} text={ev} />)}
                     {(() => {
-                      const firstEv = node.evidence[0];
-                      const additionalEv = node.evidence.slice(1).filter(ev => ev !== firstEv && ev.toLowerCase().trim() !== (firstEv ?? '').toLowerCase().trim());
-                      if (additionalEv.length === 0) return null;
+                      const extraEv = node.evidence.slice(2);
+                      if (extraEv.length === 0) return null;
                       return (
-                        <DisclosurePanel summary={`Ещё ${additionalEv.length} цитат${additionalEv.length === 1 ? 'а' : additionalEv.length <= 4 ? 'ы' : ''}`} tone="beige">
+                        <DisclosurePanel summary={`Показать ещё ${extraEv.length}`} tone="beige">
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.3rem' }}>
-                            {additionalEv.map((ev, ei) => <QuoteRow key={ei} text={ev} />)}
+                            {extraEv.map((ev, ei) => <QuoteRow key={ei} text={ev} />)}
                           </div>
                         </DisclosurePanel>
                       );
@@ -3636,7 +3692,7 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
             const relatedNode = hyp.node_id ? nodeById.get(hyp.node_id) : undefined;
             return (
               <div key={i} style={{ background: '#fff7df', border: '1px solid rgba(228,166,52,0.18)', borderRadius: 22, padding: '0.9rem 1rem' }}>
-                <div style={{ fontSize: '13.5px', fontWeight: 650, color: '#2a1e08', lineHeight: 1.55 }}>{hyp.hypothesis}</div>
+                <div style={{ fontSize: '13.5px', fontWeight: 650, color: '#2a1e08', lineHeight: 1.55 }}>{sanitizeUserText(hyp.hypothesis) ?? hyp.hypothesis}</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', alignItems: 'center', marginTop: '0.45rem' }}>
                   {relatedNode?.label && <Chip tone="yellow">{relatedNode.label}</Chip>}
                   {typeof hyp.confidence === 'number' && <span style={{ fontSize: '0.74rem', color: '#7a6020', fontWeight: 650 }}>уверенность {fmtPct(hyp.confidence)}</span>}
@@ -3725,7 +3781,7 @@ function LayersSectionExact({ layers, onOpen }: { layers: MindloomReportV2['mind
                   <div style={{ marginTop: '0.35rem', height: 4, borderRadius: 999, background: '#f1e8de', overflow: 'hidden' }}>
                     <div style={{ width: `${clampInt(layer.intensity)}%`, height: '100%', borderRadius: 999, background: color }} />
                   </div>
-                  {has(quote) && <div style={{ marginTop: '0.35rem', fontSize: '11.5px', fontStyle: 'italic', color: '#7d746b', lineHeight: 1.55 }}>{`«${quote}»`}</div>}
+                  {has(quote) && <div style={{ marginTop: '0.35rem', fontSize: '11.5px', fontStyle: 'italic', color: '#7d746b', lineHeight: 1.55 }}>{`«${sanitizeUserText(quote) ?? quote}»`}</div>}
                   {handleLayerOpen && <span style={{ display: 'inline-block', marginTop: '0.28rem', fontSize: '0.62rem', color: '#c0b8b0', fontWeight: 600, letterSpacing: '0.04em' }}>подробнее →</span>}
                 </div>
               </div>
@@ -3795,7 +3851,7 @@ function MarkersSectionExact({ markers, onOpen }: { markers: MindloomReportV2['t
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: '13px', fontWeight: 650, lineHeight: 1.35, color: '#1e1a16' }}>{item.marker ?? `Признак ${i + 1}`}</div>
-                  {has(item.shift_signal) && <div style={{ marginTop: '0.3rem', fontSize: '11.5px', color: '#3f6e5a', lineHeight: 1.45 }}>{softClampText(item.shift_signal, 80) ?? item.shift_signal}</div>}
+                  {has(item.shift_signal) && <div style={{ marginTop: '0.3rem', fontSize: '11.5px', color: '#3f6e5a', lineHeight: 1.45 }}>{sanitizeUserText(softClampText(item.shift_signal, 80)) ?? sanitizeUserText(item.shift_signal) ?? item.shift_signal}</div>}
                 </div>
                 {handleMarkerOpen && <span style={{ flexShrink: 0, fontSize: 10, color: '#b0a898', marginTop: 6 }}>→</span>}
               </div>
@@ -3859,7 +3915,7 @@ function PracticesSectionExact({ practices, activeNodes }: {
                 {has(item.purpose) && (
                   <div style={{ padding: '0.82rem 0', borderTop: '1px solid rgba(118,92,68,0.14)' }}>
                     <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: toneSurface(t.tone).deep }}>Цель</div>
-                    <div style={{ marginTop: 4, fontSize: '13px', lineHeight: 1.58, color: '#2e2820' }}>{item.purpose}</div>
+                    <div style={{ marginTop: 4, fontSize: '13px', lineHeight: 1.58, color: '#2e2820' }}>{sanitizeUserText(item.purpose) ?? item.purpose}</div>
                   </div>
                 )}
                 {has(item.shift_signal) && (
@@ -3867,25 +3923,25 @@ function PracticesSectionExact({ practices, activeNodes }: {
                     <MLIcon name="check" tone="green" size={14} />
                     <div>
                       <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Как узнать, что работает</div>
-                      <div style={{ marginTop: 4, fontSize: '13px', fontWeight: 650, lineHeight: 1.5, color: '#2f5746' }}>{item.shift_signal}</div>
+                      <div style={{ marginTop: 4, fontSize: '13px', fontWeight: 650, lineHeight: 1.5, color: '#2f5746' }}>{sanitizeUserText(item.shift_signal) ?? item.shift_signal}</div>
                     </div>
                   </div>
                 )}
                 {(has(item.how_to_do) || item.observe.length > 0) && (
-                  <DisclosurePanel summary="Как делать и что наблюдать" tone={t.tone}>
+                  <div style={{ borderTop: '1px solid rgba(118,92,68,0.12)', paddingTop: '0.65rem', marginTop: '0.1rem' }}>
                     {has(item.how_to_do) && (
-                      <div style={{ padding: '0 0 0.65rem' }}>
+                      <div style={{ paddingBottom: item.observe.length > 0 ? '0.65rem' : 0 }}>
                         <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: toneSurface(t.tone).deep }}>Как делать</div>
-                        <div style={{ marginTop: 4, fontSize: '13px', lineHeight: 1.58, color: '#2e2820' }}>{item.how_to_do}</div>
+                        <div style={{ marginTop: 4, fontSize: '13px', lineHeight: 1.58, color: '#2e2820' }}>{sanitizeUserText(item.how_to_do) ?? item.how_to_do}</div>
                       </div>
                     )}
                     {item.observe.length > 0 && (
-                      <div style={{ paddingTop: has(item.how_to_do) ? '0.65rem' : 0, borderTop: has(item.how_to_do) ? '1px solid rgba(118,92,68,0.14)' : 0 }}>
+                      <div style={{ paddingTop: has(item.how_to_do) ? '0.65rem' : 0, borderTop: has(item.how_to_do) ? '1px solid rgba(118,92,68,0.12)' : 'none' }}>
                         <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: toneSurface(t.tone).deep }}>На что обращать внимание</div>
-                        <div style={{ marginTop: 4, fontSize: '13px', lineHeight: 1.58, color: '#2e2820' }}>{item.observe.join(' ')}</div>
+                        <div style={{ marginTop: 4, fontSize: '13px', lineHeight: 1.58, color: '#2e2820' }}>{item.observe.map(o => sanitizeUserText(o) ?? o).join(' ')}</div>
                       </div>
                     )}
-                  </DisclosurePanel>
+                  </div>
                 )}
               </div>
             </div>
@@ -3955,6 +4011,16 @@ export function ReportV2Dashboard({ report, createdAt }: {
     }}>
       {/* Mobile report CSS */}
       <style>{`
+        @media (max-width: 640px) {
+          /* Heatmap info cards: [active|scale] on row1, [focus full-width] on row2 */
+          .mlm-heatmap-info-grid { grid-template-columns: 1fr 1fr !important; }
+          .mlm-heatmap-info-active { grid-column: 1 !important; grid-row: 1 !important; }
+          .mlm-heatmap-info-scale { grid-column: 2 !important; grid-row: 1 !important; }
+          .mlm-heatmap-info-focus { grid-column: 1 / -1 !important; grid-row: 2 !important; }
+          /* HonestTranslation: stack label above text */
+          .mlm-translation-row { flex-direction: column !important; gap: 0.3rem !important; }
+          .mlm-translation-label { margin-top: 0 !important; }
+        }
         @media (max-width: 500px) {
           .mlm-causal-graph-panel { height: 400px !important; min-height: 400px !important; }
           .mlm-heatmap-canvas { height: 380px !important; }
@@ -3962,6 +4028,9 @@ export function ReportV2Dashboard({ report, createdAt }: {
           .mlm-heatmap-focus { align-items: flex-start !important; flex-direction: column !important; }
           .mlm-heatmap-canvas-fix { min-height: 500px !important; height: 520px !important; }
           .mlm-heatmap-focus-fix { align-items: flex-start !important; flex-direction: column !important; }
+          /* Heatmap info cards: collapse all 3 to single column */
+          .mlm-heatmap-info-grid { grid-template-columns: 1fr !important; }
+          .mlm-heatmap-info-active, .mlm-heatmap-info-scale, .mlm-heatmap-info-focus { grid-column: 1 !important; grid-row: auto !important; }
         }
         @media (max-width: 420px) {
           .mlm-translation-grid { grid-template-columns: 1fr !important; }

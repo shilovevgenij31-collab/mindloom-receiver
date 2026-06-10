@@ -13,7 +13,8 @@
     "submit:intake:file": "node scripts/submit-file-intake.mjs",
     "submit:rich": "node scripts/submit-rich-report.mjs",
     "submit:fixed": "node scripts/submit-fixed-blocks-report.mjs",
-    "submit:v2": "node scripts/submit-v2-report.mjs"
+    "submit:v2": "node scripts/submit-v2-report.mjs",
+    "submit:v2:realistic": "node scripts/submit-v2-realistic.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^12.10.0",
