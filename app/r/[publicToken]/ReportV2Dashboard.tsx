@@ -107,7 +107,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
   const systemGoal = report.desired_state.explicit_request ?? report.desired_state.hidden_request ?? report.desired_state.future_state;
   if (!has(quote) && !has(blocker) && !has(repeat) && !has(systemGoal)) return null;
   return (
-    <SectionShell title="Что поддерживает паттерн" icon="target" intro="Здесь показано, что запускает паттерн, что он временно даёт и куда можно двигаться дальше.">
+    <SectionShell title="Что поддерживает паттерн" icon="target" intro="Здесь показано, из-за чего паттерн включается, что он помогает почувствовать на короткое время и куда можно двигаться дальше.">
       {has(quote) && (
         <div style={{ borderRadius: 28, padding: '1.2rem 1.1rem', position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg, #fff4f1 0%, #fff8e8 100%)', border: '1px solid rgba(228,111,97,0.13)' }}>
           <div style={{ position: 'absolute', top: 14, right: 16, color: 'rgba(228,111,97,0.28)' }}>
@@ -122,7 +122,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
           <div style={{ gridColumn: '1 / -1', borderRadius: VS.r.md, padding: '1rem', display: 'flex', gap: '0.72rem', alignItems: 'flex-start', background: '#fff4f1', border: '1px solid rgba(228,111,97,0.15)' }}>
             <MLIcon name="warning" tone="red" size={16} />
             <div>
-              <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#a8392c' }}>Что запускает</div>
+              <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#a8392c' }}>Что включает паттерн</div>
               <div style={{ marginTop: 4, fontSize: '14px', fontWeight: 650, lineHeight: 1.45, color: '#3a241d' }}>{blocker}</div>
             </div>
           </div>
@@ -130,7 +130,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
         {has(repeat) && (
           <div style={{ borderRadius: VS.r.md, padding: '1rem', background: '#f5f3ff', border: '1px solid rgba(127,104,217,0.16)' }}>
             <MLIcon name="cycle" tone="purple" size={16} />
-            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#4d3aa6' }}>Что временно даёт</div>
+            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#4d3aa6' }}>Что помогает почувствовать</div>
             <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#4a4060' }}>{repeat}</div>
           </div>
         )}
@@ -149,7 +149,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
 function ProtectedNeedSectionExact({ pn }: { pn: NonNullable<MindloomReportV2['protected_need']> }) {
   const { title, description, named, strategy_gets, sacrificed, leading_need, interpretation } = pn;
   return (
-    <SectionShell title={title ?? 'Что паттерн может защищать'} icon="shield" intro="Этот блок помогает понять, какая потребность может стоять за паттерном и какую цену даёт привычный способ справляться.">
+    <SectionShell title={title ?? 'Что паттерн может защищать'} icon="shield" intro="Этот блок помогает понять, какая потребность может стоять за паттерном и к чему приводит привычный способ справляться.">
       {has(leading_need) && (
         <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 28, padding: '1rem', background: 'linear-gradient(140deg, #eef7ff 0%, #eef9f4 100%)', border: '1px solid rgba(74,149,211,0.16)' }}>
           <div style={{ position: 'absolute', top: -36, right: -24, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(74,149,211,0.14), transparent 70%)', filter: 'blur(8px)' }} />
@@ -165,8 +165,8 @@ function ProtectedNeedSectionExact({ pn }: { pn: NonNullable<MindloomReportV2['p
       )}
       <div style={{ display: 'grid', gap: '0.7rem', marginTop: '0.75rem' }}>
         <TagGroup label="Что слышно в вашей речи" tone="blue" icon="speech" items={named} />
-        <TagGroup label="Что даёт эта стратегия" tone="yellow" icon="target" items={strategy_gets} />
-        <TagGroup label="Цена этого способа" tone="red" icon="warning" items={sacrificed} />
+        <TagGroup label="Что это помогает почувствовать" tone="yellow" icon="target" items={strategy_gets} />
+        <TagGroup label="К чему это приводит" tone="red" icon="warning" items={sacrificed} />
       </div>
       {has(interpretation) && (
         <div style={{ marginTop: '0.9rem', paddingInline: '0.1rem', fontSize: '13.5px', lineHeight: 1.6, color: '#7d746b', fontStyle: 'italic' }}>
@@ -185,7 +185,7 @@ function PhraseMicroscopeSectionExact({ pm }: {
   const visibleFragments = pm.fragments.slice(0, 3);
   return (
     <SectionShell title="Что слышно в этой фразе" icon="quote" intro="Здесь одна фраза разбирается на части, чтобы показать, как в ней проявляется паттерн.">
-      {has(pm.quote) && <QuoteBlock text={`«${pm.quote}»`} tone="purple" />}
+      {has(pm.quote) && <PhraseQuoteHighlight quote={pm.quote} />}
       <div style={{ marginTop: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#7d746b' }}>
         <MLIcon name="brain" tone="purple" size={14} />
         Фрагменты речи · {visibleFragments.length || 1}
@@ -310,6 +310,26 @@ function softClampText(text: string | null | undefined, max = 180): string | nul
   return `${normalized.slice(0, Math.max(0, max - 1)).trimEnd()}…`;
 }
 
+function sanitizeUserText(text: string | null | undefined): string | null {
+  if (!has(text)) return null;
+  return text
+    .replace(/(?<![а-яёА-ЯЁ])([Сс])истема(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерн' : 'паттерн')
+    .replace(/(?<![а-яёА-ЯЁ])([Сс])истемы(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерна' : 'паттерна')
+    .replace(/(?<![а-яёА-ЯЁ])([Сс])истеме(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерне' : 'паттерне')
+    .replace(/(?<![а-яёА-ЯЁ])([Сс])истему(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерн' : 'паттерн')
+    .replace(/(?<![а-яёА-ЯЁ])([Сс])истемой(?![а-яёА-ЯЁ])/g, (_m, cap) => cap === 'С' ? 'Паттерном' : 'паттерном')
+    .replace(/[Аа]втоматическая связка/g, m => m[0] === 'А' ? 'Внутренняя связь' : 'внутренняя связь');
+}
+
+function humanizeGraphTitle(title: string | null | undefined): string {
+  if (!has(title)) return 'Как темы усиливают друг друга';
+  const lower = title.toLowerCase();
+  if (lower.includes('граф') || lower.includes('причинно') || lower.includes('следственн')) {
+    return 'Как темы усиливают друг друга';
+  }
+  return title;
+}
+
 function getStrongestNode(activeNodes: MindloomReportV2Node[]): MindloomReportV2Node | null {
   return activeNodes.find((node) => has(node.label) || has(node.description) || node.intensity != null) ?? null;
 }
@@ -329,6 +349,26 @@ function collectSpeechPhrases(report: MindloomReportV2): string[] {
     report.target.central_knot,
     report.hero.title,
   ]);
+}
+
+function collectDirectPhrases(report: MindloomReportV2): string[] {
+  return uniqueStrings([
+    ...report.speech_layer.key_phrases,
+    ...report.speech_layer.speech_patterns.flatMap((item) => item.evidence),
+    report.phrase_microscope?.quote ?? null,
+  ]);
+}
+
+function collectAnalyticalThemes(report: MindloomReportV2): string[] {
+  const direct = new Set(collectDirectPhrases(report).map(s => s.toLowerCase().trim()));
+  return uniqueStrings([
+    ...report.speech_layer.speech_patterns.map(item => item.pattern),
+    report.target.growth_blocker,
+    report.target.central_knot,
+  ]).filter(s => {
+    const lower = s.toLowerCase().trim();
+    return !direct.has(lower) && s.split(/\s+/).length <= 8;
+  });
 }
 
 function inferNeedLabel(report: MindloomReportV2, activeNodes: MindloomReportV2Node[], layers: MindloomReportV2['mindloom_layers']): string | null {
@@ -362,7 +402,7 @@ function buildSnapshotFallback(report: MindloomReportV2, activeNodes: MindloomRe
   );
   const threeSignals = uniqueStrings([
     ...collectSpeechPhrases(report).slice(0, 3),
-    report.target.growth_blocker ? `Что запускает: ${report.target.growth_blocker}` : null,
+    report.target.growth_blocker ? `Включает паттерн: ${report.target.growth_blocker}` : null,
     report.mechanism.protective_logic ? `Почему повторяется: ${report.mechanism.protective_logic}` : null,
     report.desired_state.explicit_request ? `Куда двигаться: ${report.desired_state.explicit_request}` : null,
   ], 3);
@@ -1203,18 +1243,20 @@ function DottedDivider({ margin = '1rem 0' }: { margin?: string }) {
   );
 }
 
-function QuoteBlock({ text, tone = 'purple' }: { text: string; tone?: Tone | 'beige' }) {
-  const s = toneSurface(tone);
+function PhraseQuoteHighlight({ quote }: { quote: string }) {
+  const commaIdx = quote.indexOf(',');
+  const splitAt = commaIdx > 2 ? commaIdx : Math.ceil(quote.length / 2);
+  const part1 = quote.slice(0, splitAt);
+  const part2 = quote.slice(splitAt);
   return (
     <div style={{
-      borderRadius: VS.r.xl,
-      padding: '1.15rem 1.05rem',
-      background: `linear-gradient(160deg, ${s.soft} 0%, #fffdf8 72%)`,
-      border: `1px solid ${s.line}`,
-      boxShadow: VS.shadow.card,
+      borderRadius: VS.r.xl, padding: '1.15rem 1.05rem',
+      background: 'linear-gradient(160deg, #f5f3ff 0%, #fffdf8 72%)',
+      border: '1px solid rgba(127,104,217,0.14)', boxShadow: VS.shadow.card,
     }}>
-      <div style={{ fontSize: '20px', lineHeight: 1.24, fontWeight: 720, letterSpacing: '-0.02em', color: '#201d1b' }}>
-        {text}
+      <div style={{ fontSize: '20px', lineHeight: 1.24, fontWeight: 720, letterSpacing: '-0.02em' }}>
+        «<span style={{ color: '#c8392c' }}>{part1}</span>
+        {part2 && <span style={{ color: '#4d3aa6' }}>{part2}</span>}»
       </div>
     </div>
   );
@@ -1278,9 +1320,10 @@ function Chip({ children, tone = 'gray' }: { children: React.ReactNode; tone?: T
   );
 }
 
-function KeyPhrasesSupportSection({ phrases, centralMeaning }: { phrases: string[]; centralMeaning?: string | null }) {
+function KeyPhrasesSupportSection({ phrases, centralMeaning, analyticalThemes }: { phrases: string[]; centralMeaning?: string | null; analyticalThemes?: string[] }) {
   const normalized = uniqueStrings(phrases.filter(has));
-  if (normalized.length === 0) return null;
+  const themes = uniqueStrings((analyticalThemes ?? []).filter(has));
+  if (normalized.length === 0 && themes.length === 0) return null;
   const visible = normalized.slice(0, 6);
   const hidden = normalized.slice(6);
   return (
@@ -1296,24 +1339,29 @@ function KeyPhrasesSupportSection({ phrases, centralMeaning }: { phrases: string
             </p>
           </div>
         )}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.38rem 0.46rem', alignItems: 'center' }}>
-          {visible.map((phrase, index) => {
-            const scale = index === 0 ? { fontSize: 14, fontWeight: 680, padding: '5px 13px', opacity: 1, borderRadius: 10 }
-              : index === 1 ? { fontSize: 13, fontWeight: 630, padding: '4px 11px', opacity: 0.97, borderRadius: 10 }
-              : index === 2 ? { fontSize: 12, fontWeight: 580, padding: '4px 10px', opacity: 0.92, borderRadius: 9 }
-              : { fontSize: 11, fontWeight: 520, padding: '3px 9px', opacity: 0.78, borderRadius: 8 };
-            return (
-              <span key={`${phrase}-${index}`} style={{
-                display: 'inline-flex', alignItems: 'center', lineHeight: 1.4,
-                background: index < 3 ? '#eeebff' : '#f4f2ff',
-                color: '#5244a8', border: '1px solid rgba(127,104,217,0.20)',
-                ...scale,
-              }}>
-                {phrase}
-              </span>
-            );
-          })}
-        </div>
+        {visible.length > 0 && (
+          <>
+            <div style={{ fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#7d746b', marginBottom: '0.38rem' }}>Фразы из материала</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.38rem 0.46rem', alignItems: 'center' }}>
+              {visible.map((phrase, index) => {
+                const scale = index === 0 ? { fontSize: 14, fontWeight: 680, padding: '5px 13px', opacity: 1, borderRadius: 10 }
+                  : index === 1 ? { fontSize: 13, fontWeight: 630, padding: '4px 11px', opacity: 0.97, borderRadius: 10 }
+                  : index === 2 ? { fontSize: 12, fontWeight: 580, padding: '4px 10px', opacity: 0.92, borderRadius: 9 }
+                  : { fontSize: 11, fontWeight: 520, padding: '3px 9px', opacity: 0.78, borderRadius: 8 };
+                return (
+                  <span key={`${phrase}-${index}`} style={{
+                    display: 'inline-flex', alignItems: 'center', lineHeight: 1.4,
+                    background: index < 3 ? '#eeebff' : '#f4f2ff',
+                    color: '#5244a8', border: '1px solid rgba(127,104,217,0.20)',
+                    ...scale,
+                  }}>
+                    {phrase}
+                  </span>
+                );
+              })}
+            </div>
+          </>
+        )}
         {hidden.length > 0 && (
           <DisclosurePanel summary={`Показать ещё ${hidden.length} фраз`} tone="purple">
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.42rem' }}>
@@ -1325,16 +1373,28 @@ function KeyPhrasesSupportSection({ phrases, centralMeaning }: { phrases: string
             </div>
           </DisclosurePanel>
         )}
+        {themes.length > 0 && (
+          <div style={{ marginTop: visible.length > 0 ? '0.75rem' : '0', borderTop: visible.length > 0 ? '1px solid rgba(127,104,217,0.11)' : 'none', paddingTop: visible.length > 0 ? '0.65rem' : '0' }}>
+            <div style={{ fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#7d746b', marginBottom: '0.38rem' }}>Темы, которые заметил отчёт</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.38rem 0.46rem' }}>
+              {themes.map((theme, i) => (
+                <span key={`theme-${i}`} style={{ display: 'inline-flex', alignItems: 'center', padding: '4px 10px', borderRadius: 8, fontSize: 11, lineHeight: 1.4, background: '#f5f5f0', color: '#7d746b', border: '1px solid rgba(118,92,68,0.18)', fontWeight: 560 }}>
+                  {theme}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </SharedPanel>
     </SectionShell>
   );
 }
 
-function MindloomSpeechCloud({ phrases, centralMeaning }: { phrases: string[]; centralMeaning?: string | null }) {
+function MindloomSpeechCloud({ phrases, centralMeaning, analyticalThemes }: { phrases: string[]; centralMeaning?: string | null; analyticalThemes?: string[] }) {
   const [showAll, setShowAll] = useState(false);
   const normalized = uniqueStrings(phrases.filter(has));
   if (normalized.length < 2) {
-    return <KeyPhrasesSupportSection phrases={phrases} centralMeaning={centralMeaning} />;
+    return <KeyPhrasesSupportSection phrases={phrases} centralMeaning={centralMeaning} analyticalThemes={analyticalThemes} />;
   }
   const rawCentral = firstNonEmpty(
     has(centralMeaning) && (centralMeaning ?? '').split(/\s+/).length <= 7 ? centralMeaning : null,
@@ -1449,6 +1509,32 @@ function MindloomSpeechCloud({ phrases, centralMeaning }: { phrases: string[]; c
             </button>
           </div>
         )}
+
+        {/* Analytical themes group */}
+        {analyticalThemes && analyticalThemes.length > 0 && (
+          <div style={{
+            marginTop: '0.85rem', paddingTop: '0.75rem',
+            borderTop: '1px solid rgba(127,104,217,0.12)',
+            position: 'relative', zIndex: 1,
+          }}>
+            <div style={{ fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#9d9890', marginBottom: '0.45rem', textAlign: 'center' }}>
+              Темы, которые заметил отчёт
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.38rem 0.46rem', justifyContent: 'center' }}>
+              {analyticalThemes.map((theme, i) => (
+                <span key={`analytic-${i}`} style={{
+                  display: 'inline-flex', alignItems: 'center',
+                  padding: '4px 11px', borderRadius: 999,
+                  fontSize: 11.5, lineHeight: 1.4, fontWeight: 570,
+                  background: '#f5f4f0', color: '#7d746b',
+                  border: '1px solid rgba(118,92,68,0.18)',
+                }}>
+                  {theme}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </SectionShell>
   );
@@ -1483,7 +1569,7 @@ type HeatPalette = {
 const DEFAULT_HEAT_SCALE = [
   { label: 'Слабее', range: '0-40%', description: 'слабое проявление', tone: 'blue' as Tone },
   { label: 'Заметно', range: '40-65%', description: 'заметное проявление', tone: 'yellow' as Tone },
-  { label: 'Сильно', range: '65-88%', description: 'сильное проявление', tone: 'red' as Tone },
+  { label: 'Сильно', range: '65-88%', description: 'сильное проявление', tone: 'purple' as Tone },
   { label: 'Очень сильно', range: '88-100%', description: 'пик активности', tone: 'red' as Tone },
 ];
 
@@ -2427,7 +2513,7 @@ function HeatmapCanvasFirst({ points, heatmap, onNodeClick, activeNodesRef, grap
               why: whyText,
               rows: sheetRows.length > 0 ? sheetRows : undefined,
               evidence: nodeEvidence.length > 0 ? nodeEvidence : undefined,
-              note: 'Процент показывает условную выраженность темы в этом материале.',
+              note: 'Тема выражена в этом материале. Процент показывает, насколько сильно она проявилась.',
             });
           } : undefined;
           return (
@@ -2699,6 +2785,12 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
     return (b.strength ?? 0) - (a.strength ?? 0);
   });
   const visualEdges = sortedEdges.slice(0, 7).map((edge) => ({ ...edge, type: resolveGraphEdgeType(edge.type, edge.strength) }));
+  // Only render nodes that are connected to at least one edge (isolated nodes are confusing)
+  const connectedNodeIds = new Set<string>([
+    ...(centralId ? [centralId] : []),
+    ...visualEdges.flatMap(e => [e.from, e.to]).filter((id): id is string => Boolean(id)),
+  ]);
+  const renderedGraphItems = graphItems.filter(n => n.isCentral || !n.id || connectedNodeIds.has(n.id));
   const displayEdges = sortedEdges.slice(0, edgeLimit).map((edge) => ({ ...edge, type: resolveGraphEdgeType(edge.type, edge.strength) }));
   const defaultLegend = [
     { type: 'hard', label: 'Жёсткая связь', description: 'срабатывает быстро' },
@@ -2878,7 +2970,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
         })}
 
         {/* Per-node glow blobs — renders behind nodes */}
-        {graphItems.map((n, i) => {
+        {renderedGraphItems.map((n, i) => {
           const palette = graphNodePalette(n.tone);
           const sz = n.isCentral ? 116 : Math.max(62, Math.min(82, 62 + Math.round((n.intensity ?? 0.55) * 22)));
           const blobMul = n.isCentral ? 3.0 : 2.2;
@@ -2897,7 +2989,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
           );
         })}
 
-        {graphItems.map((n, i) => {
+        {renderedGraphItems.map((n, i) => {
           const sz = n.isCentral ? 116 : Math.max(62, Math.min(82, 62 + Math.round((n.intensity ?? 0.55) * 22)));
           const palette = graphNodePalette(n.tone);
           const label = getShortLabel(n.displayLabel);
@@ -2935,7 +3027,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
               badge: n.isCentral ? 'Главная тема' : (has(n.type) ? nodeTypeLabel(n.type) || null : null),
               rows: graphNodeRows.length > 0 ? graphNodeRows : undefined,
               evidence: nodeEvidence.slice(0, 3),
-              note: 'Это повторяющаяся тема из материала. Процент показывает условную выраженность.',
+              note: 'Это повторяющаяся тема, которая проявляется в материале.',
             });
           } : undefined;
           return (
@@ -3131,9 +3223,9 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
 function mapOverheatLabel(label: string | null | undefined): string | null {
   if (!has(label)) return null;
   const lower = label.toLowerCase().trim();
-  if (lower === 'high') return 'Высокая выраженность';
-  if (lower === 'medium') return 'Средняя выраженность';
-  if (lower === 'low') return 'Низкая выраженность';
+  if (lower === 'high') return 'Высокая активность';
+  if (lower === 'medium') return 'Средняя активность';
+  if (lower === 'low') return 'Низкая активность';
   return label;
 }
 
@@ -3153,9 +3245,6 @@ function OverheatTile({ report, activeNodes }: { report: MindloomReportV2; activ
             <MLIcon name="heat" tone="red" size={15} />
             <span style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#a87068' }}>Самый заметный паттерн</span>
           </div>
-          <p style={{ margin: '0 0 0.5rem', fontSize: '12px', lineHeight: 1.5, color: '#8a6860' }}>
-            Это самый заметный повторяющийся паттерн в материале.
-          </p>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.85rem', flexWrap: 'wrap' }}>
             <div>
               {has(overheatLabel) && <div style={{ fontSize: 'clamp(16px, 4.5vw, 22px)', fontWeight: 660, lineHeight: 1.15, letterSpacing: '-0.02em', color: '#2e1c18' }}>{overheatLabel}</div>}
@@ -3163,7 +3252,7 @@ function OverheatTile({ report, activeNodes }: { report: MindloomReportV2; activ
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, marginTop: 4 }}>
                   <span style={{ fontSize: 30, lineHeight: 1, fontWeight: 680, color: '#c8706a' }}>{pct}</span>
                   <span style={{ fontSize: 13, fontWeight: 680, color: '#c8706a' }}>%</span>
-                  <span style={{ fontSize: 11, color: '#a89090', marginLeft: 4, fontWeight: 500 }}>— условный ориентир выраженности</span>
+                  <span style={{ fontSize: 11, color: '#a89090', marginLeft: 4, fontWeight: 500 }}>— насколько сильно тема проявилась в материале</span>
                 </div>
               )}
             </div>
@@ -3174,7 +3263,7 @@ function OverheatTile({ report, activeNodes }: { report: MindloomReportV2; activ
             </div>
           )}
           {has(overheatExplanation) && (
-            <p style={{ margin: '0.55rem 0 0', fontSize: '12.5px', lineHeight: 1.58, color: '#8a6860' }}>{softClampText(overheatExplanation, 160) ?? overheatExplanation}</p>
+            <p style={{ margin: '0.55rem 0 0', fontSize: '12.5px', lineHeight: 1.58, color: '#8a6860' }}>{sanitizeUserText(softClampText(overheatExplanation, 160)) ?? sanitizeUserText(overheatExplanation)}</p>
           )}
         </div>
       </div>
@@ -3224,7 +3313,7 @@ function HeroSection({ report, createdAt }: { report: MindloomReportV2; createdA
 
           {has(subtitle) && (
             <p style={{ margin: '0 0 0.75rem', fontSize: '14.5px', lineHeight: 1.55, color: '#7d746b' }}>
-              {subtitle}
+              {sanitizeUserText(subtitle)}
             </p>
           )}
 
@@ -3302,7 +3391,7 @@ function NodeGraphSection({ nodeGraph, activeNodes }: {
   return (
     <SectionShell
       icon="network"
-      title={nodeGraph.title ?? 'Как темы усиливают друг друга'}
+      title={humanizeGraphTitle(nodeGraph.title)}
       intro="Этот блок показывает возможные связи между темами: что может усиливать другое и где появляется повторяющийся цикл."
     >
       <p style={{ margin: '0 0 0.6rem', fontSize: '12px', color: '#8a8077', lineHeight: 1.5 }}>
@@ -3470,13 +3559,18 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
                     </div>
                     {has(node.description) && <div style={{ marginTop: '0.45rem', fontSize: '12.5px', color: '#5d564f', lineHeight: 1.6 }}>{node.description}</div>}
                     {evidenceSnippet.map((ev, ei) => <QuoteRow key={ei} text={ev} />)}
-                    {node.evidence.length > 1 && (
-                      <DisclosurePanel summary={`Показать цитаты (${node.evidence.length - 1})`} tone="beige">
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.3rem' }}>
-                          {node.evidence.slice(1).map((ev, ei) => <QuoteRow key={ei} text={ev} />)}
-                        </div>
-                      </DisclosurePanel>
-                    )}
+                    {(() => {
+                      const firstEv = node.evidence[0];
+                      const additionalEv = node.evidence.slice(1).filter(ev => ev !== firstEv && ev.toLowerCase().trim() !== (firstEv ?? '').toLowerCase().trim());
+                      if (additionalEv.length === 0) return null;
+                      return (
+                        <DisclosurePanel summary={`Ещё ${additionalEv.length} цитат${additionalEv.length === 1 ? 'а' : additionalEv.length <= 4 ? 'ы' : ''}`} tone="beige">
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.3rem' }}>
+                            {additionalEv.map((ev, ei) => <QuoteRow key={ei} text={ev} />)}
+                          </div>
+                        </DisclosurePanel>
+                      );
+                    })()}
                   </div>
                 </div>
                 {i < visibleNodes.length - 1 && <DottedDivider margin="0" />}
@@ -3846,6 +3940,8 @@ export function ReportV2Dashboard({ report, createdAt }: {
   const markers = report.transformation_markers.filter(m => m.marker || m.description || m.shift_signal);
   const practices = report.recommended_practices.filter(p => p.title || p.purpose || p.how_to_do);
   const keyPhrases = collectSpeechPhrases(report);
+  const directPhrases = collectDirectPhrases(report);
+  const analyticalThemes = collectAnalyticalThemes(report);
   const snapshotData = report.snapshot ?? buildSnapshotFallback(report, activeNodes);
   const protectedNeedData = report.protected_need ?? buildProtectedNeedFallback(report, activeNodes, layers);
   const phraseMicroscopeData = report.phrase_microscope ?? buildPhraseMicroscopeFallback(report, activeNodes);
@@ -4010,7 +4106,7 @@ export function ReportV2Dashboard({ report, createdAt }: {
       {honestTranslationData && <HonestTranslationSectionExact ht={honestTranslationData} />}
 
       {/* 8 — Key phrases / speech cloud */}
-      <MindloomSpeechCloud phrases={keyPhrases} centralMeaning={phraseMicroscopeData?.summary ?? report.hero.title ?? null} />
+      <MindloomSpeechCloud phrases={directPhrases} analyticalThemes={analyticalThemes} centralMeaning={phraseMicroscopeData?.summary ?? report.hero.title ?? null} />
 
       {/* 9 — Heatmap */}
       <HeatmapSection heatmap={report.heatmap} activeNodes={activeNodes} graphNodes={report.node_graph.nodes} keyPhrases={keyPhrases} />
