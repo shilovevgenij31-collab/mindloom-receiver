@@ -74,12 +74,11 @@ function SnapshotSectionExact({ snap }: { snap: NonNullable<MindloomReportV2['sn
         {three_signals.length > 0 && (
           <div>
             <SmallLabel>Три признака</SmallLabel>
-            <div style={{ display: 'grid', gap: '0.42rem', marginTop: '0.5rem' }}>
+            <div style={{ display: 'grid', gap: '0.52rem', marginTop: '0.5rem' }}>
               {three_signals.map((sig, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.72rem' }}>
-                  <div style={{ width: 28, textAlign: 'right', fontSize: 17, lineHeight: 1, fontWeight: 720, color: '#e46f61' }}>{String(i + 1)}</div>
-                  <div style={{ width: 1, height: 20, background: 'rgba(118,92,68,0.14)' }} />
-                  <p style={{ margin: 0, fontSize: '13.5px', color: '#2e2820', lineHeight: 1.4, fontWeight: 550 }}>{sanitizeUserText(sig) ?? sig}</p>
+                <div key={i} style={{ display: 'grid', gridTemplateColumns: '24px 1fr', gap: '0.65rem', alignItems: 'flex-start' }}>
+                  <div style={{ textAlign: 'right', fontSize: 17, lineHeight: 1.4, fontWeight: 720, color: '#e46f61', flexShrink: 0 }}>{String(i + 1)}</div>
+                  <p style={{ margin: 0, fontSize: '13.5px', color: '#2e2820', lineHeight: 1.5, fontWeight: 550, wordBreak: 'break-word', overflowWrap: 'break-word' }}>{sanitizeUserText(sig) ?? sig}</p>
                 </div>
               ))}
             </div>
@@ -1292,10 +1291,25 @@ function DottedDivider({ margin = '1rem 0' }: { margin?: string }) {
 }
 
 function PhraseQuoteHighlight({ quote }: { quote: string }) {
+  const MIN_FRAGMENT = 4;
+  const STOPWORDS_RU = new Set(['я', 'и', 'с', 'в', 'не', 'а', 'но', 'это', 'то', 'же', 'бы', 'ли', 'из', 'за', 'на', 'по', 'к', 'о', 'у', 'её', 'он', 'но']);
+
+  function fragmentSafe(text: string): boolean {
+    const clean = text.replace(/^[\s«»"'—–,\-]+|[\s«»"'—–,\-]+$/g, '').trim();
+    return clean.length >= MIN_FRAGMENT && !STOPWORDS_RU.has(clean.toLowerCase());
+  }
+
+  // Prefer dash separator (meaningful phrase boundary), then comma at position > MIN_FRAGMENT
+  const dashIdx = quote.search(/\s[—–]\s/);
   const commaIdx = quote.indexOf(',');
-  const splitAt = commaIdx > 2 ? commaIdx : Math.ceil(quote.length / 2);
-  const part1 = quote.slice(0, splitAt);
-  const part2 = quote.slice(splitAt);
+  const splitAt = dashIdx > MIN_FRAGMENT ? dashIdx
+    : commaIdx > MIN_FRAGMENT ? commaIdx
+    : null;
+
+  const part1 = splitAt != null ? quote.slice(0, splitAt) : '';
+  const part2 = splitAt != null ? quote.slice(splitAt) : '';
+  const showSplit = splitAt != null && fragmentSafe(part1) && fragmentSafe(part2);
+
   return (
     <div style={{
       borderRadius: VS.r.xl, padding: '1.15rem 1.05rem',
@@ -1303,8 +1317,11 @@ function PhraseQuoteHighlight({ quote }: { quote: string }) {
       border: '1px solid rgba(127,104,217,0.14)', boxShadow: VS.shadow.card,
     }}>
       <div style={{ fontSize: '20px', lineHeight: 1.24, fontWeight: 720, letterSpacing: '-0.02em' }}>
-        «<span style={{ color: '#c8392c' }}>{part1}</span>
-        {part2 && <span style={{ color: '#4d3aa6' }}>{part2}</span>}»
+        {showSplit ? (
+          <>«<span style={{ color: '#c8392c' }}>{part1}</span><span style={{ color: '#4d3aa6' }}>{part2}</span>»</>
+        ) : (
+          <>«{quote}»</>
+        )}
       </div>
     </div>
   );
@@ -1727,6 +1744,7 @@ function ReportDetailSheet({ state, onClose }: {
         aria-hidden="true"
         style={{
           position: 'fixed', inset: 0, zIndex: 200,
+          background: 'rgba(35, 28, 22, 0.28)',
         }}
       />
       <div
