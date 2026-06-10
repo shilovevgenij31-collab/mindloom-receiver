@@ -7,7 +7,6 @@ import type {
   MindloomReportV2GraphNode,
   MindloomReportV2HeatmapZone,
   MindloomReportV2Node,
-  MindloomReportV2HowToRead,
   MindloomReportV2HonestTranslation,
   MindloomReportV2PhraseFragment,
   MindloomReportV2PhraseMicroscope,
@@ -70,15 +69,15 @@ function SnapshotSectionExact({ snap }: { snap: NonNullable<MindloomReportV2['sn
   const hasContent = three_signals.length > 0 || has(first_step);
   if (!hasContent) return null;
   return (
-    <SectionShell eyebrow="Как это проявляется" title="Что это значит для вас" icon="spark" help="Три сигнала показывают, как паттерн звучит в вашей речи и поведении. Первый шаг — не про немедленные изменения, а про то, чтобы заметить момент включения паттерна.">
+    <SectionShell title="Где это видно" icon="spark" intro="Этот блок показывает конкретные признаки из материала, по которым заметен главный паттерн.">
       <SharedPanel padding="1.18rem 1rem">
         {three_signals.length > 0 && (
           <div>
-            <SmallLabel>Три ключевых сигнала</SmallLabel>
+            <SmallLabel>Три признака</SmallLabel>
             <div style={{ display: 'grid', gap: '0.42rem', marginTop: '0.5rem' }}>
               {three_signals.map((sig, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.72rem' }}>
-                  <div style={{ width: 28, textAlign: 'right', fontSize: 17, lineHeight: 1, fontWeight: 720, color: '#e46f61' }}>{String(i + 1).padStart(2, '0')}</div>
+                  <div style={{ width: 28, textAlign: 'right', fontSize: 17, lineHeight: 1, fontWeight: 720, color: '#e46f61' }}>{String(i + 1)}</div>
                   <div style={{ width: 1, height: 20, background: 'rgba(118,92,68,0.14)' }} />
                   <p style={{ margin: 0, fontSize: '13.5px', color: '#2e2820', lineHeight: 1.4, fontWeight: 550 }}>{sig}</p>
                 </div>
@@ -91,9 +90,9 @@ function SnapshotSectionExact({ snap }: { snap: NonNullable<MindloomReportV2['sn
         <div style={{ marginTop: '0.75rem', borderRadius: 22, padding: '1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start', background: 'linear-gradient(135deg, #edf9f3, #e3f2eb)', border: '1px solid rgba(104,169,141,0.28)' }}>
           <MLIcon name="leaf" tone="green" size={18} />
           <div>
-            <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Ваш первый шаг</div>
+            <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Что можно начать замечать</div>
             <p style={{ margin: '0.35rem 0 0', fontSize: '14px', fontWeight: 650, color: '#201d1b', lineHeight: 1.4 }}>{first_step}</p>
-            <p style={{ margin: '0.4rem 0 0', fontSize: '11.5px', color: '#4a7a62', lineHeight: 1.5 }}>Этот шаг нужен не чтобы сразу всё исправить, а чтобы поймать момент, где паттерн включается автоматически.</p>
+            <p style={{ margin: '0.4rem 0 0', fontSize: '11.5px', color: '#4a7a62', lineHeight: 1.5 }}>Не нужно менять всё сразу. Начните замечать момент, когда паттерн включается автоматически.</p>
           </div>
         </div>
       )}
@@ -108,7 +107,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
   const systemGoal = report.desired_state.explicit_request ?? report.desired_state.hidden_request ?? report.desired_state.future_state;
   if (!has(quote) && !has(blocker) && !has(repeat) && !has(systemGoal)) return null;
   return (
-    <SectionShell eyebrow="Где система застревает" title="Что блокирует рост" icon="target" help="Этот блок показывает, почему ваш паттерн возвращается снова: какую тревогу он снижает, какую выгоду даёт и чем за это приходится платить.">
+    <SectionShell title="Что поддерживает паттерн" icon="target" intro="Здесь показано, что запускает паттерн, что он временно даёт и куда можно двигаться дальше.">
       {has(quote) && (
         <div style={{ borderRadius: 28, padding: '1.2rem 1.1rem', position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg, #fff4f1 0%, #fff8e8 100%)', border: '1px solid rgba(228,111,97,0.13)' }}>
           <div style={{ position: 'absolute', top: 14, right: 16, color: 'rgba(228,111,97,0.28)' }}>
@@ -123,7 +122,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
           <div style={{ gridColumn: '1 / -1', borderRadius: VS.r.md, padding: '1rem', display: 'flex', gap: '0.72rem', alignItems: 'flex-start', background: '#fff4f1', border: '1px solid rgba(228,111,97,0.15)' }}>
             <MLIcon name="warning" tone="red" size={16} />
             <div>
-              <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#a8392c' }}>Что мешает</div>
+              <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#a8392c' }}>Что запускает</div>
               <div style={{ marginTop: 4, fontSize: '14px', fontWeight: 650, lineHeight: 1.45, color: '#3a241d' }}>{blocker}</div>
             </div>
           </div>
@@ -131,14 +130,14 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
         {has(repeat) && (
           <div style={{ borderRadius: VS.r.md, padding: '1rem', background: '#f5f3ff', border: '1px solid rgba(127,104,217,0.16)' }}>
             <MLIcon name="cycle" tone="purple" size={16} />
-            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#4d3aa6' }}>Почему повторяется</div>
+            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#4d3aa6' }}>Что временно даёт</div>
             <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#4a4060' }}>{repeat}</div>
           </div>
         )}
         {has(systemGoal) && (
           <div style={{ borderRadius: VS.r.md, padding: '1rem', background: 'linear-gradient(135deg, #eef9f4, #e6f3ec)', border: '1px solid rgba(104,169,141,0.20)' }}>
             <MLIcon name="compass" tone="green" size={16} />
-            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Куда хочет ваша система</div>
+            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Куда можно двигаться</div>
             <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#315a49' }}>{systemGoal}</div>
           </div>
         )}
@@ -150,14 +149,14 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
 function ProtectedNeedSectionExact({ pn }: { pn: NonNullable<MindloomReportV2['protected_need']> }) {
   const { title, description, named, strategy_gets, sacrificed, leading_need, interpretation } = pn;
   return (
-    <SectionShell eyebrow="Глубинный слой" title={title ?? 'Потребность под защитой'} icon="shield" help="Потребность под защитой — это то, что на самом деле пытается сохранить ваша внутренняя система. Часто защита выглядит как контроль или перегрузка, но внутри может быть потребность в безопасности, признании или праве на отдых.">
+    <SectionShell title={title ?? 'Что паттерн может защищать'} icon="shield" intro="Этот блок помогает понять, какая потребность может стоять за паттерном и какую цену даёт привычный способ справляться.">
       {has(leading_need) && (
         <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 28, padding: '1rem', background: 'linear-gradient(140deg, #eef7ff 0%, #eef9f4 100%)', border: '1px solid rgba(74,149,211,0.16)' }}>
           <div style={{ position: 'absolute', top: -36, right: -24, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(74,149,211,0.14), transparent 70%)', filter: 'blur(8px)' }} />
           <div style={{ position: 'relative', display: 'flex', gap: '0.78rem', alignItems: 'flex-start' }}>
             <MLIcon name="shield" tone="blue" size={18} />
             <div>
-              <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#2a5a85' }}>Ваша ведущая потребность</div>
+              <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#2a5a85' }}>Ведущая потребность</div>
               <div style={{ marginTop: 4, fontSize: 21, fontWeight: 720, lineHeight: 1.16, letterSpacing: '-0.02em' }}>{leading_need}</div>
               {has(description) && <p style={{ margin: '0.45rem 0 0', fontSize: '13px', lineHeight: 1.55, color: '#5d6a73' }}>{description}</p>}
             </div>
@@ -167,7 +166,7 @@ function ProtectedNeedSectionExact({ pn }: { pn: NonNullable<MindloomReportV2['p
       <div style={{ display: 'grid', gap: '0.7rem', marginTop: '0.75rem' }}>
         <TagGroup label="Что слышно в вашей речи" tone="blue" icon="speech" items={named} />
         <TagGroup label="Что даёт эта стратегия" tone="yellow" icon="target" items={strategy_gets} />
-        <TagGroup label="Чем вы за это платите" tone="red" icon="warning" items={sacrificed} />
+        <TagGroup label="Цена этого способа" tone="red" icon="warning" items={sacrificed} />
       </div>
       {has(interpretation) && (
         <div style={{ marginTop: '0.9rem', paddingInline: '0.1rem', fontSize: '13.5px', lineHeight: 1.6, color: '#7d746b', fontStyle: 'italic' }}>
@@ -185,11 +184,11 @@ function PhraseMicroscopeSectionExact({ pm }: {
   if (!pm) return null;
   const visibleFragments = pm.fragments.slice(0, 3);
   return (
-    <SectionShell eyebrow="Микроскоп" title={pm.title ?? 'Фраза под микроскопом'} icon="quote" help="Этот блок показывает, как конкретная фраза связана с найденным паттерном и за счёт каких смысловых опор он удерживается.">
+    <SectionShell title="Что слышно в этой фразе" icon="quote" intro="Здесь одна фраза разбирается на части, чтобы показать, как в ней проявляется паттерн.">
       {has(pm.quote) && <QuoteBlock text={`«${pm.quote}»`} tone="purple" />}
       <div style={{ marginTop: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#7d746b' }}>
         <MLIcon name="brain" tone="purple" size={14} />
-        {visibleFragments.length || 1} смысловые точки
+        Фрагменты речи · {visibleFragments.length || 1}
       </div>
       {visibleFragments.length > 0 && (
         <div style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
@@ -202,7 +201,7 @@ function PhraseMicroscopeSectionExact({ pm }: {
               <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem 0.85rem', borderRadius: 18, background: bg, border: `1px solid ${border}` }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.38rem', width: 28, flexShrink: 0, paddingTop: 2 }}>
                   <div style={{ width: 3, height: 28, borderRadius: 999, background: accent }} />
-                  <div style={{ fontSize: 11, fontWeight: 740, color: '#7d746b' }}>{String(i + 1).padStart(2, '0')}</div>
+                  <div style={{ fontSize: 11, fontWeight: 740, color: '#7d746b' }}>{String(i + 1)}</div>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   {has(frag.text) && <div style={{ fontSize: '13px', fontWeight: 650, lineHeight: 1.35 }}>{`«${frag.text}»`}</div>}
@@ -233,7 +232,7 @@ function HonestTranslationSectionExact({ ht }: { ht: NonNullable<MindloomReportV
   if (ht.items.length === 0) return null;
   const visible = ht.items.slice(0, 2);
   return (
-    <SectionShell eyebrow="Что за словами" title={ht.title ?? 'Что стоит за привычными формулировками'} icon="speech" help="Этот блок переводит привычную фразу в более честную и бережную потребность. Не оценку и не диагноз — а то, что на самом деле скрывается за словами.">
+    <SectionShell title="Фразы и возможный смысл" icon="speech" intro="Здесь привычные фразы переводятся в возможный внутренний смысл. Это не точный перевод, а версия для проверки.">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {visible.map((item, i) => (
           <div key={i} style={{ borderRadius: VS.r.lg, overflow: 'hidden', border: '1px solid rgba(118,92,68,0.13)', background: '#fffdf8', boxShadow: VS.shadow.card }}>
@@ -245,7 +244,7 @@ function HonestTranslationSectionExact({ ht }: { ht: NonNullable<MindloomReportV
               <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: -12, width: 24, height: 24, borderRadius: 999, display: 'grid', placeItems: 'center', background: '#edf9f3', border: '1px solid rgba(104,169,141,0.25)', color: '#68a98d', fontSize: 11, opacity: 0.82 }}>↓</div>
             </div>
             <div style={{ padding: '1.1rem 1rem 0.95rem', display: 'flex', alignItems: 'flex-start', gap: '0.7rem', background: 'linear-gradient(135deg, #edf9f3, #e3f2eb)' }}>
-              <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a', flexShrink: 0, marginTop: 3 }}>Что на самом деле</div>
+              <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a', flexShrink: 0, marginTop: 3 }}>Что может за этим стоять</div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 {has(item.more_honest) && <div style={{ fontSize: '13.5px', fontWeight: 620, color: '#1e3e30', lineHeight: 1.58 }}>{item.more_honest}</div>}
                 {has(item.explanation) && item.explanation !== item.more_honest && item.explanation.trim().toLowerCase() !== item.more_honest?.trim().toLowerCase() && (
@@ -363,9 +362,9 @@ function buildSnapshotFallback(report: MindloomReportV2, activeNodes: MindloomRe
   );
   const threeSignals = uniqueStrings([
     ...collectSpeechPhrases(report).slice(0, 3),
-    report.target.growth_blocker ? `Что мешает: ${report.target.growth_blocker}` : null,
+    report.target.growth_blocker ? `Что запускает: ${report.target.growth_blocker}` : null,
     report.mechanism.protective_logic ? `Почему повторяется: ${report.mechanism.protective_logic}` : null,
-    report.desired_state.explicit_request ? `Куда хочет система: ${report.desired_state.explicit_request}` : null,
+    report.desired_state.explicit_request ? `Куда двигаться: ${report.desired_state.explicit_request}` : null,
   ], 3);
   const overheatScore = strongestNode?.intensity ?? strongestZone?.intensity ?? report.processing_dashboard.overheat_level ?? null;
   const mainOverheat = overheatScore != null || has(strongestNode?.label) || has(strongestZone?.label)
@@ -390,19 +389,6 @@ function buildSnapshotFallback(report: MindloomReportV2, activeNodes: MindloomRe
     main_overheat: mainOverheat,
     first_step: firstStep,
   };
-}
-
-function buildHowToReadFallback(report: MindloomReportV2): MindloomReportV2HowToRead {
-  const hasVisualMaps = report.heatmap.zones.length > 0 || report.node_graph.nodes.length > 0;
-  const hasPhrase = collectSpeechPhrases(report).length > 0;
-  const hasPractice = report.recommended_practices.length > 0;
-  const steps = [
-    { title: 'Сначала прочитайте главный паттерн', description: report.snapshot?.key_pattern ?? report.hero.title ?? undefined },
-    { title: 'Посмотрите карту перегрева', description: hasVisualMaps ? 'Найдите самые напряжённые зоны и узлы.' : 'Обратите внимание, где система удерживает больше всего напряжения.' },
-    { title: 'Разберите одну фразу под микроскопом', description: hasPhrase ? 'Одна конкретная фраза показывает, как паттерн звучит вживую.' : 'Сравните привычную формулировку с более честной потребностью.' },
-    { title: 'Выберите одну практику на неделю', description: hasPractice ? report.recommended_practices[0]?.title ?? undefined : 'Не пытайтесь взять всё сразу — достаточно одного действия.' },
-  ];
-  return { title: 'Как пользоваться отчётом', steps };
 }
 
 function buildProtectedNeedFallback(
@@ -434,7 +420,7 @@ function buildProtectedNeedFallback(
   );
   if (!leadingNeed && named.length === 0 && strategyGets.length === 0 && sacrificed.length === 0 && !interpretation) return null;
   return {
-    title: 'Потребность под защитой',
+    title: 'Что паттерн может защищать',
     description,
     named,
     strategy_gets: strategyGets,
@@ -459,10 +445,10 @@ function inferPhraseFragments(report: MindloomReportV2, quote: string): Mindloom
   const lower = quote.toLowerCase();
   const heuristics: MindloomReportV2PhraseFragment[] = [];
   if (lower.includes('контрол')) {
-    heuristics.push({ text: 'контроль', meaning: 'контроль как защита', pattern: 'Система снижает тревогу через постоянное управление.' });
+    heuristics.push({ text: 'контроль', meaning: 'контроль как защита', pattern: 'Тревога снижается через постоянное управление и контроль.' });
   }
   if (lower.includes('останов') || lower.includes('пауз') || lower.includes('отдых')) {
-    heuristics.push({ text: 'остановка / пауза', meaning: 'страх потери опоры', pattern: 'Пауза переживается как риск, а не как восстановление.' });
+    heuristics.push({ text: 'остановка / пауза', meaning: 'страх потери опоры', pattern: 'Пауза переживается как угроза, а не как восстановление.' });
   }
   if (lower.includes('долж') || lower.includes('обязан') || lower.includes('сам')) {
     heuristics.push({ text: 'должен / сам', meaning: 'гиперответственность', pattern: 'Внутреннее давление не даёт делегировать и отпускать.' });
@@ -484,7 +470,7 @@ function buildPhraseMicroscopeFallback(
   if (!quote) return null;
   const fragments = inferPhraseFragments(report, quote);
   return {
-    title: 'Фраза под микроскопом',
+    title: 'Что слышно в этой фразе',
     quote,
     why_this_quote: firstNonEmpty(report.target.short_explanation, report.mechanism.protective_logic),
     fragments,
@@ -520,7 +506,7 @@ function buildHonestTranslationFallback(
     };
   });
   if (items.length === 0) return null;
-  return { title: 'Что стоит за привычными формулировками', items };
+  return { title: 'Фразы и возможный смысл', items };
 }
 
 function accentHeroTitle(title: string): React.ReactNode {
@@ -673,8 +659,8 @@ function edgeTypeLabel(type?: string): string {
 
 function buildHumanEdgeTitle(fromLabel: string, toLabel: string, edgeType: string, explanation?: string | null): string {
   if (has(explanation)) return explanation;
-  const from = fromLabel || 'Узел';
-  const to = toLabel || 'Узел';
+  const from = fromLabel || 'Тема';
+  const to = toLabel || 'Тема';
   switch (edgeType) {
     case 'hard': return `${from} автоматически запускает ${to}.`;
     case 'choice_blocked': return `${from} ведёт к ${to} — выбор здесь переживается как недоступный.`;
@@ -687,10 +673,10 @@ function buildHumanEdgeTitle(fromLabel: string, toLabel: string, edgeType: strin
 
 function edgeTypeDescription(type?: string): string {
   switch (type) {
-    case 'hard': return 'быстро запускает другой узел';
+    case 'hard': return 'быстро запускает другую тему';
     case 'normal': return 'заметно поддерживает паттерн';
     case 'soft': return 'проявляется слабее';
-    case 'choice_available': return 'связь можно начать ослаблять';
+    case 'choice_available': return 'эту связь можно начать ослаблять';
     case 'choice_blocked': return 'переживается как автоматическая';
     default: return 'заметно поддерживает паттерн';
   }
@@ -829,10 +815,11 @@ function HelpTip({ text }: { text: string }) {
         style={{
           position: 'fixed', bottom: '1rem', left: '1rem', right: '1rem',
           maxWidth: 'min(480px, calc(100vw - 2rem))', marginInline: 'auto',
-          zIndex: 9999, background: '#2a241e', color: '#fffdf8',
+          zIndex: 9999, background: '#fffdf8', color: '#3a3228',
           fontSize: '0.84rem', lineHeight: 1.62,
           padding: '0.9rem 1rem', borderRadius: 20,
-          boxShadow: '0 -2px 16px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.28)',
+          border: '1px solid rgba(118,92,68,0.18)',
+          boxShadow: '0 -2px 16px rgba(70,53,35,0.10), 0 8px 32px rgba(70,53,35,0.12)',
           fontWeight: 400, wordBreak: 'normal', overflowWrap: 'break-word',
           display: 'flex', gap: '0.75rem', alignItems: 'flex-start',
         }}
@@ -844,8 +831,8 @@ function HelpTip({ text }: { text: string }) {
           aria-label="Закрыть"
           style={{
             flexShrink: 0, width: 24, height: 24, borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.18)', background: 'rgba(255,255,255,0.10)',
-            color: 'rgba(255,255,255,0.75)', cursor: 'pointer', fontSize: 16,
+            border: '1px solid rgba(118,92,68,0.18)', background: 'rgba(118,92,68,0.06)',
+            color: '#7d746b', cursor: 'pointer', fontSize: 16,
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1,
           }}
         >×</button>
@@ -886,11 +873,11 @@ function Eyebrow({ children }: { children: string }) {
 }
 
 function SectionHead({ eyebrow, title, help }: {
-  eyebrow: string; title: string; help?: string;
+  eyebrow?: string; title: string; help?: string;
 }) {
   return (
     <div style={{ marginBottom: '1.05rem' }}>
-      <Eyebrow>{eyebrow}</Eyebrow>
+      {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
       <h2 style={{
         margin: 0,
         fontSize: 'clamp(19px, 5.2vw, 26px)',
@@ -1086,13 +1073,15 @@ function SectionShell({
   eyebrow,
   title,
   help,
+  intro,
   icon: _icon,
   id,
   children,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   help?: string;
+  intro?: string;
   icon?: IconName;
   id?: string;
   children: React.ReactNode;
@@ -1106,6 +1095,9 @@ function SectionShell({
       <div style={{ maxWidth: '100%' }}>
         <SectionHead eyebrow={eyebrow} title={title} help={help} />
       </div>
+      {intro && (
+        <p style={{ margin: '0 0 0.75rem', fontSize: '13px', lineHeight: 1.6, color: '#8a8077' }}>{intro}</p>
+      )}
       {children}
     </section>
   );
@@ -1292,12 +1284,12 @@ function KeyPhrasesSupportSection({ phrases, centralMeaning }: { phrases: string
   const visible = normalized.slice(0, 6);
   const hidden = normalized.slice(6);
   return (
-    <SectionShell eyebrow="Речевые маркеры паттерна" title="Что слышно в вашей речи" icon="speech" help="По этим фразам в материале распознаётся повторяющийся паттерн. Они не оценки — а точки, где система проявляет себя вслух.">
+    <SectionShell title="Что повторяется в речи" icon="speech" intro="Здесь собраны повторяющиеся слова и темы. Они помогают увидеть, вокруг чего чаще всего собирается паттерн.">
       <SharedPanel padding="0.95rem 1rem">
         {has(centralMeaning) && (
           <div style={{ marginBottom: '0.85rem', padding: '0.72rem 0.9rem', borderRadius: 14, background: '#f2efff', border: '1px solid rgba(127,104,217,0.18)' }}>
             <div style={{ fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#5244a8', marginBottom: '0.28rem' }}>
-              Главный речевой паттерн
+              Центральная тема
             </div>
             <p style={{ margin: 0, fontSize: '13.5px', lineHeight: 1.5, color: '#4d3aa6', fontWeight: 600 }}>
               {softClampText(centralMeaning, 120) ?? centralMeaning}
@@ -1382,8 +1374,8 @@ function MindloomSpeechCloud({ phrases, centralMeaning }: { phrases: string[]; c
   };
 
   return (
-    <SectionShell eyebrow="Речевые маркеры паттерна" title="Что слышно в вашей речи" icon="speech"
-      help="По этим фразам в материале распознаётся повторяющийся паттерн. Они не оценки — а точки, где система проявляет себя вслух.">
+    <SectionShell title="Что повторяется в речи" icon="speech"
+      intro="Здесь собраны повторяющиеся слова и темы. Они помогают увидеть, вокруг чего чаще всего собирается паттерн.">
       <div style={{
         position: 'relative',
         background: 'linear-gradient(155deg, #fffefc 0%, #fdfaf5 52%, #fbf6ee 100%)',
@@ -1410,15 +1402,8 @@ function MindloomSpeechCloud({ phrases, centralMeaning }: { phrases: string[]; c
         {/* Central bubble */}
         <div style={{
           display: 'flex', flexDirection: 'column', alignItems: 'center',
-          marginBottom: '1.1rem', position: 'relative', zIndex: 1,
+          marginBottom: '0.75rem', position: 'relative', zIndex: 1,
         }}>
-          <p style={{
-            margin: '0 0 0.65rem',
-            fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase' as const,
-            fontWeight: 700, color: '#9080cc', lineHeight: 1,
-          }}>
-            Главный паттерн
-          </p>
           <div className="mlm-speech-center" style={{
             width: 148, height: 148, borderRadius: '50%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1496,10 +1481,10 @@ type HeatPalette = {
 };
 
 const DEFAULT_HEAT_SCALE = [
-  { label: 'Низкая', range: '0-40%', description: 'ресурс или сниженная активность', tone: 'blue' as Tone },
-  { label: 'Умеренная', range: '40-70%', description: 'заметная зона внимания', tone: 'yellow' as Tone },
-  { label: 'Высокая', range: '70-88%', description: 'сильная активация', tone: 'yellow' as Tone },
-  { label: 'Перегрев', range: '88-100%', description: 'критическая нагрузка', tone: 'red' as Tone },
+  { label: 'Слабее', range: '0-40%', description: 'слабое проявление', tone: 'blue' as Tone },
+  { label: 'Заметно', range: '40-65%', description: 'заметное проявление', tone: 'yellow' as Tone },
+  { label: 'Сильно', range: '65-88%', description: 'сильное проявление', tone: 'red' as Tone },
+  { label: 'Очень сильно', range: '88-100%', description: 'пик активности', tone: 'red' as Tone },
 ];
 
 const HEAT_POSITIONS = [
@@ -1578,127 +1563,6 @@ function heatPosition(label: string, index: number, used: Map<string, number>) {
   return list[usedCount] ?? HEAT_SLOT_POSITIONS.extra[index % HEAT_SLOT_POSITIONS.extra.length];
 }
 
-function HeatmapInfoSheet({ insightRows, scale, onClose }: {
-  insightRows: Array<{ title: string; text: string; tone: Tone; kind: 'alert' | 'brain' | 'quote'; dots: string[] }>;
-  scale: Array<{ label?: string | null; range?: string | null; description?: string | null; tone: Tone }>;
-  onClose: () => void;
-}) {
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [onClose]);
-  return createPortal(
-    <>
-      <div onClick={onClose} aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(30,26,22,0.44)', backdropFilter: 'blur(3px)', WebkitBackdropFilter: 'blur(3px)' }} />
-      <div role="dialog" aria-modal="true" aria-labelledby="mlm-heat-info-title" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 201, maxHeight: '82vh', background: 'linear-gradient(160deg, #fffdf8 0%, #fbf5ec 100%)', borderRadius: '24px 24px 0 0', border: '1px solid rgba(118,92,68,0.16)', borderBottom: 'none', boxShadow: '0 -12px 48px rgba(70,53,35,0.15)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0.75rem 1.2rem 0' }}>
-          <div style={{ width: 36, height: 4, borderRadius: 999, background: 'rgba(118,92,68,0.22)', marginBottom: '0.6rem' }} />
-        </div>
-        <div style={{ flex: 1, overflow: 'auto', padding: '0 1.2rem 2rem', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <div>
-              <p style={{ margin: '0 0 0.2rem', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 760, color: '#7d746b' }}>Тепловая карта</p>
-              <h2 id="mlm-heat-info-title" style={{ margin: 0, fontSize: 'clamp(18px, 5vw, 22px)', fontWeight: 700, color: '#201d1b', lineHeight: 1.15 }}>Как читать карту</h2>
-            </div>
-            <button type="button" onClick={onClose} aria-label="Закрыть" style={{ width: 34, height: 34, borderRadius: 999, border: '1px solid rgba(118,92,68,0.18)', background: '#fffdf8', color: '#5a5450', cursor: 'pointer', display: 'grid', placeItems: 'center', fontSize: 18, flexShrink: 0 }}>×</button>
-          </div>
-          {insightRows.map((row, i) => {
-            const iconName: IconName = row.kind === 'alert' ? 'heat' : row.kind === 'brain' ? 'network' : 'info';
-            return (
-              <div key={i} style={{ marginBottom: '0.85rem', padding: '0.9rem 1rem', borderRadius: 18, background: i === 0 ? '#fff3ef' : i === 1 ? '#f2efff' : '#edf6ff', border: `1px solid ${i === 0 ? 'rgba(228,111,97,0.14)' : i === 1 ? 'rgba(127,104,217,0.14)' : 'rgba(74,149,211,0.14)'}` }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.45rem' }}>
-                  <MLIcon name={iconName} tone={row.tone} size={14} />
-                  <strong style={{ fontSize: '0.8rem', fontWeight: 700, color: '#29241f' }}>{row.title}</strong>
-                </div>
-                <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.58, color: '#3a3228' }}>{row.text}</p>
-                <div style={{ display: 'flex', gap: '0.38rem', marginTop: '0.55rem' }}>
-                  {row.dots.map((dot, di) => (
-                    <span key={di} style={{ width: 9, height: 9, borderRadius: '50%', background: dot, opacity: 0.9 }} />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-          <div style={{ marginTop: '0.5rem' }}>
-            <p style={{ margin: '0 0 0.6rem', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7d746b' }}>Шкала активности</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
-              {scale.map((s, i) => {
-                const pal = heatPalette(s.tone);
-                return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', padding: '0.55rem 0.7rem', borderRadius: 14, background: 'rgba(255,252,246,0.8)', border: '1px solid rgba(118,92,68,0.10)' }}>
-                    <span style={{ flexShrink: 0, marginTop: 3, display: 'inline-block', width: 10, height: 10, borderRadius: '50%', background: pal.base }} />
-                    <div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#2f2822', lineHeight: 1.2 }}>{s.label ?? `Уровень ${i + 1}`}</div>
-                      {has(s.range) && <div style={{ fontSize: '0.65rem', color: '#8a8077', marginTop: 1 }}>{s.range}</div>}
-                      {has(s.description) && <div style={{ fontSize: '0.7rem', color: '#7d746b', marginTop: 2, lineHeight: 1.4 }}>{s.description}</div>}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <p style={{ margin: '0.9rem 0 0', fontSize: '11px', color: '#a09690', lineHeight: 1.5, fontStyle: 'italic' }}>
-            Процент — условная сила проявления зоны в данном материале. Это не медицинская оценка и не диагноз.
-          </p>
-        </div>
-      </div>
-    </>,
-    document.body
-  );
-}
-
-function HowToReadSheet({ htr, onClose }: {
-  htr: MindloomReportV2HowToRead;
-  onClose: () => void;
-}) {
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [onClose]);
-
-  return createPortal(
-    <>
-      <div onClick={onClose} aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(30,26,22,0.44)', backdropFilter: 'blur(3px)', WebkitBackdropFilter: 'blur(3px)' }} />
-      <div role="dialog" aria-modal="true" aria-labelledby="mlm-htr-title" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 201, maxHeight: '80vh', background: 'linear-gradient(160deg, #fffdf8 0%, #fbf5ec 100%)', borderRadius: '24px 24px 0 0', border: '1px solid rgba(118,92,68,0.16)', borderBottom: 'none', boxShadow: '0 -12px 48px rgba(70,53,35,0.15)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0.75rem 1.2rem 0' }}>
-          <div style={{ width: 36, height: 4, borderRadius: 999, background: 'rgba(118,92,68,0.22)', marginBottom: '0.6rem' }} />
-        </div>
-        <div style={{ flex: 1, overflow: 'auto', padding: '0 1.2rem 2rem', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-            <div>
-              <p style={{ margin: '0 0 0.2rem', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 760, color: '#7d746b' }}>Навигация</p>
-              <h2 id="mlm-htr-title" style={{ margin: 0, fontSize: 'clamp(19px, 5vw, 23px)', fontWeight: 740, color: '#201d1b', lineHeight: 1.1 }}>Как читать отчёт</h2>
-            </div>
-            <button type="button" onClick={onClose} aria-label="Закрыть" style={{ width: 34, height: 34, borderRadius: 999, border: '1px solid rgba(118,92,68,0.18)', background: '#fffdf8', color: '#5a5450', cursor: 'pointer', display: 'grid', placeItems: 'center', fontSize: 18, flexShrink: 0 }}>×</button>
-          </div>
-          <div style={{ padding: '0.85rem 0.95rem', borderRadius: 18, background: '#f2efff', border: '1px solid rgba(127,104,217,0.18)', marginBottom: '1rem', fontSize: '13px', lineHeight: 1.6, color: '#3a3258' }}>
-            Отчёт не нужно читать как диагноз. Его лучше читать как карту: сначала понять ваш главный паттерн, затем посмотреть, где он проявляется в речи и поведении, и выбрать один маленький шаг.
-          </div>
-          {htr.steps.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {htr.steps.map((step, i) => (
-                <div key={i} style={{ display: 'flex', gap: '0.75rem', paddingBottom: i < htr.steps.length - 1 ? '0.85rem' : '0' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: '50%', background: '#ece8ff', color: '#5244a8', fontSize: '0.68rem', fontWeight: 760 }}>{i + 1}</span>
-                    {i < htr.steps.length - 1 && <div style={{ width: 1, flex: 1, background: '#e8ddd0', marginTop: '0.3rem' }} />}
-                  </div>
-                  <div style={{ paddingTop: '0.2rem', paddingBottom: i < htr.steps.length - 1 ? '0.4rem' : '0' }}>
-                    {has(step.title) && <p style={{ margin: '0 0 0.22rem', fontWeight: 600, fontSize: '0.9rem', color: '#1e1a16', lineHeight: 1.3 }}>{step.title}</p>}
-                    {has(step.description) && <p style={{ margin: 0, fontSize: '0.85rem', color: '#5a5450', lineHeight: 1.6 }}>{step.description}</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </>,
-    document.body
-  );
-}
-
 function ReportDetailSheet({ state, onClose }: {
   state: DetailSheetState | null;
   onClose: () => void;
@@ -1719,7 +1583,7 @@ function ReportDetailSheet({ state, onClose }: {
     normal: 'Связь заметно поддерживает паттерн.',
     soft: 'Связь проявляется слабее или не всегда.',
     choice_available: 'Здесь может появляться пространство выбора.',
-    choice_blocked: 'Здесь система переживает выбор как недоступный.',
+    choice_blocked: 'Выбор здесь переживается как недоступный.',
   };
 
   return createPortal(
@@ -1739,25 +1603,23 @@ function ReportDetailSheet({ state, onClose }: {
         aria-modal="true"
         aria-labelledby="mlm-sheet-title"
         style={{
-          position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 201,
-          maxHeight: '84vh',
+          position: 'fixed',
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 'min(560px, calc(100% - 32px))',
+          maxHeight: '80vh',
+          zIndex: 201,
           background: 'linear-gradient(160deg, #fffdf8 0%, #fbf5ec 100%)',
-          borderRadius: '24px 24px 0 0',
+          borderRadius: 24,
           border: '1px solid rgba(118,92,68,0.16)',
-          borderBottom: 'none',
-          boxShadow: '0 -12px 48px rgba(70,53,35,0.15)',
+          boxShadow: '0 8px 48px rgba(70,53,35,0.18)',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
         }}
       >
-        {/* Handle */}
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px', flexShrink: 0 }}>
-          <div style={{ width: 36, height: 4, borderRadius: 999, background: 'rgba(118,92,68,0.22)' }} />
-        </div>
-
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '0.55rem 1.1rem 0.4rem', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '1rem 1.1rem 0.4rem', flexShrink: 0 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{ margin: '0 0 0.18rem', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: surf.text }}>{state.eyebrow}</p>
             <h2 id="mlm-sheet-title" style={{ margin: 0, fontSize: 'clamp(16px, 5vw, 21px)', fontWeight: 730, lineHeight: 1.2, color: '#201d1b', letterSpacing: '-0.02em' }}>{state.title}</h2>
@@ -1826,14 +1688,14 @@ function ReportDetailSheet({ state, onClose }: {
           {/* Fallback description for heatmap-node */}
           {state.type === 'heatmap-node' && !has(state.description) && (
             <p style={{ margin: '0 0 0.8rem', fontSize: '13.5px', lineHeight: 1.65, color: '#5d564f', fontStyle: 'italic' }}>
-              Эта зона показывает, где в материале чаще всего проявляется напряжение или ресурс.
+              Эта тема показывает, где паттерн проявляется заметнее всего в материале.
             </p>
           )}
 
           {/* Fallback description for graph-node */}
           {state.type === 'graph-node' && !has(state.description) && (
             <p style={{ margin: '0 0 0.8rem', fontSize: '13.5px', lineHeight: 1.65, color: '#5d564f', fontStyle: 'italic' }}>
-              Этот узел участвует в общей карте причинно-следственных связей.
+              Эта тема участвует в общей цепочке паттерна.
             </p>
           )}
 
@@ -2074,7 +1936,7 @@ function NeuroHeatmap({ zones, nodes, heatmap, displayLimit = 4 }: {
     })),
     ...nodeItems.slice(0, Math.max(0, 9 - zoneItems.length)).map((n, i) => ({
       id: n.id ?? `node-${i}`,
-      label: n.label ?? `Узел ${i + 1}`,
+      label: n.label ?? `Тема ${i + 1}`,
       description: n.description,
       intensity: n.intensity,
       tone: heatTone(n.label ?? '', n.color),
@@ -2094,7 +1956,7 @@ function NeuroHeatmap({ zones, nodes, heatmap, displayLimit = 4 }: {
     })),
     ...nodeItems.slice(0, Math.max(0, 9 - zoneItems.length)).map((n, i) => ({
       id: n.id ?? `node-${i}`,
-      label: n.label ?? `Узел ${i + 1}`,
+      label: n.label ?? `Тема ${i + 1}`,
       description: n.description,
       intensity: n.intensity,
       tone: heatTone(n.label ?? '', n.color),
@@ -2260,11 +2122,10 @@ function heatNodeSize(intensity: number | null | undefined): number {
   return 54;
 }
 
-function HeatmapCanvasFirst({ points, heatmap, onNodeClick, onInfoOpen, activeNodesRef, graphNodesRef, keyPhrasesRef }: {
+function HeatmapCanvasFirst({ points, heatmap, onNodeClick, activeNodesRef, graphNodesRef, keyPhrasesRef }: {
   points: HeatPoint[];
   heatmap: MindloomReportV2['heatmap'];
   onNodeClick?: (s: DetailSheetState) => void;
-  onInfoOpen?: () => void;
   activeNodesRef?: MindloomReportV2Node[];
   graphNodesRef?: MindloomReportV2GraphNode[];
   keyPhrasesRef?: string[];
@@ -2552,13 +2413,13 @@ function HeatmapCanvasFirst({ points, heatmap, onNodeClick, onInfoOpen, activeNo
               sheetRows.push({ label: 'Почему важно', text: pt.why_it_matters });
             }
             if (relatedLabels.length > 0) {
-              sheetRows.push({ label: 'Связанные узлы', text: relatedLabels.join(' · ') });
+              sheetRows.push({ label: 'Связанные темы', text: relatedLabels.join(' · ') });
             }
             const descriptionText = pt.description ?? matchingActive?.description;
-            const whyText = !has(pt.why_it_matters) ? 'В материале эта зона связана с повторяющимся напряжением и поддерживает общий паттерн.' : null;
+            const whyText = !has(pt.why_it_matters) ? 'В материале эта тема связана с повторяющимся напряжением и поддерживает общий паттерн.' : null;
             onNodeClick({
               type: 'heatmap-node',
-              eyebrow: 'Тепловая зона',
+              eyebrow: 'Тема',
               title: pt.label,
               tone: pt.tone,
               percent: pt.intensity,
@@ -2566,7 +2427,7 @@ function HeatmapCanvasFirst({ points, heatmap, onNodeClick, onInfoOpen, activeNo
               why: whyText,
               rows: sheetRows.length > 0 ? sheetRows : undefined,
               evidence: nodeEvidence.length > 0 ? nodeEvidence : undefined,
-              note: 'Процент — условная сила проявления в данном материале, не медицинская оценка.',
+              note: 'Процент показывает условную выраженность темы в этом материале.',
             });
           } : undefined;
           return (
@@ -2669,12 +2530,6 @@ function HeatmapCanvasFirst({ points, heatmap, onNodeClick, onInfoOpen, activeNo
               );
             })}
           </div>
-          {onInfoOpen && (
-            <button type="button" onClick={onInfoOpen} className="mlm-interactive-card" style={{ marginTop: '0.5rem', display: 'inline-flex', alignItems: 'center', gap: 3, padding: '0.3rem 0.55rem', borderRadius: 10, background: 'rgba(255,252,246,0.88)', border: '1px solid rgba(118,92,68,0.15)', color: '#7d746b', fontSize: '0.62rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>
-              <span style={{ fontSize: 10 }}>◎</span>
-              Как читать
-            </button>
-          )}
         </div>
       </div>
 
@@ -2689,12 +2544,11 @@ function HeatmapCanvasFirst({ points, heatmap, onNodeClick, onInfoOpen, activeNo
   );
 }
 
-function NeuroHeatmapCanvasFirst({ zones, nodes, heatmap, onNodeClick, onInfoOpen, activeNodesRef, graphNodesRef, keyPhrasesRef }: {
+function NeuroHeatmapCanvasFirst({ zones, nodes, heatmap, onNodeClick, activeNodesRef, graphNodesRef, keyPhrasesRef }: {
   zones: MindloomReportV2HeatmapZone[];
   nodes: MindloomReportV2Node[];
   heatmap: MindloomReportV2['heatmap'];
   onNodeClick?: (s: DetailSheetState) => void;
-  onInfoOpen?: () => void;
   activeNodesRef?: MindloomReportV2Node[];
   graphNodesRef?: MindloomReportV2GraphNode[];
   keyPhrasesRef?: string[];
@@ -2713,7 +2567,7 @@ function NeuroHeatmapCanvasFirst({ zones, nodes, heatmap, onNodeClick, onInfoOpe
     })),
     ...nodeItems.slice(0, Math.max(0, 10 - zoneItems.length)).map((n, i) => ({
       id: n.id ?? `node-fix-${i}`,
-      label: n.label ?? `Узел ${i + 1}`,
+      label: n.label ?? `Тема ${i + 1}`,
       description: n.description,
       intensity: n.intensity,
       tone: heatTone(n.label ?? '', n.color),
@@ -2729,7 +2583,7 @@ function NeuroHeatmapCanvasFirst({ zones, nodes, heatmap, onNodeClick, onInfoOpe
     );
   }
 
-  return <HeatmapCanvasFirst points={points} heatmap={heatmap} onNodeClick={onNodeClick} onInfoOpen={onInfoOpen} activeNodesRef={activeNodesRef} graphNodesRef={graphNodesRef} keyPhrasesRef={keyPhrasesRef} />;
+  return <HeatmapCanvasFirst points={points} heatmap={heatmap} onNodeClick={onNodeClick} activeNodesRef={activeNodesRef} graphNodesRef={graphNodesRef} keyPhrasesRef={keyPhrasesRef} />;
 }
 
 function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend, howToRead, edgeLimit = 4, onNodeClick, onEdgeClick }: {
@@ -2756,7 +2610,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
   const activeById = new Map(activeNodes.filter(n => n.id).map(n => [n.id!, n]));
   const enrichedNodes = visibleNodes.map((n, idx) => {
     const active = n.id ? activeById.get(n.id) : undefined;
-    const displayLabel = n.label ?? active?.label ?? `Узел ${idx + 1}`;
+    const displayLabel = n.label ?? active?.label ?? `Тема ${idx + 1}`;
     const fallbackTone = toneFromColor(active?.color);
     return {
       ...n,
@@ -2853,7 +2707,8 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
     { type: 'choice_available', label: 'Есть выбор', description: 'можно ослаблять' },
     { type: 'choice_blocked', label: 'Выбора нет', description: 'как автоматизм' },
   ];
-  const legendItems = legend.length > 0 ? legend : defaultLegend;
+  const rawLegend = legend.length > 0 ? legend : defaultLegend;
+  const legendItems = rawLegend.filter((item, idx) => rawLegend.findIndex(x => (x.type ?? 'normal') === (item.type ?? 'normal')) === idx);
   const allReadRows = howToRead.length > 0
     ? howToRead.map((item, idx) => {
         const edgeRef = displayEdges[idx] as typeof displayEdges[0] | undefined;
@@ -2876,7 +2731,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
         const to = edge.to ? byId.get(edge.to) : undefined;
         const resolvedType = resolveGraphEdgeType(edge.type, edge.strength);
         return {
-          title: buildHumanEdgeTitle(from?.displayLabel ?? 'Узел', to?.displayLabel ?? 'Узел', resolvedType, edge.explanation ?? edge.label),
+          title: buildHumanEdgeTitle(from?.displayLabel ?? 'Тема', to?.displayLabel ?? 'Тема', resolvedType, edge.explanation ?? edge.label),
           description: null,
           iconNode: from ?? graphItems[idx + 1] ?? graphItems[0],
           edgeRef: edge as typeof displayEdges[0],
@@ -2971,7 +2826,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
               edgeType: resolvedType,
               strength: e.strength,
               explanation: has(e.explanation) ? e.explanation : `Это означает, что ${from.displayLabel.toLowerCase()} может запускать или усиливать ${to.displayLabel.toLowerCase()}. Это не приговор, а гипотеза по материалу.`,
-              note: 'Связь показывает не диагноз, а предполагаемую причинно-следственную динамику по материалу.',
+              note: 'Связь показывает предполагаемую динамику по этому материалу.',
             }) : undefined;
             return (
               <g key={i}>
@@ -3047,7 +2902,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
           const palette = graphNodePalette(n.tone);
           const label = getShortLabel(n.displayLabel);
           const iconColor = n.isCentral ? '#fffaf2' : `${palette.deep}e6`;
-          const centralChip = has(n.type) ? nodeTypeLabel(n.type) || 'драйвер' : 'ключевой драйвер';
+          const centralChip = has(n.type) ? nodeTypeLabel(n.type) || 'главная тема' : 'главная тема';
           const handleNodeClick = onNodeClick ? () => {
             const outgoing = visualEdges.filter(e => e.from === n.id && e.to && byId.has(e.to)).slice(0, 3);
             const incoming = visualEdges.filter(e => e.to === n.id && e.from && byId.has(e.from)).slice(0, 3);
@@ -3058,29 +2913,29 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
             const nodeEvidence = activeNodes.find(an => an.id === n.id)?.evidence ?? [];
             const nodeLower = (n.displayLabel ?? '').toLowerCase();
             const nodeWhatItMeans = nodeLower.includes('контрол') || nodeLower.includes('защит')
-              ? 'Этот узел отражает защитную реакцию — систему, которая пытается управлять ситуацией, чтобы снизить тревогу.'
+              ? 'Эта тема отражает защитную реакцию — попытку управлять ситуацией, чтобы снизить тревогу.'
               : nodeLower.includes('вина') || nodeLower.includes('отдых')
-                ? 'Этот узел связан с внутренним напряжением вокруг разрешения или запрета на что-то важное.'
+                ? 'Эта тема связана с внутренним напряжением вокруг разрешения или запрета на что-то важное.'
                 : nodeLower.includes('ценность') || nodeLower.includes('убежд')
-                  ? 'Этот узел — убеждение или ценность, которое автоматически запускает поведение и оценку ситуации.'
+                  ? 'Это убеждение или ценность, которое автоматически запускает поведение и оценку ситуации.'
                   : nodeLower.includes('тело') || nodeLower.includes('телес') || nodeLower.includes('перегрев')
-                    ? 'Этот узел показывает, где паттерн проявляется через тело — усталость, напряжение, физическую реакцию.'
-                    : 'Этот узел — повторяющаяся смысловая точка, которая участвует в общей цепочке паттерна.';
+                    ? 'Здесь паттерн проявляется через тело — усталость, напряжение, физическую реакцию.'
+                    : 'Это повторяющаяся тема, которая участвует в общей цепочке паттерна.';
             const graphNodeRows = [
               ...rows,
               { label: 'Что это значит', text: nodeWhatItMeans },
             ].filter(r => has(r.text));
             onNodeClick({
               type: 'graph-node',
-              eyebrow: n.isCentral ? 'Ключевой драйвер' : 'Узел системы',
+              eyebrow: 'Тема',
               title: n.displayLabel,
               tone: n.tone,
               percent: n.intensity,
               description: n.description,
-              badge: n.isCentral ? 'Ключевой драйвер' : (has(n.type) ? nodeTypeLabel(n.type) || null : null),
+              badge: n.isCentral ? 'Главная тема' : (has(n.type) ? nodeTypeLabel(n.type) || null : null),
               rows: graphNodeRows.length > 0 ? graphNodeRows : undefined,
               evidence: nodeEvidence.slice(0, 3),
-              note: 'Узел — повторяющаяся смысловая точка, вокруг которой собирается часть паттерна.',
+              note: 'Это повторяющаяся тема из материала. Процент показывает условную выраженность.',
             });
           } : undefined;
           return (
@@ -3148,20 +3003,6 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
               }}>
                 {fmtPct(n.intensity)}
               </span>
-              {n.isCentral && (
-                <span style={{
-                  marginTop: '0.18rem',
-                  padding: '0.11rem 0.36rem',
-                  borderRadius: 999,
-                  background: 'rgba(255,250,244,0.16)',
-                  color: 'rgba(255,250,244,0.86)',
-                  fontSize: '0.52rem',
-                  fontWeight: 750,
-                  border: '1px solid rgba(255,250,244,0.20)',
-                }}>
-                  драйвер
-                </span>
-              )}
             </div>
           );
         })}
@@ -3237,7 +3078,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
                   edgeType: resolvedType,
                   strength: e.strength,
                   explanation: edgeExpl,
-                  note: 'Связь показывает не диагноз, а предполагаемую причинно-следственную динамику по материалу.',
+                  note: 'Связь показывает предполагаемую динамику по этому материалу.',
                 });
               } : undefined;
               const edgeSt = graphEdgeStyle(resolvedType);
@@ -3281,31 +3122,25 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
         </div>
       )}
 
-      <div style={{
-        display: 'flex',
-        gap: '0.5rem',
-        alignItems: 'center',
-        borderTop: '1px solid rgba(228,216,204,0.8)',
-        padding: '0.72rem 0.9rem',
-        background: '#fbf7ef',
-        color: '#a49a8f',
-        fontSize: '0.74rem',
-        lineHeight: 1.45,
-      }}>
-        <span style={{ color: '#d0aa4f', flexShrink: 0 }}>
-          <GraphIcon kind="leaf" color="#d0aa4f" size={17} />
-        </span>
-        Карта показывает типичные связи в вашей системе. Это не диагноз, а инструмент для понимания и выбора изменений.
-      </div>
     </div>
   );
 }
 
 // ── Section components ────────────────────────────────────────────────────────
 
+function mapOverheatLabel(label: string | null | undefined): string | null {
+  if (!has(label)) return null;
+  const lower = label.toLowerCase().trim();
+  if (lower === 'high') return 'Высокая выраженность';
+  if (lower === 'medium') return 'Средняя выраженность';
+  if (lower === 'low') return 'Низкая выраженность';
+  return label;
+}
+
 function OverheatTile({ report, activeNodes }: { report: MindloomReportV2; activeNodes: MindloomReportV2Node[] }) {
   const snap = report.snapshot;
-  const overheatLabel = snap?.main_overheat?.label ?? report.processing_dashboard.priority ?? getStrongestNode(activeNodes)?.label ?? getStrongestZone(report)?.label;
+  const rawLabel = snap?.main_overheat?.label ?? report.processing_dashboard.priority ?? getStrongestNode(activeNodes)?.label ?? getStrongestZone(report)?.label;
+  const overheatLabel = mapOverheatLabel(rawLabel);
   const overheatScore = snap?.main_overheat?.score ?? report.processing_dashboard.overheat_level ?? getStrongestNode(activeNodes)?.intensity ?? getStrongestZone(report)?.intensity;
   const overheatExplanation = snap?.main_overheat?.explanation ?? report.target.short_explanation ?? getStrongestNode(activeNodes)?.description;
   if (overheatScore == null && !has(overheatLabel)) return null;
@@ -3316,9 +3151,11 @@ function OverheatTile({ report, activeNodes }: { report: MindloomReportV2; activ
         <div style={{ padding: '1.1rem 1.2rem 1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
             <MLIcon name="heat" tone="red" size={15} />
-            <span style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#a87068' }}>Главный перегрев</span>
-            <HelpTip text="Это не диагноз и не медицинская оценка. Процент показывает, насколько часто и сильно этот паттерн проявился в исходном материале — насколько активно система тратила здесь ресурс." />
+            <span style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#a87068' }}>Самый заметный паттерн</span>
           </div>
+          <p style={{ margin: '0 0 0.5rem', fontSize: '12px', lineHeight: 1.5, color: '#8a6860' }}>
+            Это самый заметный повторяющийся паттерн в материале.
+          </p>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.85rem', flexWrap: 'wrap' }}>
             <div>
               {has(overheatLabel) && <div style={{ fontSize: 'clamp(16px, 4.5vw, 22px)', fontWeight: 660, lineHeight: 1.15, letterSpacing: '-0.02em', color: '#2e1c18' }}>{overheatLabel}</div>}
@@ -3326,7 +3163,7 @@ function OverheatTile({ report, activeNodes }: { report: MindloomReportV2; activ
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, marginTop: 4 }}>
                   <span style={{ fontSize: 30, lineHeight: 1, fontWeight: 680, color: '#c8706a' }}>{pct}</span>
                   <span style={{ fontSize: 13, fontWeight: 680, color: '#c8706a' }}>%</span>
-                  <span style={{ fontSize: 11, color: '#a89090', marginLeft: 4, fontWeight: 500 }}>— условная сила проявления в вашем материале</span>
+                  <span style={{ fontSize: 11, color: '#a89090', marginLeft: 4, fontWeight: 500 }}>— условный ориентир выраженности</span>
                 </div>
               )}
             </div>
@@ -3339,18 +3176,13 @@ function OverheatTile({ report, activeNodes }: { report: MindloomReportV2; activ
           {has(overheatExplanation) && (
             <p style={{ margin: '0.55rem 0 0', fontSize: '12.5px', lineHeight: 1.58, color: '#8a6860' }}>{softClampText(overheatExplanation, 160) ?? overheatExplanation}</p>
           )}
-          {!has(overheatExplanation) && (
-            <p style={{ margin: '0.55rem 0 0', fontSize: '12px', lineHeight: 1.55, color: '#9a7870', fontStyle: 'italic' }}>
-              Здесь паттерн проявляется наиболее активно — ваша система тратит здесь больше всего ресурсов.
-            </p>
-          )}
         </div>
       </div>
     </section>
   );
 }
 
-function HeroSection({ report, createdAt, onOpenHowToRead }: { report: MindloomReportV2; createdAt: string; onOpenHowToRead: () => void }) {
+function HeroSection({ report, createdAt }: { report: MindloomReportV2; createdAt: string }) {
   const title = report.snapshot?.key_pattern ?? report.hero.title ?? 'Отчёт Mindloom';
   const subtitle = report.snapshot?.short_explanation ?? report.hero.main_insight ?? report.hero.one_sentence_summary;
   const activeCount = report.active_nodes.filter(n => n.label || n.description || n.id).length;
@@ -3384,7 +3216,6 @@ function HeroSection({ report, createdAt, onOpenHowToRead }: { report: MindloomR
 
           <div style={{ marginTop: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <span style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700, color: '#9a6c5e' }}>Ключевой паттерн</span>
-            <HelpTip text="Ключевой паттерн — это главная повторяющаяся связка вашего отчёта: как ваша внутренняя система защищается, за что платит напряжением и куда можно начать двигаться." />
           </div>
 
           <h1 style={{ margin: '0.5rem 0 0.65rem', fontSize: 'clamp(26px, 7.5vw, 36px)', lineHeight: 1.1, fontWeight: 720, letterSpacing: '-0.02em', color: '#201d1b' }}>
@@ -3392,17 +3223,26 @@ function HeroSection({ report, createdAt, onOpenHowToRead }: { report: MindloomR
           </h1>
 
           {has(subtitle) && (
-            <p style={{ margin: '0 0 1rem', fontSize: '14.5px', lineHeight: 1.55, color: '#7d746b' }}>
+            <p style={{ margin: '0 0 0.75rem', fontSize: '14.5px', lineHeight: 1.55, color: '#7d746b' }}>
               {subtitle}
             </p>
           )}
+
+          <div style={{ marginBottom: '0.9rem', borderRadius: 14, padding: '0.75rem 0.95rem', background: 'rgba(255,255,255,0.58)', border: '1px solid rgba(118,92,68,0.11)' }}>
+            <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.6, color: '#4a4038' }}>
+              Это психологический аналитический отчёт Mindloom по вашему материалу. Это не медицинская справка, не диагноз и не замена специалиста. Ниже — гипотеза о том, какой повторяющийся паттерн заметен, где он проявляется и с чего можно начать.
+            </p>
+            <p style={{ margin: '0.45rem 0 0', fontSize: '11.5px', lineHeight: 1.55, color: '#8a8077' }}>
+              Читайте сверху вниз: сначала — главный паттерн, затем — почему он повторяется, в конце — маленькие шаги.
+            </p>
+          </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', flexWrap: 'wrap' }}>
             {activeCount > 0 && (
               <button
                 type="button"
                 onClick={() => document.getElementById('mlm-evidence-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                title="Посмотреть ключевые узлы"
+                title="Перейти к основаниям отчёта"
                 className="mlm-interactive-card"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -3411,26 +3251,10 @@ function HeroSection({ report, createdAt, onOpenHowToRead }: { report: MindloomR
                   cursor: 'pointer', fontSize: 11, fontWeight: 700, color: '#201d1b',
                 }}
               >
-                <span style={{ fontSize: 17, lineHeight: 1, fontWeight: 760 }}>{activeCount}</span>
-                <span style={{ color: '#7d746b' }}>активных узлов</span>
+                <span style={{ color: '#7d746b' }}>На чём основан отчёт</span>
                 <span style={{ color: '#9d8f84', fontSize: 10 }}>↓</span>
               </button>
             )}
-            <button
-              type="button"
-              onClick={onOpenHowToRead}
-              className="mlm-interactive-card"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 5,
-                padding: '0.5rem 0.85rem', borderRadius: VS.r.row,
-                background: 'rgba(236,232,255,0.88)', border: '1px solid rgba(127,104,217,0.24)',
-                color: '#5244a8', fontSize: 11, fontWeight: 700, cursor: 'pointer',
-                letterSpacing: '0.02em',
-              }}
-            >
-              <span style={{ fontSize: 13 }}>◎</span>
-              Как читать отчёт
-            </button>
           </div>
 
           {(has(report.participant.name) || has(createdAt)) && (
@@ -3448,164 +3272,58 @@ function HeroSection({ report, createdAt, onOpenHowToRead }: { report: MindloomR
   );
 }
 
-function HeatmapSection({ heatmap, activeNodes, onNodeClick, graphNodes, keyPhrases }: {
+function HeatmapSection({ heatmap, activeNodes, graphNodes, keyPhrases }: {
   heatmap: MindloomReportV2['heatmap'];
   activeNodes: MindloomReportV2Node[];
-  onNodeClick?: (s: DetailSheetState) => void;
   graphNodes?: MindloomReportV2GraphNode[];
   keyPhrases?: string[];
 }) {
-  const [infoOpen, setInfoOpen] = useState(false);
-  const topThreeLabels = [...heatmap.zones, ...activeNodes]
-    .filter(z => z.label)
-    .sort((a, b) => (b.intensity ?? 0) - (a.intensity ?? 0))
-    .slice(0, 3)
-    .map(z => z.label!);
-  const insightRows = [
-    {
-      title: 'Самые активные зоны',
-      text: topThreeLabels.length > 0
-        ? `${topThreeLabels.join(', ')} — основной кластер напряжения в вашем материале.`
-        : 'Ключевые зоны формируют основной кластер напряжения.',
-      tone: 'red' as Tone,
-      kind: 'alert' as const,
-      dots: ['#e54848', '#f07c26', '#f3ad25'],
-    },
-    {
-      title: 'Что показывает карта',
-      text: has(heatmap.description) ? heatmap.description : 'Карта отражает распределение активности смысловых зон вашего паттерна по всему материалу.',
-      tone: 'purple' as Tone,
-      kind: 'brain' as const,
-      dots: ['#f27b22', '#f3ad25', '#9857d7', '#4398dc'],
-    },
-    {
-      title: 'Как читать',
-      text: 'Цвет и размер зоны показывают интенсивность. Тёплые зоны — перегрузка и напряжение, синие — ресурс и потенциал.',
-      tone: 'blue' as Tone,
-      kind: 'quote' as const,
-      dots: ['#e54848', '#f07c26', '#f3ad25', '#9857d7', '#4398dc'],
-    },
-  ];
-  const scale = heatmap.scale.length > 0
-    ? heatmap.scale.slice(0, 4).map((s, i) => ({ ...s, tone: DEFAULT_HEAT_SCALE[i]?.tone ?? 'yellow' as Tone }))
-    : DEFAULT_HEAT_SCALE;
+  const [selectedNode, setSelectedNode] = useState<DetailSheetState | null>(null);
   return (
-    <>
-      <SectionShell
-        icon="heat"
-        eyebrow="Тепловая карта"
-        title="Карта активности"
-        help="Каждая зона — это смысловая область вашего паттерна. Процент — условная сила её проявления в материале. Это не медицинская оценка и не диагноз."
-      >
-        <p style={{ margin: '0 0 0.6rem', fontSize: '12px', color: '#8a8077', lineHeight: 1.5 }}>
-          Нажмите на зону, чтобы увидеть подробности.
-        </p>
-        <NeuroHeatmapCanvasFirst zones={heatmap.zones} nodes={activeNodes} heatmap={heatmap} onNodeClick={onNodeClick} onInfoOpen={() => setInfoOpen(true)} activeNodesRef={activeNodes} graphNodesRef={graphNodes} keyPhrasesRef={keyPhrases} />
-      </SectionShell>
-      {infoOpen && (
-        <HeatmapInfoSheet insightRows={insightRows} scale={scale} onClose={() => setInfoOpen(false)} />
-      )}
-    </>
+    <SectionShell
+      icon="heat"
+      title="Что звучит сильнее всего"
+      intro="Карта показывает, какие темы выражены сильнее других и какими фразами они подтверждаются."
+    >
+      <p style={{ margin: '0 0 0.6rem', fontSize: '12px', color: '#8a8077', lineHeight: 1.5 }}>
+        Нажмите на тему — увидите, какими фразами и выводами она подтверждается.
+      </p>
+      <NeuroHeatmapCanvasFirst zones={heatmap.zones} nodes={activeNodes} heatmap={heatmap} onNodeClick={setSelectedNode} activeNodesRef={activeNodes} graphNodesRef={graphNodes} keyPhrasesRef={keyPhrases} />
+      <ReportDetailSheet state={selectedNode} onClose={() => setSelectedNode(null)} />
+    </SectionShell>
   );
 }
 
-function GraphHowToReadSheet({ onClose }: { onClose: () => void }) {
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [onClose]);
-  const items = [
-    { label: 'Узлы', text: 'Каждый узел — повторяющаяся смысловая точка вашего паттерна. Это не диагноз, а гипотеза о том, что регулярно происходит в вашей системе.' },
-    { label: 'Стрелки', text: 'Стрелка показывает направление влияния — один узел запускает или усиливает другой.' },
-    { label: 'Толщина линии', text: 'Более жирная линия — более сильная или автоматическая связь. Тонкая пунктирная — слабее или не всегда проявляется.' },
-    { label: 'Жёсткая связь', text: 'Срабатывает быстро и почти автоматически — без паузы на осознанный выбор.' },
-    { label: 'Обычная связь', text: 'Заметно поддерживает паттерн, но не всегда полностью автоматическая.' },
-    { label: 'Ослабленная связь', text: 'Проявляется слабее или не в каждой ситуации.' },
-    { label: 'Есть выбор', text: 'Эту связь можно постепенно ослаблять — здесь система допускает пространство выбора.' },
-    { label: 'Выбора нет', text: 'Связь переживается как автоматическая — пространство выбора здесь пока не ощущается.' },
-    { label: 'Расстояние', text: 'Расстояние между узлами — визуальная раскладка, а не точная метрика близости или силы влияния.' },
-  ];
-  return createPortal(
-    <>
-      <div onClick={onClose} aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(30,26,22,0.44)', backdropFilter: 'blur(3px)', WebkitBackdropFilter: 'blur(3px)' }} />
-      <div role="dialog" aria-modal="true" aria-labelledby="mlm-graph-htr-title" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 201, maxHeight: '84vh', background: 'linear-gradient(160deg, #fffdf8 0%, #fbf5ec 100%)', borderRadius: '24px 24px 0 0', border: '1px solid rgba(118,92,68,0.16)', borderBottom: 'none', boxShadow: '0 -12px 48px rgba(70,53,35,0.15)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0.75rem 1.2rem 0' }}>
-          <div style={{ width: 36, height: 4, borderRadius: 999, background: 'rgba(118,92,68,0.22)', marginBottom: '0.6rem' }} />
-        </div>
-        <div style={{ flex: 1, overflow: 'auto', padding: '0 1.2rem 2rem', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-            <div>
-              <p style={{ margin: '0 0 0.2rem', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 760, color: '#7d746b' }}>Системная карта</p>
-              <h2 id="mlm-graph-htr-title" style={{ margin: 0, fontSize: 'clamp(18px, 5vw, 22px)', fontWeight: 700, color: '#201d1b', lineHeight: 1.15 }}>Как читать карту связей</h2>
-            </div>
-            <button type="button" onClick={onClose} aria-label="Закрыть" style={{ width: 34, height: 34, borderRadius: 999, border: '1px solid rgba(118,92,68,0.18)', background: '#fffdf8', color: '#5a5450', cursor: 'pointer', display: 'grid', placeItems: 'center', fontSize: 18, flexShrink: 0 }}>×</button>
-          </div>
-          <div style={{ marginBottom: '1rem', padding: '0.85rem 1rem', borderRadius: 18, background: '#f2efff', border: '1px solid rgba(127,104,217,0.18)', fontSize: '13px', lineHeight: 1.6, color: '#3a3258' }}>
-            Граф — не диагноз, а визуализация гипотез о том, как смысловые точки вашего паттерна связаны между собой. Нажмите на узел или связь для подробного объяснения.
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.48rem' }}>
-            {items.map((item, i) => (
-              <div key={i} style={{ display: 'flex', gap: '0.75rem', padding: '0.68rem 0.85rem', borderRadius: 14, background: i % 2 === 0 ? 'rgba(255,252,246,0.72)' : 'rgba(255,255,255,0.42)', border: '1px solid rgba(118,92,68,0.09)' }}>
-                <strong style={{ flexShrink: 0, fontSize: '0.70rem', fontWeight: 760, color: '#5244a8', minWidth: 88, lineHeight: 1.45 }}>{item.label}</strong>
-                <span style={{ fontSize: '0.77rem', lineHeight: 1.56, color: '#3a3228' }}>{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </>,
-    document.body
-  );
-}
-
-function NodeGraphSection({ nodeGraph, activeNodes, onNodeClick, onEdgeClick }: {
+function NodeGraphSection({ nodeGraph, activeNodes }: {
   nodeGraph: MindloomReportV2['node_graph'];
   activeNodes: MindloomReportV2Node[];
-  onNodeClick?: (s: DetailSheetState) => void;
-  onEdgeClick?: (s: DetailSheetState) => void;
 }) {
-  const [graphHowToReadOpen, setGraphHowToReadOpen] = useState(false);
+  const [selectedDetail, setSelectedDetail] = useState<DetailSheetState | null>(null);
   return (
-    <>
-      <SectionShell
-        icon="network"
-        eyebrow="Системная карта"
-        title={nodeGraph.title ?? 'Граф причинно-следственных связей'}
-        help="Узлы — повторяющиеся смысловые точки вашего паттерна. Стрелки показывают, какой узел усиливает другой. Толщина и тип линии показывают силу связи. Расстояние между узлами — визуальная раскладка, а не точная метрика."
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
-          <p style={{ margin: 0, fontSize: '12px', color: '#8a8077', lineHeight: 1.5 }}>
-            Нажмите на узел или связь, чтобы увидеть объяснение.
-          </p>
-          <button
-            type="button"
-            onClick={() => setGraphHowToReadOpen(true)}
-            className="mlm-interactive-card"
-            style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 5, padding: '0.42rem 0.82rem', borderRadius: VS.r.row, background: 'rgba(236,232,255,0.88)', border: '1px solid rgba(127,104,217,0.22)', color: '#5244a8', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
-          >
-            <span style={{ fontSize: 12 }}>◎</span>
-            Как читать
-          </button>
-        </div>
-        {has(nodeGraph.description) && (
-          <p style={{ margin: '0 0 0.75rem', fontSize: '0.87rem', color: '#5a5450', lineHeight: 1.65 }}>{nodeGraph.description}</p>
-        )}
-
-        <NeuroNodeGraph
-          graphNodes={nodeGraph.nodes}
-          activeNodes={activeNodes}
-          edges={nodeGraph.edges}
-          centralNodeId={nodeGraph.central_node_id}
-          legend={nodeGraph.legend}
-          howToRead={nodeGraph.how_to_read}
-          edgeLimit={4}
-          onNodeClick={onNodeClick}
-          onEdgeClick={onEdgeClick}
-        />
-      </SectionShell>
-      {graphHowToReadOpen && <GraphHowToReadSheet onClose={() => setGraphHowToReadOpen(false)} />}
-    </>
+    <SectionShell
+      icon="network"
+      title={nodeGraph.title ?? 'Как темы усиливают друг друга'}
+      intro="Этот блок показывает возможные связи между темами: что может усиливать другое и где появляется повторяющийся цикл."
+    >
+      <p style={{ margin: '0 0 0.6rem', fontSize: '12px', color: '#8a8077', lineHeight: 1.5 }}>
+        Нажмите на тему или связь — увидите короткое объяснение.
+      </p>
+      {has(nodeGraph.description) && (
+        <p style={{ margin: '0 0 0.75rem', fontSize: '0.87rem', color: '#5a5450', lineHeight: 1.65 }}>{nodeGraph.description}</p>
+      )}
+      <NeuroNodeGraph
+        graphNodes={nodeGraph.nodes}
+        activeNodes={activeNodes}
+        edges={nodeGraph.edges}
+        centralNodeId={nodeGraph.central_node_id}
+        legend={nodeGraph.legend}
+        howToRead={nodeGraph.how_to_read}
+        edgeLimit={4}
+        onNodeClick={setSelectedDetail}
+        onEdgeClick={setSelectedDetail}
+      />
+      <ReportDetailSheet state={selectedDetail} onClose={() => setSelectedDetail(null)} />
+    </SectionShell>
   );
 }
 
@@ -3615,7 +3333,7 @@ function TrajectorySection({ trajectory }: { trajectory: MindloomReportV2['traje
   if (!hasCycle && !hasExtra) return null;
 
   return (
-    <SectionShell eyebrow="Траектория паттерна" title="Цикл воспроизведения" icon="cycle">
+    <SectionShell title="Цикл паттерна" icon="cycle" intro="Здесь показано, как паттерн может запускаться снова: с чего начинается, чем продолжается и где можно выйти из цикла.">
 
       {hasCycle && (
         <SharedPanel padding="1.08rem 1rem">
@@ -3675,33 +3393,37 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
   const hiddenHyps = sortedHyps.slice(1);
   const nodeById = new Map(activeNodes.filter(n => n.id).map(n => [n.id!, n]));
   const metrics = [
-    { value: activeNodes.length, label: activeNodes.length === 1 ? 'ключевой узел' : 'ключевых узлов', tone: 'purple' as const, color: '#5244a8' },
+    { value: activeNodes.length, label: activeNodes.length === 1 ? 'ключевая тема' : activeNodes.length < 5 ? 'ключевые темы' : 'ключевых тем', tone: 'purple' as const, color: '#5244a8' },
     { value: hyps.length, label: hyps.length === 1 ? 'гипотеза' : hyps.length < 5 ? 'гипотезы' : 'гипотез', tone: 'yellow' as const, color: '#c98a30' },
-    { value: report.speech_layer.key_phrases.length, label: report.speech_layer.key_phrases.length === 1 ? 'речевой признак' : 'речевых признаков', tone: 'green' as const, color: '#38967c' },
+    { value: report.speech_layer.key_phrases.length, label: report.speech_layer.key_phrases.length === 1 ? 'фрагмент речи' : report.speech_layer.key_phrases.length < 5 ? 'фрагмента речи' : 'фрагментов речи', tone: 'green' as const, color: '#38967c' },
   ].filter(item => item.value > 0);
 
   return (
-    <SectionShell eyebrow="Доказательная база" title="На чём основан отчёт" icon="eye" id="mlm-evidence-section" help="Показывает, какие признаки в материале поддерживают выводы отчёта: узлы, фразы и рабочие гипотезы.">
+    <SectionShell title="На чём основаны выводы" icon="eye" id="mlm-evidence-section" intro="Этот блок нужен для проверки отчёта: здесь видно, какие темы, гипотезы и фразы лежат в основе выводов.">
       {metrics.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${metrics.length}, minmax(0, 1fr))`, gap: '0.5rem', marginBottom: '0.75rem' }}>
-          {metrics.map((item) => (
-            <BentoTile key={item.label} tone={item.tone} padding="0.82rem 0.6rem">
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.2rem', fontWeight: 700, color: item.color, lineHeight: 1 }}>{item.value}</div>
-                <div style={{ marginTop: '0.22rem', fontSize: '0.64rem', lineHeight: 1.35, color: '#7d746b' }}>{item.label}</div>
-              </div>
-            </BentoTile>
-          ))}
-        </div>
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${metrics.length}, minmax(0, 1fr))`, gap: '0.5rem', marginBottom: '0.5rem' }}>
+            {metrics.map((item) => (
+              <BentoTile key={item.label} tone={item.tone} padding="0.82rem 0.6rem">
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: item.color, lineHeight: 1 }}>{item.value}</div>
+                  <div style={{ marginTop: '0.22rem', fontSize: '0.64rem', lineHeight: 1.35, color: '#7d746b' }}>{item.label}</div>
+                </div>
+              </BentoTile>
+            ))}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.14rem', padding: '0.55rem 0.7rem', borderRadius: 12, background: 'rgba(255,252,246,0.7)', border: '1px solid rgba(118,92,68,0.09)', marginBottom: '0.5rem' }}>
+            <p style={{ margin: 0, fontSize: '11px', lineHeight: 1.5, color: '#8a8077' }}><strong style={{ color: '#5244a8', fontWeight: 700 }}>Ключевые темы</strong> — повторяющиеся темы из материала.</p>
+            <p style={{ margin: 0, fontSize: '11px', lineHeight: 1.5, color: '#8a8077' }}><strong style={{ color: '#c98a30', fontWeight: 700 }}>Гипотеза</strong> — возможное объяснение, которое отчёт предлагает проверить.</p>
+            <p style={{ margin: 0, fontSize: '11px', lineHeight: 1.5, color: '#8a8077' }}><strong style={{ color: '#38967c', fontWeight: 700 }}>Фрагменты речи</strong> — конкретные цитаты, на которые опирается вывод.</p>
+          </div>
+        </>
       )}
-      <p style={{ margin: '0 0 0.85rem', fontSize: '12.5px', lineHeight: 1.6, color: '#5d564f' }}>
-        Эта секция показывает, на какие узлы, гипотезы и речевые признаки опирается отчёт.
-      </p>
       {visibleNodes.length > 0 && (
         <SharedPanel padding="1.05rem 1rem">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
             <div style={{ fontSize: '0.67rem', fontWeight: 760, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7d746b' }}>
-              Ключевые узлы
+              Ключевые темы
             </div>
             {activeNodes.length > 4 && (
               <div style={{ fontSize: '0.66rem', color: '#a09690' }}>
@@ -3715,14 +3437,14 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
             const evidenceSnippet = node.evidence.slice(0, 1);
             const handleNodeOpen = onOpen ? () => onOpen({
               type: 'evidence-node',
-              eyebrow: 'Доказательная база',
-              title: node.label ?? node.id ?? `Узел ${i + 1}`,
+              eyebrow: 'Основания отчёта',
+              title: node.label ?? node.id ?? `Тема ${i + 1}`,
               tone: tone !== 'gray' ? tone : 'purple',
               percent: node.intensity,
               description: node.description,
               badge: has(node.type) ? nodeTypeLabel(node.type) || null : null,
               evidence: node.evidence.slice(0, 4),
-              note: 'Узел — смысловая точка, которая повторяется в материале.',
+              note: 'Тема — повторяющийся элемент, который проявляется в материале.',
             }) : undefined;
             return (
               <div key={node.id ?? i}>
@@ -3733,14 +3455,14 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
                   role={handleNodeOpen ? 'button' : undefined}
                   tabIndex={handleNodeOpen ? 0 : undefined}
                   onKeyDown={handleNodeOpen ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNodeOpen(); } } : undefined}
-                  aria-label={handleNodeOpen ? `Открыть подробности: ${node.label ?? `Узел ${i + 1}`}` : undefined}
+                  aria-label={handleNodeOpen ? `Открыть подробности: ${node.label ?? `Тема ${i + 1}`}` : undefined}
                 >
                   <div style={{ width: 28, flexShrink: 0, textAlign: 'center' }}>
                     <div style={{ width: 24, height: 24, borderRadius: 999, display: 'grid', placeItems: 'center', margin: '0 auto', background: `${hex}18`, color: hex, fontSize: 11, fontWeight: 740 }}>{i + 1}</div>
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem' }}>
-                      <div style={{ fontSize: '13.5px', fontWeight: 700, lineHeight: 1.28 }}>{node.label ?? node.id ?? `Узел ${i + 1}`}</div>
+                      <div style={{ fontSize: '13.5px', fontWeight: 700, lineHeight: 1.28 }}>{node.label ?? node.id ?? `Тема ${i + 1}`}</div>
                       <div style={{ fontSize: '13px', fontWeight: 740, color: hex, flexShrink: 0 }}>{fmtPct(node.intensity)}</div>
                     </div>
                     <div style={{ marginTop: '0.35rem', height: 4, borderRadius: 999, background: '#f1e8de', overflow: 'hidden' }}>
@@ -3764,7 +3486,7 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
         </SharedPanel>
       )}
       {(hiddenNodes.length > 0 || hiddenHyps.length > 0) && (
-        <DisclosurePanel summary={`Показать все узлы${hiddenNodes.length > 0 ? ` (ещё ${hiddenNodes.length})` : ''}`} tone="beige">
+        <DisclosurePanel summary={`Показать все темы${hiddenNodes.length > 0 ? ` (ещё ${hiddenNodes.length})` : ''}`} tone="beige">
           {hiddenNodes.length > 0 && (
             <SharedPanel padding="0.85rem 1rem">
               {hiddenNodes.map((node, i) => {
@@ -3778,7 +3500,7 @@ function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem' }}>
-                          <div style={{ fontSize: '13.5px', fontWeight: 700, lineHeight: 1.28 }}>{node.label ?? node.id ?? `Узел ${i + 5}`}</div>
+                          <div style={{ fontSize: '13.5px', fontWeight: 700, lineHeight: 1.28 }}>{node.label ?? node.id ?? `Тема ${i + 5}`}</div>
                           <div style={{ fontSize: '13px', fontWeight: 740, color: nodeHex, flexShrink: 0 }}>{fmtPct(node.intensity)}</div>
                         </div>
                         <div style={{ marginTop: '0.32rem', height: 4, borderRadius: 999, background: '#f1e8de', overflow: 'hidden' }}>
@@ -3839,7 +3561,7 @@ function LayersSectionExact({ layers, onOpen }: { layers: MindloomReportV2['mind
   const visible = [...layers].sort((a, b) => (b.intensity ?? 0) - (a.intensity ?? 0)).slice(0, 5);
   const hidden = [...layers].sort((a, b) => (b.intensity ?? 0) - (a.intensity ?? 0)).slice(5);
   return (
-    <SectionShell eyebrow="Структура" title="Слои обработки" icon="layers" help="Слой — это уровень, на котором закрепляется реакция: потребность, убеждение, защита, поведение или тело.">
+    <SectionShell title="На каких уровнях это заметно" icon="layers" intro="Здесь показано, где паттерн проявляется сильнее: в мыслях, реакциях тела, потребностях или поведении.">
       <SharedPanel padding="1.05rem 1rem">
         {visible.map((layer, i) => {
           const quote = layer.evidence[0] ?? layer.manifestation ?? layer.description;
@@ -3847,16 +3569,16 @@ function LayersSectionExact({ layers, onOpen }: { layers: MindloomReportV2['mind
           const color = toneHex(tone);
           const layerLower = (layer.layer ?? '').toLowerCase();
           const layerFallbackWhy = layerLower.includes('потреб') || layerLower.includes('need') || layerLower.includes('unmet')
-            ? 'Этот слой показывает, какая потребность может стоять под напряжением в вашей системе.'
+            ? 'Этот уровень показывает, какая потребность может стоять под напряжением.'
             : layerLower.includes('защит') || layerLower.includes('defense') || layerLower.includes('protect')
-              ? 'Этот слой показывает, как ваша система пытается защититься — и какой ценой это даётся.'
+              ? 'Этот уровень показывает защитную реакцию — и какой ценой она обходится.'
               : layerLower.includes('тело') || layerLower.includes('телес') || layerLower.includes('somatic') || layerLower.includes('body')
-                ? 'Этот слой показывает, где паттерн проявляется через тело — напряжение, усталость, физические реакции.'
+                ? 'Этот уровень показывает, где паттерн проявляется через тело — напряжение, усталость, физические реакции.'
                 : layerLower.includes('убежд') || layerLower.includes('belief')
-                  ? 'Этот слой закрепляет убеждение, которое продолжает поддерживать паттерн.'
+                  ? 'Это убеждение, которое продолжает поддерживать паттерн.'
                   : layerLower.includes('повед') || layerLower.includes('behavior')
-                    ? 'Этот слой — поведенческий паттерн: реакция, которая закрепилась и запускается автоматически.'
-                    : 'Этот слой показывает уровень, где паттерн закрепился и продолжает воспроизводиться.';
+                    ? 'Поведенческий уровень: реакция, которая закрепилась и запускается автоматически.'
+                    : 'Этот уровень показывает, где паттерн проявляется заметнее всего.';
           const allEvidence = layer.evidence.filter(e => has(e));
           const observeHint = layerLower.includes('потреб') || layerLower.includes('need') || layerLower.includes('unmet')
             ? 'Когда появляется напряжение — задайте себе вопрос: «Какая потребность сейчас не удовлетворена?»'
@@ -3875,14 +3597,14 @@ function LayersSectionExact({ layers, onOpen }: { layers: MindloomReportV2['mind
           sheetRows.push({ label: 'На что обратить внимание', text: observeHint });
           const handleLayerOpen = onOpen ? () => onOpen({
             type: 'layer',
-            eyebrow: 'Слой обработки',
-            title: layer.layer ?? `Слой ${i + 1}`,
+            eyebrow: 'Уровень проявления',
+            title: layer.layer ?? `Уровень ${i + 1}`,
             tone,
             percent: layer.intensity,
             description: has(layer.description) ? layer.description : null,
             rows: sheetRows,
             evidence: allEvidence.slice(0, 3),
-            note: 'Слой показывает, на каком уровне закрепляется реакция: потребность, убеждение, защита, поведение или тело.',
+            note: 'Здесь видно, на каком уровне паттерн проявляется сильнее. Это может подсказать, с чего начать мягкий сдвиг.',
           }) : undefined;
           return (
             <div key={i}>
@@ -3893,17 +3615,17 @@ function LayersSectionExact({ layers, onOpen }: { layers: MindloomReportV2['mind
                 role={handleLayerOpen ? 'button' : undefined}
                 tabIndex={handleLayerOpen ? 0 : undefined}
                 onKeyDown={handleLayerOpen ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLayerOpen(); } } : undefined}
-                aria-label={handleLayerOpen ? `Открыть подробности слоя: ${layer.layer ?? `Слой ${i + 1}`}` : undefined}
+                aria-label={handleLayerOpen ? `Открыть подробности: ${layer.layer ?? `Уровень ${i + 1}`}` : undefined}
               >
                 <div style={{ width: 28, flexShrink: 0, textAlign: 'center' }}>
-                  <div style={{ fontSize: 10, fontWeight: 740, color: '#7d746b' }}>{String(i + 1).padStart(2, '0')}</div>
+                  <div style={{ fontSize: 10, fontWeight: 740, color: '#7d746b' }}>{String(i + 1)}</div>
                   <div style={{ width: 28, height: 28, borderRadius: 10, display: 'grid', placeItems: 'center', marginTop: 4, background: `${color}14` }}>
                     <MLIcon name={i === 0 ? 'shield' : i === 1 ? 'target' : i === 2 ? 'warning' : i === 3 ? 'cycle' : 'body'} tone={tone} size={14} />
                   </div>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
-                    <strong style={{ fontSize: '13.5px', lineHeight: 1.3, color: '#1e1a16' }}>{layer.layer ?? `Слой ${i + 1}`}</strong>
+                    <strong style={{ fontSize: '13.5px', lineHeight: 1.3, color: '#1e1a16' }}>{layer.layer ?? `Уровень ${i + 1}`}</strong>
                     <span style={{ fontSize: '13px', fontWeight: 740, color }}>{fmtPct(layer.intensity)}</span>
                   </div>
                   <div style={{ marginTop: '0.35rem', height: 4, borderRadius: 999, background: '#f1e8de', overflow: 'hidden' }}>
@@ -3918,11 +3640,11 @@ function LayersSectionExact({ layers, onOpen }: { layers: MindloomReportV2['mind
           );
         })}
         {hidden.length > 0 && (
-          <DisclosurePanel summary={`Показать ещё ${hidden.length} слоёв`} tone="blue">
+          <DisclosurePanel summary={`Ещё ${hidden.length}`} tone="blue">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               {hidden.map((layer, index) => (
                 <div key={`hidden-layer-${index}`} style={{ padding: '0.1rem 0.2rem' }}>
-                  <strong style={{ display: 'block', fontSize: '0.82rem', lineHeight: 1.35 }}>{layer.layer ?? `Слой ${index + visible.length + 1}`}</strong>
+                  <strong style={{ display: 'block', fontSize: '0.82rem', lineHeight: 1.35 }}>{layer.layer ?? `Уровень ${index + visible.length + 1}`}</strong>
                   {has(layer.description) && <p style={{ margin: '0.2rem 0 0', fontSize: '0.78rem', lineHeight: 1.52, color: '#665c53' }}>{layer.description}</p>}
                 </div>
               ))}
@@ -3938,7 +3660,7 @@ function MarkersSectionExact({ markers, onOpen }: { markers: MindloomReportV2['t
   const visible = markers.slice(0, 4);
   const hidden = markers.slice(4);
   return (
-    <SectionShell eyebrow="После отчёта" title="Что отслеживать" icon="check" help="Маркеры — это конкретные признаки, по которым можно заметить реальный сдвиг в своей системе. Не нужно ждать полного изменения — достаточно заметить небольшое отличие.">
+    <SectionShell title="Признаки сдвига" icon="check" intro="Этот блок показывает маленькие признаки, по которым можно заметить, что паттерн начинает ослабевать.">
       <SharedPanel padding="1.05rem 1rem">
         {visible.map((item, i) => {
           const hasSheetContent = has(item.description) || has(item.shift_signal) || has(item.marker);
@@ -3948,7 +3670,7 @@ function MarkersSectionExact({ markers, onOpen }: { markers: MindloomReportV2['t
             text: 'Наблюдение за маркером помогает замечать реальные маленькие сдвиги — до того, как произойдёт большое изменение.',
           });
           if (has(item.shift_signal)) {
-            markerSheetRows.push({ label: 'Маленький признак сдвига', text: item.shift_signal });
+            markerSheetRows.push({ label: 'Первый сигнал изменения', text: item.shift_signal });
           }
           markerSheetRows.push({
             label: 'Как замечать в течение дня',
@@ -3956,8 +3678,8 @@ function MarkersSectionExact({ markers, onOpen }: { markers: MindloomReportV2['t
           });
           const handleMarkerOpen = (onOpen && hasSheetContent) ? () => onOpen({
             type: 'marker',
-            eyebrow: 'Маркер изменений',
-            title: item.marker ?? `Маркер ${i + 1}`,
+            eyebrow: 'Признак изменения',
+            title: item.marker ?? `Признак ${i + 1}`,
             tone: has(item.shift_signal) ? 'green' : 'blue',
             description: has(item.description) ? item.description : null,
             rows: markerSheetRows,
@@ -3972,13 +3694,13 @@ function MarkersSectionExact({ markers, onOpen }: { markers: MindloomReportV2['t
                 role={handleMarkerOpen ? 'button' : undefined}
                 tabIndex={handleMarkerOpen ? 0 : undefined}
                 onKeyDown={handleMarkerOpen ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMarkerOpen(); } } : undefined}
-                aria-label={handleMarkerOpen ? `Открыть подробности маркера: ${item.marker ?? `Маркер ${i + 1}`}` : undefined}
+                aria-label={handleMarkerOpen ? `Открыть подробности: ${item.marker ?? `Признак ${i + 1}`}` : undefined}
               >
                 <div style={{ flexShrink: 0, width: 24, height: 24, borderRadius: 10, background: has(item.shift_signal) ? '#edf9f3' : '#edf6ff', border: `1px solid ${has(item.shift_signal) ? 'rgba(104,169,141,0.25)' : 'rgba(74,149,211,0.22)'}`, display: 'grid', placeItems: 'center', marginTop: 2 }}>
                   <span style={{ fontSize: 10, fontWeight: 760, color: has(item.shift_signal) ? '#3f6e5a' : '#326ea6' }}>{i + 1}</span>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: '13px', fontWeight: 650, lineHeight: 1.35, color: '#1e1a16' }}>{item.marker ?? `Маркер ${i + 1}`}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 650, lineHeight: 1.35, color: '#1e1a16' }}>{item.marker ?? `Признак ${i + 1}`}</div>
                   {has(item.shift_signal) && <div style={{ marginTop: '0.3rem', fontSize: '11.5px', color: '#3f6e5a', lineHeight: 1.45 }}>{softClampText(item.shift_signal, 80) ?? item.shift_signal}</div>}
                 </div>
                 {handleMarkerOpen && <span style={{ flexShrink: 0, fontSize: 10, color: '#b0a898', marginTop: 6 }}>→</span>}
@@ -3988,11 +3710,11 @@ function MarkersSectionExact({ markers, onOpen }: { markers: MindloomReportV2['t
           );
         })}
         {hidden.length > 0 && (
-          <DisclosurePanel summary={`Показать ещё ${hidden.length} маркера`} tone="green">
+          <DisclosurePanel summary={`Ещё ${hidden.length}`} tone="green">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
               {hidden.map((item, index) => (
                 <div key={`hidden-marker-${index}`} style={{ padding: '0.15rem 0.2rem' }}>
-                  <strong style={{ display: 'block', fontSize: '0.82rem', lineHeight: 1.35 }}>{item.marker ?? `Маркер ${index + visible.length + 1}`}</strong>
+                  <strong style={{ display: 'block', fontSize: '0.82rem', lineHeight: 1.35 }}>{item.marker ?? `Признак ${index + visible.length + 1}`}</strong>
                   {has(item.description) && <p style={{ margin: '0.18rem 0 0', fontSize: '0.78rem', lineHeight: 1.52, color: '#665c53' }}>{item.description}</p>}
                 </div>
               ))}
@@ -4016,7 +3738,7 @@ function PracticesSectionExact({ practices, activeNodes }: {
     { tone: 'purple' as const, bg: 'linear-gradient(135deg, #f4f2ff, transparent)', border: 'rgba(127,104,217,0.18)' },
   ];
   return (
-    <SectionShell eyebrow="Что делать" title={visible.length > 0 ? 'Три практики на ближайшую неделю' : 'Что делать'} icon="practice">
+    <SectionShell title={visible.length > 0 ? 'Три практики на неделю' : 'С чего начать'} icon="practice" intro="Выберите одну практику. Задача — не изменить всё сразу, а мягко проверить один новый способ действия.">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {visible.map((item, i) => {
           const t = tones[i % tones.length];
@@ -4050,7 +3772,7 @@ function PracticesSectionExact({ practices, activeNodes }: {
                   <div style={{ marginTop: '0.3rem', borderRadius: 16, padding: '0.75rem 0.85rem', display: 'flex', gap: '0.5rem', alignItems: 'flex-start', background: '#edf9f3', border: '1px solid rgba(104,169,141,0.22)' }}>
                     <MLIcon name="check" tone="green" size={14} />
                     <div>
-                      <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Ожидаемый сигнал</div>
+                      <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Как узнать, что работает</div>
                       <div style={{ marginTop: 4, fontSize: '13px', fontWeight: 650, lineHeight: 1.5, color: '#2f5746' }}>{item.shift_signal}</div>
                     </div>
                   </div>
@@ -4065,7 +3787,7 @@ function PracticesSectionExact({ practices, activeNodes }: {
                     )}
                     {item.observe.length > 0 && (
                       <div style={{ paddingTop: has(item.how_to_do) ? '0.65rem' : 0, borderTop: has(item.how_to_do) ? '1px solid rgba(118,92,68,0.14)' : 0 }}>
-                        <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: toneSurface(t.tone).deep }}>Наблюдать</div>
+                        <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: toneSurface(t.tone).deep }}>На что обращать внимание</div>
                         <div style={{ marginTop: 4, fontSize: '13px', lineHeight: 1.58, color: '#2e2820' }}>{item.observe.join(' ')}</div>
                       </div>
                     )}
@@ -4113,7 +3835,6 @@ export function ReportV2Dashboard({ report, createdAt }: {
   createdAt: string;
 }) {
   const [detailSheet, setDetailSheet] = useState<DetailSheetState | null>(null);
-  const [howToReadOpen, setHowToReadOpen] = useState(false);
   const openSheet = useCallback((s: DetailSheetState) => setDetailSheet(s), []);
   const closeSheet = useCallback(() => setDetailSheet(null), []);
 
@@ -4126,7 +3847,6 @@ export function ReportV2Dashboard({ report, createdAt }: {
   const practices = report.recommended_practices.filter(p => p.title || p.purpose || p.how_to_do);
   const keyPhrases = collectSpeechPhrases(report);
   const snapshotData = report.snapshot ?? buildSnapshotFallback(report, activeNodes);
-  const howToReadData = report.how_to_read?.steps.length ? report.how_to_read : buildHowToReadFallback(report);
   const protectedNeedData = report.protected_need ?? buildProtectedNeedFallback(report, activeNodes, layers);
   const phraseMicroscopeData = report.phrase_microscope ?? buildPhraseMicroscopeFallback(report, activeNodes);
   const honestTranslationData = report.honest_translation?.items.length ? report.honest_translation : buildHonestTranslationFallback(report, phraseMicroscopeData);
@@ -4267,7 +3987,7 @@ export function ReportV2Dashboard({ report, createdAt }: {
       `}</style>
 
       {/* 1 — Hero */}
-      <HeroSection report={report} createdAt={createdAt} onOpenHowToRead={() => setHowToReadOpen(true)} />
+      <HeroSection report={report} createdAt={createdAt} />
 
       {/* 1b — Overheat tile (moved out of Hero) */}
       <OverheatTile report={report} activeNodes={activeNodes} />
@@ -4293,10 +4013,10 @@ export function ReportV2Dashboard({ report, createdAt }: {
       <MindloomSpeechCloud phrases={keyPhrases} centralMeaning={phraseMicroscopeData?.summary ?? report.hero.title ?? null} />
 
       {/* 9 — Heatmap */}
-      <HeatmapSection heatmap={report.heatmap} activeNodes={activeNodes} onNodeClick={openSheet} graphNodes={report.node_graph.nodes} keyPhrases={keyPhrases} />
+      <HeatmapSection heatmap={report.heatmap} activeNodes={activeNodes} graphNodes={report.node_graph.nodes} keyPhrases={keyPhrases} />
 
       {/* 10 — Node graph */}
-      <NodeGraphSection nodeGraph={report.node_graph} activeNodes={activeNodes} onNodeClick={openSheet} onEdgeClick={openSheet} />
+      <NodeGraphSection nodeGraph={report.node_graph} activeNodes={activeNodes} />
 
       {/* 11 — Evidence layer */}
       <EvidenceLayerSectionExact report={report} activeNodes={activeNodes} onOpen={openSheet} />
@@ -4333,16 +4053,13 @@ export function ReportV2Dashboard({ report, createdAt }: {
       {/* 16 — Disclaimer */}
       <DisclaimerSectionExact text={report.disclaimer} />
 
-      {/* How to read sheet (triggered from Hero) */}
-      {howToReadOpen && <HowToReadSheet htr={howToReadData} onClose={() => setHowToReadOpen(false)} />}
-
       {/* Detail sheet (portal-free, fixed position) */}
       <ReportDetailSheet state={detailSheet} onClose={closeSheet} />
 
       {/* Footer */}
       <footer style={{ textAlign: 'center', paddingTop: '0.75rem', borderTop: '1px solid #e8ddd0' }}>
         <p style={{ margin: 0, fontSize: '0.7rem', color: '#c0b8b0' }}>
-          Mindloom · schema 2.0
+          Mindloom · аналитический отчёт
         </p>
       </footer>
     </article>
