@@ -1,0 +1,415 @@
+{
+  "report_version": "v2",
+  "source": "mindloom_lite_engine",
+  "engine_input_id": "mock_test1",
+  "session_type": "first",
+  "hero": {
+    "shown": true,
+    "data": {
+      "regime_label": "Режим контакта: закрывает рамку",
+      "top_defenses": [
+        "Защита: Самоатака",
+        "Защита: Рационализация"
+      ],
+      "headline_text": "Здесь звучит закрытие рамки: говорящая предварительно исключает себя из права на выражение. Это не жёсткость, а мягкое, но твёрдое «я не должна».",
+      "confidence_band": "green"
+    },
+    "feedback": {
+      "block_id": "main_pattern",
+      "block_title": "Самый заметный паттерн",
+      "enabled": true
+    }
+  },
+  "disclaimer": {
+    "shown": true,
+    "data": {
+      "n_sessions": 1,
+      "confidence_note": "Первая сессия — только предварительная картина. Уверенность: средняя — гипотеза, требует подтверждения.",
+      "l7_earned": false
+    }
+  },
+  "speech_cloud": {
+    "shown": true,
+    "data": {
+      "markers": [
+        {
+          "cue": "просто/всего лишь",
+          "meaning": "Минимизация",
+          "occurrences": 3,
+          "quote": "я просто слишком чувствительная"
+        },
+        {
+          "cue": "наверное",
+          "meaning": "Снижение уверенности в своём опыте",
+          "occurrences": 2,
+          "quote": "наверное, не стоит так зацикливаться"
+        }
+      ],
+      "frequent_frames": []
+    },
+    "feedback": {
+      "block_id": "speech_cloud",
+      "block_title": "Что повторяется в речи",
+      "enabled": true
+    }
+  },
+  "main_pattern": {
+    "shown": true,
+    "data": {
+      "contact_mode_text": "Здесь звучит **закрытие рамки**: говорящая предварительно исключает себя из права на выражение. Это не жёсткость, а мягкое, но твёрдое «я не должна».",
+      "confidence_band": "green"
+    },
+    "feedback": {
+      "block_id": "main_pattern",
+      "block_title": "Самый заметный паттерн",
+      "enabled": true
+    }
+  },
+  "heatmap": {
+    "shown": false,
+    "data": {
+      "segments": []
+    },
+    "reason": "Тепловая карта — будет доступна с реальными данными из engine (diff.indices)"
+  },
+  "evidence": {
+    "shown": true,
+    "data": {
+      "quotes": [
+        {
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+          "node_id": "unmet_need.acceptance"
+        },
+        {
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+          "node_id": "unmet_need.recognition"
+        },
+        {
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+          "node_id": "emotional_somatic_reaction.shame"
+        },
+        {
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+          "node_id": "defense.self_attack"
+        },
+        {
+          "quote": "Я понимаю, что у людей бывают более серьёзные проблемы.",
+          "node_id": "defense.rationalization"
+        },
+        {
+          "quote": "наверное, не стоит так зацикливаться",
+          "node_id": "behavior_and_speech.minimize_salience"
+        }
+      ]
+    },
+    "feedback": {
+      "block_id": "where_visible",
+      "block_title": "Где это видно",
+      "enabled": true
+    }
+  },
+  "protection_support": {
+    "shown": true,
+    "data": {
+      "items": [
+        {
+          "defense_label": "Защита: Самоатака",
+          "evoked_by": "Телесная реакция: Стыд",
+          "confidence": "f4:fawn"
+        },
+        {
+          "defense_label": "Защита: Рационализация",
+          "evoked_by": null,
+          "confidence": "f4:flight"
+        }
+      ]
+    },
+    "feedback": {
+      "block_id": "what_protects",
+      "block_title": "Что паттерн может защищать",
+      "enabled": true
+    }
+  },
+  "protection_purpose": {
+    "shown": true,
+    "data": {
+      "items": [
+        {
+          "defense_label": "Защита: Самоатака",
+          "masks": "Потребность: Принятие",
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная."
+        },
+        {
+          "defense_label": "Защита: Рационализация",
+          "masks": "Потребность: Признание",
+          "quote": "Я понимаю, что у людей бывают более серьёзные проблемы."
+        }
+      ]
+    },
+    "feedback": {
+      "block_id": "what_protects",
+      "block_title": "Что паттерн может защищать",
+      "enabled": true
+    }
+  },
+  "phrases_meaning": {
+    "shown": false,
+    "data": {
+      "segments": []
+    },
+    "reason": "Маршрут фраз доступен только с полным attention_route из engine"
+  },
+  "graph": {
+    "shown": true,
+    "data": {
+      "nodes": [
+        {
+          "node_id": "contact_regime.lock",
+          "display_label": "Режим контакта: закрывает рамку",
+          "family": "contact_regime",
+          "activation": 0.41,
+          "valence": "adaptation"
+        },
+        {
+          "node_id": "emotional_somatic_reaction.shame",
+          "display_label": "Телесная реакция: Стыд",
+          "family": "emotional_somatic_reaction",
+          "activation": 0.4,
+          "valence": "distress"
+        },
+        {
+          "node_id": "behavior_and_speech.minimize_salience",
+          "display_label": "Привычный ход речи: обесценивание важного",
+          "family": "behavior_and_speech",
+          "activation": 0.4,
+          "valence": "adaptation"
+        },
+        {
+          "node_id": "defense.self_attack",
+          "display_label": "Защита: Самоатака",
+          "family": "defense",
+          "activation": 0.39,
+          "valence": "protection",
+          "f4": "fawn"
+        },
+        {
+          "node_id": "defense.rationalization",
+          "display_label": "Защита: Рационализация",
+          "family": "defense",
+          "activation": 0.39,
+          "valence": "protection",
+          "f4": "flight"
+        },
+        {
+          "node_id": "unmet_need.acceptance",
+          "display_label": "Потребность: Принятие",
+          "family": "unmet_need",
+          "activation": 0.375,
+          "valence": "distress"
+        },
+        {
+          "node_id": "core_belief.if_i_am_seen_i_will_be_judged",
+          "display_label": "Вывод о себе: Если меня увидят — осудят",
+          "family": "core_belief",
+          "activation": 0.37,
+          "valence": "protection"
+        },
+        {
+          "node_id": "unmet_need.recognition",
+          "display_label": "Потребность: Признание",
+          "family": "unmet_need",
+          "activation": 0.35,
+          "valence": "distress"
+        }
+      ],
+      "edges": [
+        {
+          "from_id": "emotional_somatic_reaction.shame",
+          "to_id": "defense.self_attack",
+          "from_label": "Телесная реакция: Стыд",
+          "to_label": "Защита: Самоатака",
+          "tau": "evocation",
+          "weight": 0.968
+        },
+        {
+          "from_id": "defense.self_attack",
+          "to_id": "behavior_and_speech.minimize_salience",
+          "from_label": "Защита: Самоатака",
+          "to_label": "Привычный ход речи: обесценивание важного",
+          "tau": "expression",
+          "weight": 0.968
+        },
+        {
+          "from_id": "defense.self_attack",
+          "to_id": "unmet_need.acceptance",
+          "from_label": "Защита: Самоатака",
+          "to_label": "Потребность: Принятие",
+          "tau": "masking",
+          "weight": -0.565
+        },
+        {
+          "from_id": "defense.rationalization",
+          "to_id": "unmet_need.recognition",
+          "from_label": "Защита: Рационализация",
+          "to_label": "Потребность: Признание",
+          "tau": "masking",
+          "weight": -0.547
+        }
+      ],
+      "top_pattern": "Потребность: Принятие → Защита: Самоатака → Телесная реакция: Стыд"
+    },
+    "feedback": {
+      "block_id": "graph",
+      "block_title": "Как темы усиливают друг друга",
+      "enabled": true
+    }
+  },
+  "attention_route": {
+    "shown": true,
+    "data": {
+      "path": [
+        {
+          "level": "L0",
+          "attention": 0,
+          "earned": true,
+          "description": "Называет себя чувствительной"
+        },
+        {
+          "level": "L3",
+          "attention": 0,
+          "earned": true,
+          "description": "Закрывает поле через самодиагноз"
+        },
+        {
+          "level": "L6",
+          "attention": 0,
+          "earned": true,
+          "description": "Самоатака как предзащита от критики"
+        }
+      ]
+    },
+    "feedback": {
+      "block_id": "attention_route",
+      "block_title": "Маршрут внимания",
+      "enabled": true
+    }
+  },
+  "blind_spots": {
+    "shown": true,
+    "data": {
+      "items": [
+        {
+          "text": "Не названо: страдание не конкурирует — признание боли не отнимает ресурсы у других.",
+          "confidence": 0.85,
+          "source": "attention"
+        },
+        {
+          "text": "Не названо: молчание может быть бесконечным — отложение выражения не решает проблему.",
+          "confidence": 0.82,
+          "source": "attention"
+        },
+        {
+          "text": "Не названо: что **страдание не конкурирует** — признание моей боли не отнимает ресурсы у других. Не названо: что молчание может быть бесконечным.",
+          "confidence": 0.8,
+          "source": "cards"
+        }
+      ]
+    },
+    "feedback": {
+      "block_id": "attention_blind",
+      "block_title": "Что внимание пропускает",
+      "enabled": true
+    }
+  },
+  "pattern_cycle": {
+    "shown": true,
+    "data": {
+      "description": "Защита: Самоатака + Защита: Рационализация → скрывает → Потребность: Принятие, Потребность: Признание",
+      "based_on": "Защита: Самоатака"
+    }
+  },
+  "levels_visible": {
+    "shown": false,
+    "data": {
+      "segments": []
+    },
+    "reason": "Карта уровней будет заполнена с реальными diff данными из engine"
+  },
+  "evidence_basis": {
+    "shown": true,
+    "data": {
+      "quotes": [
+        {
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+          "node_id": "unmet_need.acceptance"
+        },
+        {
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+          "node_id": "unmet_need.recognition"
+        },
+        {
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+          "node_id": "emotional_somatic_reaction.shame"
+        },
+        {
+          "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+          "node_id": "defense.self_attack"
+        },
+        {
+          "quote": "Я понимаю, что у людей бывают более серьёзные проблемы.",
+          "node_id": "defense.rationalization"
+        },
+        {
+          "quote": "наверное, не стоит так зацикливаться",
+          "node_id": "behavior_and_speech.minimize_salience"
+        }
+      ]
+    }
+  },
+  "shift_signals": {
+    "shown": false,
+    "data": {
+      "signals": [],
+      "adaptivity": ""
+    },
+    "reason": "Первая сессия — динамика недоступна (нужно ≥3 эпизодов)"
+  },
+  "practices": {
+    "shown": true,
+    "data": {
+      "items": [
+        {
+          "text": "Вместо «я просто слишком чувствительная» → «Я чувствую глубже — это часть меня». Вместо молчания → назвать одно конкретное ощущение без объяснений.",
+          "source": "try_this"
+        },
+        {
+          "text": "я просто слишком чувствительная → я чувствую глубже — это часть меня",
+          "source": "transition_map"
+        }
+      ]
+    },
+    "feedback": {
+      "block_id": "practices",
+      "block_title": "Практики — маленькие шаги",
+      "enabled": true
+    }
+  },
+  "business_impact": {
+    "shown": false,
+    "data": null,
+    "feedback": {
+      "block_id": "business_impact",
+      "block_title": "Бизнес-влияние",
+      "enabled": false
+    },
+    "reason": "Бизнес-анализ требует дополнительного prompt layer — не входит в MVP"
+  },
+  "meta": {
+    "n_sessions": 1,
+    "has_dynamics": false,
+    "has_self_portrait": false,
+    "care_flag": false,
+    "confidence_summary": "yellow",
+    "generated_at": "2026-06-17T19:18:01.358Z"
+  }
+}

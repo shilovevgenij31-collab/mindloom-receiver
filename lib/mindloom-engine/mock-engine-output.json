@@ -1,0 +1,452 @@
+{
+  "input_id": "mock_test1",
+  "input_text": "Иногда мне кажется, что я просто слишком чувствительная. Я понимаю, что у людей бывают более серьёзные проблемы, и, наверное, не стоит так зацикливаться. С другой стороны, внутри всё равно остаётся ощущение, что что-то не так. Я не хочу никого нагружать своими переживаниями, тем более сейчас.",
+
+  "cards": {
+    "schema_version": "lite.cards.v0.1",
+    "input_id": "mock_test1",
+    "cards": [
+      {
+        "id": "what_happened",
+        "title": "Что произошло",
+        "confidence_band": "green",
+        "body": "Говорящая описывает внутренний конфликт: логически она пытается убедить себя молчать, но телесно чувствует, что **«что-то не так»**.",
+        "source_fields": ["analysis[0].ladder.L0_event"]
+      },
+      {
+        "id": "contact_mode",
+        "title": "Режим контакта",
+        "confidence_band": "green",
+        "body": "Здесь звучит **закрытие рамки**: говорящая предварительно исключает себя из права на выражение. Это не жёсткость, а мягкое, но твёрдое «я не должна».",
+        "source_fields": ["analysis[0].primary.regime", "analysis[1].primary.regime"]
+      },
+      {
+        "id": "active_need",
+        "title": "Активная потребность",
+        "confidence_band": "green",
+        "body": "Под защитой лежат потребности в **признании** и **принятии**: говорящей нужно, чтобы её видели и не осуждали.",
+        "source_fields": ["analysis[0].needs", "analysis[1].needs"]
+      },
+      {
+        "id": "logical_defense",
+        "title": "Логичная защита",
+        "confidence_band": "green",
+        "body": "**Первый ход**: Самокритика как предзащита — «я просто слишком чувствительная». **Второй ход**: Сравнение и минимизация — «у людей бывают более серьёзные проблемы».",
+        "source_fields": ["analysis[0].defenses", "analysis[1].defenses"]
+      },
+      {
+        "id": "blind_spot",
+        "title": "Возможное слепое пятно",
+        "confidence_band": "green",
+        "body": "Не названо: что **страдание не конкурирует** — признание моей боли не отнимает ресурсы у других. Не названо: что молчание может быть бесконечным.",
+        "source_fields": ["analysis[1].blind_spots", "analysis[4].blind_spots"]
+      },
+      {
+        "id": "try_this",
+        "title": "Попробовать иначе",
+        "confidence_band": "yellow",
+        "body": "Вместо «я просто слишком чувствительная» → «Я чувствую глубже — это часть меня». Вместо молчания → назвать одно конкретное ощущение без объяснений.",
+        "source_fields": ["analysis[0].route.new", "analysis[1].route.new"]
+      }
+    ]
+  },
+
+  "diff": [
+    {
+      "schema_version": "lite.diff.v0.2",
+      "unit_id": "s1",
+      "unit_type": "utterance",
+      "levels": [
+        { "code": "L0", "value": "Говорящая называет себя чувствительной; это самоопределение.", "confidence": 0.85, "band": "green", "earned": true },
+        { "code": "L1", "value": "Утверждение о себе в форме сомнения (кажется); мягкое, но фиксирующее.", "confidence": 0.8, "band": "green", "earned": true },
+        { "code": "L2", "value": "Самокритика, выглядящая как честность.", "confidence": 0.78, "band": "yellow", "earned": true },
+        { "code": "L3", "value": "Предварительно закрывает поле через самодиагноз.", "confidence": 0.75, "band": "yellow", "earned": true },
+        { "code": "L4", "value": "Внутренний монолог, сцена самооправдания.", "confidence": 0.7, "band": "yellow", "earned": true },
+        { "code": "L5", "value": "Поле сужается: говорящая исключает себя из права на выражение.", "confidence": 0.68, "band": "yellow", "earned": true },
+        { "code": "L6", "value": "Защита от стыда через самоуничижение.", "confidence": 0.72, "band": "white", "earned": true },
+        { "code": "L7", "value": "Если меня увидят такой, меня осудят.", "confidence": 0.7, "band": "white", "earned": false }
+      ],
+      "parameters": {
+        "frame_openness": 2, "response_space_width": 1, "refusal_cost": 4,
+        "agency_preservation": 3, "repair_availability": 4, "role_asymmetry": 1,
+        "update_capacity": 2, "evidence_density": 4, "pattern_stability": 0
+      },
+      "indices": { "pressure_index": 10, "inquiry_integrity": 11, "field_constriction": 7 },
+      "gates": {
+        "L6": { "requires": ["L3", "L5"], "met": true },
+        "L7": { "requires": ["L6", "pattern_stability"], "met": false }
+      },
+      "jumps": [],
+      "border": { "solid_up_to": "L1", "hedged_through": "L5", "reconstruction_from": "L6" }
+    },
+    {
+      "schema_version": "lite.diff.v0.2",
+      "unit_id": "s2",
+      "unit_type": "utterance",
+      "levels": [
+        { "code": "L0", "value": "Говорящая сравнивает свои проблемы с проблемами других и делает вывод, что не должна зацикливаться.", "confidence": 0.88, "band": "green", "earned": true },
+        { "code": "L1", "value": "Логическое рассуждение, выглядящее как рациональность.", "confidence": 0.82, "band": "green", "earned": true },
+        { "code": "L2", "value": "Здравый смысл, объективность.", "confidence": 0.8, "band": "yellow", "earned": true },
+        { "code": "L3", "value": "Закрывает право на переживание через сравнение.", "confidence": 0.8, "band": "yellow", "earned": true },
+        { "code": "L4", "value": "Сцена морального суда: себя находит недостойной внимания.", "confidence": 0.75, "band": "yellow", "earned": true },
+        { "code": "L5", "value": "Поле структурируется иерархией: другие имеют право говорить, я — нет.", "confidence": 0.76, "band": "yellow", "earned": true },
+        { "code": "L6", "value": "Защита от стыда через рационализацию.", "confidence": 0.77, "band": "white", "earned": true },
+        { "code": "L7", "value": "Страдание имеет иерархию; моё — не имеет права на выражение.", "confidence": 0.74, "band": "white", "earned": false }
+      ],
+      "parameters": {
+        "frame_openness": 2, "response_space_width": 1, "refusal_cost": 4,
+        "agency_preservation": 4, "repair_availability": 4, "role_asymmetry": 2,
+        "update_capacity": 2, "evidence_density": 4, "pattern_stability": 0
+      },
+      "indices": { "pressure_index": 9, "inquiry_integrity": 12, "field_constriction": 7 },
+      "gates": {
+        "L6": { "requires": ["L3", "L5"], "met": true },
+        "L7": { "requires": ["L6", "pattern_stability"], "met": false }
+      },
+      "jumps": [],
+      "border": { "solid_up_to": "L1", "hedged_through": "L5", "reconstruction_from": "L6" }
+    }
+  ],
+
+  "graph": {
+    "graph_spec": "lite.graph.v0.1",
+    "user_id": "mock_test1",
+    "ontology_version": "v8.1.3",
+    "nodes": [
+      {
+        "node_id": "unmet_need.acceptance",
+        "family": "unmet_need",
+        "subnode": "acceptance",
+        "display_label": "Потребность: Принятие",
+        "activation": 0.375,
+        "confidence": 0.78,
+        "valence": "distress",
+        "occurrences": 1,
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17",
+        "visible": "yes",
+        "need_id": "ATT-02",
+        "evidence": [{ "input_id": "mock_test1", "span": "Иногда мне кажется, что я просто слишком чувствительная.", "date": "2026-06-17" }]
+      },
+      {
+        "node_id": "unmet_need.recognition",
+        "family": "unmet_need",
+        "subnode": "recognition",
+        "display_label": "Потребность: Признание",
+        "activation": 0.35,
+        "confidence": 0.72,
+        "valence": "distress",
+        "occurrences": 1,
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17",
+        "visible": "yes",
+        "need_id": "REC-02",
+        "evidence": [{ "input_id": "mock_test1", "span": "Иногда мне кажется, что я просто слишком чувствительная.", "date": "2026-06-17" }]
+      },
+      {
+        "node_id": "emotional_somatic_reaction.shame",
+        "family": "emotional_somatic_reaction",
+        "subnode": "shame",
+        "display_label": "Телесная реакция: Стыд",
+        "activation": 0.4,
+        "confidence": 0.48,
+        "valence": "distress",
+        "occurrences": 1,
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17",
+        "visible": "yes",
+        "evidence": [{ "input_id": "mock_test1", "span": "Иногда мне кажется, что я просто слишком чувствительная.", "date": "2026-06-17" }]
+      },
+      {
+        "node_id": "defense.self_attack",
+        "family": "defense",
+        "subnode": "self_attack",
+        "display_label": "Защита: Самоатака",
+        "activation": 0.39,
+        "confidence": 0.8,
+        "valence": "protection",
+        "occurrences": 1,
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17",
+        "visible": "yes",
+        "f4": "fawn",
+        "evidence": [{ "input_id": "mock_test1", "span": "Иногда мне кажется, что я просто слишком чувствительная.", "date": "2026-06-17" }]
+      },
+      {
+        "node_id": "defense.rationalization",
+        "family": "defense",
+        "subnode": "rationalization",
+        "display_label": "Защита: Рационализация",
+        "activation": 0.39,
+        "confidence": 0.8,
+        "valence": "protection",
+        "occurrences": 1,
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17",
+        "visible": "yes",
+        "f4": "flight",
+        "evidence": [{ "input_id": "mock_test1", "span": "Я понимаю, что у людей бывают более серьёзные проблемы.", "date": "2026-06-17" }]
+      },
+      {
+        "node_id": "contact_regime.lock",
+        "family": "contact_regime",
+        "subnode": "lock",
+        "display_label": "Режим контакта: закрывает рамку",
+        "activation": 0.41,
+        "confidence": 0.82,
+        "valence": "adaptation",
+        "occurrences": 1,
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17",
+        "visible": "yes",
+        "evidence": [{ "input_id": "mock_test1", "span": null, "date": "2026-06-17" }]
+      },
+      {
+        "node_id": "behavior_and_speech.minimize_salience",
+        "family": "behavior_and_speech",
+        "subnode": "minimize_salience",
+        "display_label": "Привычный ход речи: обесценивание важного",
+        "activation": 0.4,
+        "confidence": 0.64,
+        "valence": "adaptation",
+        "occurrences": 1,
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17",
+        "visible": "yes",
+        "evidence": [{ "input_id": "mock_test1", "span": "наверное, не стоит так зацикливаться", "date": "2026-06-17" }]
+      },
+      {
+        "node_id": "core_belief.if_i_am_seen_i_will_be_judged",
+        "family": "core_belief",
+        "subnode": "if_i_am_seen_i_will_be_judged",
+        "display_label": "Вывод о себе: Если меня увидят — осудят",
+        "activation": 0.37,
+        "confidence": 0.44,
+        "valence": "protection",
+        "occurrences": 1,
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17",
+        "visible": "careful",
+        "evidence": [{ "input_id": "mock_test1", "span": "Иногда мне кажется, что я просто слишком чувствительная.", "date": "2026-06-17" }]
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "evocation::emotional_somatic_reaction.shame->defense.self_attack",
+        "from": "emotional_somatic_reaction.shame",
+        "to": "defense.self_attack",
+        "tau": "evocation",
+        "morphism": "generates",
+        "weight": 0.968,
+        "confidence": 0.48,
+        "occurrences": 1,
+        "evidence": [{ "input_id": "mock_test1" }],
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17"
+      },
+      {
+        "edge_id": "masking::defense.self_attack->unmet_need.acceptance",
+        "from": "defense.self_attack",
+        "to": "unmet_need.acceptance",
+        "tau": "masking",
+        "morphism": "masks",
+        "weight": -0.565,
+        "confidence": 0.78,
+        "occurrences": 1,
+        "evidence": [{ "input_id": "mock_test1" }],
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17"
+      },
+      {
+        "edge_id": "expression::defense.self_attack->behavior_and_speech.minimize_salience",
+        "from": "defense.self_attack",
+        "to": "behavior_and_speech.minimize_salience",
+        "tau": "expression",
+        "morphism": "externalizes",
+        "weight": 0.968,
+        "confidence": 0.64,
+        "occurrences": 1,
+        "evidence": [{ "input_id": "mock_test1" }],
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17"
+      },
+      {
+        "edge_id": "masking::defense.rationalization->unmet_need.recognition",
+        "from": "defense.rationalization",
+        "to": "unmet_need.recognition",
+        "tau": "masking",
+        "morphism": "masks",
+        "weight": -0.547,
+        "confidence": 0.75,
+        "occurrences": 1,
+        "evidence": [{ "input_id": "mock_test1" }],
+        "first_seen": "2026-06-17",
+        "last_seen": "2026-06-17"
+      }
+    ],
+    "snapshots": [],
+    "ranked_hypotheses": [
+      {
+        "rank": 1,
+        "active_nodes": ["unmet_need.acceptance", "defense.self_attack", "emotional_somatic_reaction.shame"],
+        "strongest_links": [
+          { "from": "emotional_somatic_reaction.shame", "to": "defense.self_attack", "tau": "evocation", "weight": 0.968 },
+          { "from": "defense.self_attack", "to": "unmet_need.acceptance", "tau": "masking", "weight": -0.565 }
+        ],
+        "ambiguity_flags": ["один эпизод — устойчивый паттерн (L7) не выводится"],
+        "follow_up_questions": ["Есть ли ситуация, где можно было не защищаться?", "Что происходит, когда кто-то замечает усталость?"]
+      }
+    ]
+  },
+
+  "attention": {
+    "kind": "attention_path",
+    "n_snapshots": 1,
+    "preliminary": true,
+    "path": {
+      "levels": [
+        { "code": "L0", "attention": 0.92, "earned": true },
+        { "code": "L1", "attention": 0.9, "earned": true },
+        { "code": "L2", "attention": 0.86, "earned": true },
+        { "code": "L3", "attention": 0.83, "earned": true },
+        { "code": "L4", "attention": 0.8, "earned": true },
+        { "code": "L5", "attention": 0.79, "earned": true },
+        { "code": "L6", "attention": 0.77, "earned": true },
+        { "code": "L7", "attention": 0.7, "earned": false }
+      ],
+      "skipped": ["L7"]
+    },
+    "blind": [
+      { "text": "Не названо: страдание не конкурирует — признание боли не отнимает ресурсы у других.", "confidence": 0.85 },
+      { "text": "Не названо: молчание может быть бесконечным — отложение выражения не решает проблему.", "confidence": 0.82 }
+    ],
+    "aggregate_available": false
+  },
+
+  "field": {
+    "allowed": ["согласиться с оценкой других", "продолжать молчать", "объяснить логически"],
+    "costly": ["назвать своё переживание", "попросить поддержки", "настоять на своём"],
+    "blocked": ["выразить боль без объяснений", "просто сказать «мне больно»", "попросить без обоснования"],
+    "openness": 0.25,
+    "speaker": 0.4,
+    "addressee": 0.6
+  },
+
+  "markers": {
+    "schema_version": "lite.markers.v0.1",
+    "markers": [
+      {
+        "cue": "просто/всего лишь",
+        "meaning": "Минимизация",
+        "leads_to": "Подавление",
+        "occurrences": 3,
+        "evidence": [
+          { "segment_id": "s1", "quote": "я просто слишком чувствительная" },
+          { "segment_id": "s2", "quote": "наверное, не стоит так зацикливаться" }
+        ]
+      },
+      {
+        "cue": "наверное",
+        "meaning": "Снижение уверенности в своём опыте",
+        "leads_to": "Самоотмена",
+        "occurrences": 2,
+        "evidence": [
+          { "segment_id": "s1", "quote": "наверное, не стоит так зацикливаться" }
+        ]
+      }
+    ]
+  },
+
+  "semantic_map": {
+    "schema_version": "lite.semmap.v0.1",
+    "concepts": [
+      { "id": "sensitivity", "label": "Чувствительность", "valence": "charged", "degree": 2, "in_degree_charged": 1, "state": "collapsed" },
+      { "id": "problem", "label": "Проблема", "valence": "charged", "degree": 1, "in_degree_charged": 1, "state": "funnel" },
+      { "id": "silence", "label": "Молчание", "valence": "charged", "degree": 1, "in_degree_charged": 0, "state": "collapsed" },
+      { "id": "burden", "label": "Обуза", "valence": "charged", "degree": 1, "in_degree_charged": 1, "state": "collapsed" }
+    ],
+    "links": [
+      { "from": "sensitivity", "to": "problem", "type": "causes", "rigid": true, "valence": "charged", "label": "→ проблема" },
+      { "from": "problem", "to": "burden", "type": "equals", "rigid": true, "valence": "charged", "label": "= обуза" },
+      { "from": "silence", "to": "sensitivity", "type": "part_of", "rigid": false, "valence": "charged", "label": "часть" }
+    ],
+    "collapse_score": 0.85,
+    "affordances": [
+      { "from": "sensitivity", "to": "глубина восприятия", "rationale": "чувствительность — это способность, а не дефект", "affects_choice": "возвращает выбор" },
+      { "from": "burden", "to": "потребность", "rationale": "нуждаться — это не значит быть обузой", "affects_choice": "возвращает выбор" }
+    ],
+    "care_flag": false
+  },
+
+  "transition_map": {
+    "schema_version": "lite.tm.v0.1",
+    "n_evidenced": 3,
+    "n_total": 13,
+    "nodes": [
+      { "key": "need", "n": 1, "ru": "Потребность", "deep": false, "evidenced": true, "label": "Признание и принятие", "strength": 0.75 },
+      { "key": "emotion", "n": 2, "ru": "Эмоция", "deep": false, "evidenced": true, "label": "Стыд", "strength": 0.4 },
+      { "key": "defense", "n": 5, "ru": "Защита", "deep": false, "evidenced": true, "label": "Самоатака / Рационализация", "strength": 0.8 }
+    ],
+    "transitions": [
+      { "id": "t1", "from": "emotion", "to": "defense", "morphism": "evocation", "ru": "Стыд вызывает самоатаку", "does": "generates", "active": true },
+      { "id": "t2", "from": "defense", "to": "need", "morphism": "masking", "ru": "Самоатака маскирует потребность", "does": "masks", "active": true }
+    ],
+    "loops": [
+      { "id": "l1", "ru": "Стыд → Самоатака → Стыд", "type": "defense_loop", "desc": "Самоатака не снимает стыд, а воспроизводит его", "break": "Назвать стыд без объяснений", "from": "defense", "to": "emotion", "active": true }
+    ],
+    "replacements": [
+      { "old": "я просто слишком чувствительная", "new": "я чувствую глубже — это часть меня", "phrase": "Прямой перевод", "relevant": true }
+    ]
+  },
+
+  "attention_route": {
+    "schema_version": "lite.ar.v0.1",
+    "n_segments": 2,
+    "segments": [
+      {
+        "segment_id": "s1",
+        "quote": "Иногда мне кажется, что я просто слишком чувствительная.",
+        "steps": [
+          { "key": "L0", "ru": "Факт", "value": "Называет себя чувствительной", "status": "ok" },
+          { "key": "L3", "ru": "Функция", "value": "Закрывает поле через самодиагноз", "status": "ok" },
+          { "key": "L6", "ru": "Защита", "value": "Самоатака как предзащита от критики", "status": "ok" }
+        ],
+        "fork": {
+          "old": "я просто слишком чувствительная",
+          "new": "я чувствую глубже — это часть меня",
+          "phrase": "«просто» → убрать минимизацию",
+          "why": "«просто» снижает статус опыта до ошибки"
+        }
+      },
+      {
+        "segment_id": "s2",
+        "quote": "Я не хочу никого нагружать своими переживаниями.",
+        "steps": [
+          { "key": "L0", "ru": "Факт", "value": "Не хочет нагружать других", "status": "ok" },
+          { "key": "L3", "ru": "Функция", "value": "Вина и ответственность блокируют запрос", "status": "ok" },
+          { "key": "L6", "ru": "Защита", "value": "Мученичество — забота о другом скрывает свою нужду", "status": "approx" }
+        ],
+        "fork": {
+          "old": "я не хочу никого нагружать",
+          "new": "мне важна поддержка, и я боюсь её просить",
+          "phrase": "Нагружать → просить",
+          "why": "«нагружать» заряжает просьбу виной"
+        }
+      }
+    ],
+    "loops": [
+      { "ru": "Замалчивание → усиление тяжести → замалчивание", "desc": "Молчание не снимает напряжение, а накапливает его", "break": "Один маленький шаг — назвать одно ощущение" }
+    ]
+  },
+
+  "meta": {
+    "schema_version": "lite.analysis.v0.1",
+    "ontology_version": "v8.1.3",
+    "model": "claude-haiku-4-5",
+    "prompt_version": "analysis_v0_1",
+    "input_id": "mock_test1",
+    "language": "ru",
+    "n_segments": 2,
+    "analysis_time": 0
+  }
+}
