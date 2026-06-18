@@ -262,10 +262,13 @@ export interface EngineARSegment {
   quote: string;
   steps: EngineARStep[];
   fork: EngineARFork;
+  forks?: EngineARFork[];
+  blocked_transitions?: string[];
 }
 
 export interface EngineAttentionRoute {
   schema_version?: string;
+  version?: string;
   n_segments: number;
   segments: EngineARSegment[];
   loops: Array<{ ru: string; desc?: string; break?: string }>;
@@ -328,12 +331,19 @@ export interface EngineSelfPortrait {
 export interface EngineMeta {
   schema_version?: string;
   ontology_version?: string;
+  // Pipeline meta (mock / internal)
   model?: string;
   prompt_version?: string;
   input_id?: string;
   language?: string;
   n_segments?: number;
   analysis_time?: number;
+  // Serve meta (real engine response from serve.py)
+  cost_usd?: number;
+  llm_calls?: number;
+  report_model?: string;
+  rejected?: string[];
+  analysis_id?: number;
 }
 
 // ── Main engine output type ──────────────────────────────────────────────────
