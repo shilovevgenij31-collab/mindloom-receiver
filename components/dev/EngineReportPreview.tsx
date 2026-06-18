@@ -1,10 +1,7 @@
 import type { ReactNode } from 'react';
 import { SpeechCloud, type SpeechCloudItem } from '@/components/SpeechCloud';
 import {
-  getDevOnlyEngineReportBlocks,
-  getEngineReportBlockDefinition,
-  getFeedbackEnabledEngineReportBlocks,
-  getHiddenEngineReportBlocks,
+  ENGINE_REPORT_BLOCK_REGISTRY,
   getVisibleEngineReportBlocks,
   type EngineReportBlockId,
 } from '@/lib/mindloom-engine/report-block-registry';
@@ -33,20 +30,21 @@ const C = {
 } as const;
 
 const CODE_LABELS: Record<string, string> = {
-  'defense.self_attack': '?????????',
-  'defense.hypercontrol': '?????????????',
-  'defense.minimization': '????????????? ???????????',
-  'defense.rationalization': '??????????????',
-  'unmet_need.acceptance': '??????????? ? ????????',
-  'unmet_need.recognition': '??????????? ? ?????????',
-  'unmet_need.safety': '??????????? ? ????????????',
-  'unmet_need.rest': '??????????? ? ??????',
-  'behavior_and_speech.minimize_silence': '??????????? ? ????????',
-  'behavior_and_speech.self_justification': '?????????????? ? ????',
-  'behavior_and_speech.overexplaining': '???????? ????????? ?????????',
-  'behavior_and_speech.control_through_clarifying': '???????? ????? ?????????',
-  contact_regime: '????? ????????',
+  'defense.self_attack': 'Самокритика',
+  'defense.hypercontrol': 'Гиперконтроль',
+  'defense.minimization': 'Минимизация значимости',
+  'defense.rationalization': 'Рационализация',
+  'unmet_need.acceptance': 'Потребность в принятии',
+  'unmet_need.recognition': 'Потребность в признании',
+  'unmet_need.safety': 'Потребность в безопасности',
+  'unmet_need.rest': 'Потребность в отдыхе',
+  'behavior_and_speech.minimize_silence': 'Заполнение тишины',
+  'behavior_and_speech.self_justification': 'Самооправдание в речи',
+  'behavior_and_speech.overexplaining': 'Избыточные объяснения',
+  'behavior_and_speech.control_through_clarifying': 'Контроль через уточнения',
+  contact_regime: 'Режим контакта',
 };
+
 function getReportBlockByRegistryId(report: ReportV2PayloadFromEngine, id: EngineReportBlockId): ReportV2Block | null {
   switch (id) {
     case 'hero':
@@ -75,12 +73,8 @@ function getReportBlockByRegistryId(report: ReportV2PayloadFromEngine, id: Engin
       return report.blind_spots;
     case 'pattern_cycle':
       return report.pattern_cycle;
-    case 'levels_visible':
-      return report.levels_visible;
     case 'evidence_basis':
       return report.evidence_basis;
-    case 'shift_signals':
-      return report.shift_signals;
     case 'practices':
       return report.practices;
     case 'business_impact':
@@ -90,14 +84,35 @@ function getReportBlockByRegistryId(report: ReportV2PayloadFromEngine, id: Engin
   }
 }
 
-function getRegistrySummary() {
-  const shown = getVisibleEngineReportBlocks().map((block) => block.id);
-  const hidden = getHiddenEngineReportBlocks().map((block) => block.id);
-  const feedbackReady = getFeedbackEnabledEngineReportBlocks().map((block) => block.id);
-  const devOnly = getDevOnlyEngineReportBlocks().map((block) => block.id);
+// ── Block coverage ─────────────────────────────────────────────────────────────
 
-  return { shown, hidden, feedbackReady, devOnly };
+type BlockCoverageStatus = 'present' | 'missing' | 'hidden' | 'dev_only';
+
+interface BlockCoverageEntry {
+  id: EngineReportBlockId;
+  order: number;
+  title: string;
+  status: BlockCoverageStatus;
+  reason?: string;
 }
+
+function computeBlockCoverage(report: ReportV2PayloadFromEngine): BlockCoverageEntry[] {
+  return ENGINE_REPORT_BLOCK_REGISTRY.map((def) => {
+    if (def.status === 'dev_only') {
+      return { id: def.id, order: def.order, title: def.title, status: 'dev_only' as const };
+    }
+    if (def.status === 'hidden') {
+      return { id: def.id, order: def.order, title: def.title, status: 'hidden' as const, reason: def.hiddenReason };
+    }
+    const reportBlock = getReportBlockByRegistryId(report, def.id);
+    if (!reportBlock || !reportBlock.shown) {
+      return { id: def.id, order: def.order, title: def.title, status: 'missing' as const, reason: reportBlock?.reason };
+    }
+    return { id: def.id, order: def.order, title: def.title, status: 'present' as const };
+  });
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
 
 function hasText(value: string | null | undefined): value is string {
   return typeof value === 'string' && value.trim().length > 0;
@@ -175,6 +190,8 @@ function uniqueNonEmpty(values: Array<string | null | undefined>): string[] {
 
   return result;
 }
+
+// ── Primitives ─────────────────────────────────────────────────────────────────
 
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
@@ -276,24 +293,154 @@ function QuoteList({ quotes }: { quotes: string[] }) {
   );
 }
 
-function DevBanner() {
+// ── Dev panels ────────────────────────────────────────────────────────────────
+
+function DevSummaryPanel({
+  report,
+  coverage,
+}: {
+  report: ReportV2PayloadFromEngine;
+  coverage: BlockCoverageEntry[];
+}) {
+  const presentCount = coverage.filter((e) => e.status === 'present').length;
+  const missingCount = coverage.filter((e) => e.status === 'missing').length;
+  const hiddenCount = coverage.filter((e) => e.status === 'hidden').length;
+  const devOnlyCount = coverage.filter((e) => e.status === 'dev_only').length;
+
   return (
     <div
       style={{
-        background: '#faf7f2',
+        background: '#f0ede6',
         border: `1px solid ${C.border}`,
         borderRadius: 18,
-        padding: '0.8rem 1rem',
-        color: C.body,
+        padding: '1rem 1.1rem',
       }}
     >
-      <Eyebrow>DEV PREVIEW · Mindloom Lite Engine → Report V2</Eyebrow>
-      <p style={{ margin: '0.35rem 0 0', fontSize: 14, lineHeight: 1.55 }}>
-        Источник: mock engine output. Production route не затронут.
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+        <Eyebrow>Engine Report Preview</Eyebrow>
+        <span style={{ fontSize: 11, color: C.muted, fontWeight: 600 }}>dev-only · не для клиентов</span>
+      </div>
+      <p style={{ margin: '0 0 0.65rem', fontSize: 13, color: C.body, lineHeight: 1.5 }}>
+        Source:{' '}
+        <code style={{ background: 'rgba(0,0,0,0.06)', padding: '0.1em 0.35em', borderRadius: 4 }}>
+          mock-engine-output.json
+        </code>{' '}
+        →{' '}
+        <code style={{ background: 'rgba(0,0,0,0.06)', padding: '0.1em 0.35em', borderRadius: 4 }}>normalize</code>{' '}
+        →{' '}
+        <code style={{ background: 'rgba(0,0,0,0.06)', padding: '0.1em 0.35em', borderRadius: 4 }}>map-to-report-v2</code>
       </p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+        <StatChip tone="green">present: {presentCount}</StatChip>
+        <StatChip tone="yellow">missing: {missingCount}</StatChip>
+        <StatChip>hidden: {hiddenCount}</StatChip>
+        <StatChip tone="blue">dev-only: {devOnlyCount}</StatChip>
+        <StatChip>session: {formatSessionType(report.session_type)}</StatChip>
+        <StatChip
+          tone={
+            report.meta.confidence_summary === 'green'
+              ? 'green'
+              : report.meta.confidence_summary === 'yellow'
+              ? 'yellow'
+              : 'neutral'
+          }
+        >
+          confidence: {formatConfidenceBand(report.meta.confidence_summary)}
+        </StatChip>
+      </div>
     </div>
   );
 }
+
+const COVERAGE_STYLE: Record<BlockCoverageStatus, { bg: string; color: string; label: string }> = {
+  present: { bg: C.greenBg, color: '#2f6147', label: 'present' },
+  missing: { bg: C.yellowBg, color: '#7a5812', label: 'missing' },
+  hidden: { bg: '#f0ede6', color: '#7a7268', label: 'hidden' },
+  dev_only: { bg: C.blueBg, color: '#3a5e82', label: 'dev-only' },
+};
+
+function BlockCoveragePanel({ coverage }: { coverage: BlockCoverageEntry[] }) {
+  const presentCount = coverage.filter((e) => e.status === 'present').length;
+  const visibleCount = coverage.filter((e) => e.status === 'present' || e.status === 'missing').length;
+
+  return (
+    <details
+      style={{
+        background: C.cardSoft,
+        border: `1px solid ${C.border}`,
+        borderRadius: 22,
+        padding: '0.85rem 1rem',
+      }}
+    >
+      <summary style={{ cursor: 'pointer', fontWeight: 700, color: C.text, fontSize: 14 }}>
+        Block coverage — {presentCount} из {visibleCount} visible blocks с данными
+      </summary>
+      <div style={{ marginTop: '0.85rem', overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+          <thead>
+            <tr>
+              {['#', 'Блок', 'Статус', 'Причина'].map((h) => (
+                <th
+                  key={h}
+                  style={{
+                    textAlign: 'left',
+                    padding: '0.4rem 0.6rem',
+                    borderBottom: `1px solid ${C.border}`,
+                    color: C.muted,
+                    fontWeight: 600,
+                    fontSize: 11,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {coverage.map((entry) => {
+              const st = COVERAGE_STYLE[entry.status];
+              return (
+                <tr key={entry.id} style={{ borderBottom: `1px solid rgba(232,221,208,0.45)` }}>
+                  <td style={{ padding: '0.45rem 0.6rem', color: C.muted, fontSize: 12 }}>{entry.order}</td>
+                  <td style={{ padding: '0.45rem 0.6rem', color: C.text, fontWeight: 500 }}>{entry.title}</td>
+                  <td style={{ padding: '0.45rem 0.6rem' }}>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        padding: '0.15rem 0.55rem',
+                        borderRadius: 999,
+                        background: st.bg,
+                        color: st.color,
+                        fontSize: 11,
+                        fontWeight: 700,
+                      }}
+                    >
+                      {st.label}
+                    </span>
+                  </td>
+                  <td
+                    style={{
+                      padding: '0.45rem 0.6rem',
+                      color: C.muted,
+                      fontSize: 12,
+                      maxWidth: 280,
+                    }}
+                  >
+                    {entry.reason ?? '—'}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  );
+}
+
+// ── Report block sections ─────────────────────────────────────────────────────
 
 function HeroBlock({ report }: { report: ReportV2PayloadFromEngine }) {
   const headline = cleanUserText(report.hero.data?.headline_text ?? report.hero.data?.regime_label ?? 'Preview отчета');
@@ -738,46 +885,69 @@ function renderBlock(report: ReportV2PayloadFromEngine, blockId: EngineReportBlo
   }
 }
 
-function DebugSummary({ report }: { report: ReportV2PayloadFromEngine }) {
-  const summary = getRegistrySummary();
+// ── Data inspector ────────────────────────────────────────────────────────────
+
+function DataInspector({
+  report,
+  rawEngineOutput,
+  normalized,
+}: {
+  report: ReportV2PayloadFromEngine;
+  rawEngineOutput?: unknown;
+  normalized?: unknown;
+}) {
+  const sections: Array<{ title: string; data: unknown }> = [
+    ...(rawEngineOutput !== undefined ? [{ title: 'Raw engine output (mock-engine-output.json)', data: rawEngineOutput }] : []),
+    ...(normalized !== undefined ? [{ title: 'Normalized analysis', data: normalized }] : []),
+    { title: 'Mapped Report V2 payload', data: report },
+  ];
 
   return (
-    <details
-      style={{
-        background: C.cardSoft,
-        border: `1px dashed ${C.border}`,
-        borderRadius: 22,
-        padding: '0.95rem 1rem',
-      }}
-    >
-      <summary style={{ cursor: 'pointer', color: C.text, fontWeight: 700 }}>Debug summary</summary>
-      <div style={{ display: 'grid', gap: '0.85rem', marginTop: '0.9rem', color: C.body, fontSize: 14, lineHeight: 1.55 }}>
-        <div><strong style={{ color: C.text }}>engine_input_id:</strong> {report.engine_input_id}</div>
-        <div><strong style={{ color: C.text }}>source:</strong> {report.source}</div>
-        <div><strong style={{ color: C.text }}>shown:</strong> {summary.shown.join(', ') || 'none'}</div>
-        <div><strong style={{ color: C.text }}>hidden:</strong> {summary.hidden.join(', ') || 'none'}</div>
-        <div><strong style={{ color: C.text }}>dev-only:</strong> {summary.devOnly.join(', ') || 'none'}</div>
-        <div><strong style={{ color: C.text }}>feedback-ready:</strong> {summary.feedbackReady.join(', ') || 'none'}</div>
-        <div style={{ display: 'grid', gap: '0.55rem' }}>
-          {summary.hidden.map((id) => {
-            const definition = getEngineReportBlockDefinition(id);
-            const block = getReportBlockByRegistryId(report, id);
-            return (
-              <div key={id} style={{ borderTop: `1px solid ${C.border}`, paddingTop: '0.55rem' }}>
-                <strong style={{ color: C.text }}>{definition.title}</strong>
-                <div>status: {definition.status}</div>
-                <div>reason: {block?.reason ?? definition.hiddenReason ?? 'reason not provided'}</div>
-                <div>source_fields: {definition.sourceFields.join(', ')}</div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </details>
+    <div style={{ display: 'grid', gap: '0.55rem' }}>
+      {sections.map(({ title, data }) => (
+        <details
+          key={title}
+          style={{
+            background: C.cardSoft,
+            border: `1px dashed ${C.border}`,
+            borderRadius: 18,
+            padding: '0.75rem 0.9rem',
+          }}
+        >
+          <summary style={{ cursor: 'pointer', color: C.text, fontWeight: 700, fontSize: 13 }}>{title}</summary>
+          <pre
+            style={{
+              marginTop: '0.7rem',
+              fontSize: 11.5,
+              lineHeight: 1.55,
+              color: '#4a4440',
+              overflowX: 'auto',
+              maxHeight: 400,
+              overflowY: 'auto',
+              background: '#faf7f2',
+              borderRadius: 12,
+              padding: '0.8rem',
+            }}
+          >
+            {JSON.stringify(data, null, 2)}
+          </pre>
+        </details>
+      ))}
+    </div>
   );
 }
 
-export function EngineReportPreview({ report }: { report: ReportV2PayloadFromEngine }) {
+// ── Main export ────────────────────────────────────────────────────────────────
+
+export interface EngineReportPreviewProps {
+  report: ReportV2PayloadFromEngine;
+  rawEngineOutput?: unknown;
+  normalized?: unknown;
+}
+
+export function EngineReportPreview({ report, rawEngineOutput, normalized }: EngineReportPreviewProps) {
+  const coverage = computeBlockCoverage(report);
+
   return (
     <main
       style={{
@@ -796,11 +966,12 @@ export function EngineReportPreview({ report }: { report: ReportV2PayloadFromEng
         }
       `}</style>
       <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: '1rem' }}>
-        <DevBanner />
+        <DevSummaryPanel report={report} coverage={coverage} />
+        <BlockCoveragePanel coverage={coverage} />
         {getVisibleEngineReportBlocks().map((block) => (
           <div key={block.id}>{renderBlock(report, block.id)}</div>
         ))}
-        <DebugSummary report={report} />
+        <DataInspector report={report} rawEngineOutput={rawEngineOutput} normalized={normalized} />
       </div>
     </main>
   );

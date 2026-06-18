@@ -7,8 +7,9 @@ import type { MindloomEngineOutput } from '@/lib/mindloom-engine/types';
 export const dynamic = 'force-static';
 
 export default function EngineReportDevPage() {
-  const normalized = normalizeMindloomEngineOutput(mockEngineOutput as MindloomEngineOutput);
+  const rawEngine = mockEngineOutput as MindloomEngineOutput;
+  const normalized = normalizeMindloomEngineOutput(rawEngine);
   const report = mapNormalizedToReportV2(normalized);
 
-  return <EngineReportPreview report={report} />;
+  return <EngineReportPreview report={report} rawEngineOutput={rawEngine} normalized={normalized} />;
 }
