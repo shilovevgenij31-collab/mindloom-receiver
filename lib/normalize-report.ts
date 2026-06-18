@@ -223,6 +223,41 @@ export interface MindloomReportV2FeedbackConfig {
   negative_label?: string | null;
 }
 
+export interface MindloomReportV2AttentionRouteStep {
+  label: string;
+  text: string;
+}
+
+export interface MindloomReportV2AttentionRoute {
+  title?: string | null;
+  intro?: string | null;
+  steps: MindloomReportV2AttentionRouteStep[];
+}
+
+export interface MindloomReportV2AttentionBlindItem {
+  title: string;
+  text: string;
+}
+
+export interface MindloomReportV2AttentionBlind {
+  title?: string | null;
+  intro?: string | null;
+  items: MindloomReportV2AttentionBlindItem[];
+}
+
+export interface MindloomReportV2BusinessImpactArea {
+  title: string;
+  text: string;
+}
+
+export interface MindloomReportV2BusinessImpact {
+  title?: string | null;
+  intro?: string | null;
+  areas: MindloomReportV2BusinessImpactArea[];
+  strengths?: string[];
+  risks?: string[];
+}
+
 export interface MindloomReportV2 {
   meta: MindloomReportV2Meta;
   participant: {
@@ -304,6 +339,9 @@ export interface MindloomReportV2 {
   phrase_microscope?: MindloomReportV2PhraseMicroscope | null;
   honest_translation?: MindloomReportV2HonestTranslation | null;
   protected_need?: MindloomReportV2ProtectedNeed | null;
+  attention_route?: MindloomReportV2AttentionRoute | null;
+  attention_blind?: MindloomReportV2AttentionBlind | null;
+  business_impact?: MindloomReportV2BusinessImpact | null;
   feedback_config?: MindloomReportV2FeedbackConfig | null;
 }
 
@@ -950,6 +988,38 @@ export function normalizeMindloomReportV2(payload: unknown): MindloomReportV2 | 
         leading_need: asStrNull(pn.leading_need),
         interpretation: asStrNull(pn.interpretation),
       };
+    })(),
+    attention_route: (() => {
+      const ar = toObj(p.attention_route);
+      if (!Object.keys(ar).length) return null;
+      const steps = toArr(ar.steps).map((item) => {
+        const obj = toObj(item);
+        return { label: asStr(obj.label) ?? '', text: asStr(obj.text) ?? '' };
+      }).filter((s) => s.label || s.text);
+      if (steps.length === 0) return null;
+      return { title: asStrNull(ar.title), intro: asStrNull(ar.intro), steps };
+    })(),
+    attention_blind: (() => {
+      const ab = toObj(p.attention_blind);
+      if (!Object.keys(ab).length) return null;
+      const items = toArr(ab.items).map((item) => {
+        const obj = toObj(item);
+        return { title: asStr(obj.title) ?? '', text: asStr(obj.text) ?? '' };
+      }).filter((s) => s.title || s.text);
+      if (items.length === 0) return null;
+      return { title: asStrNull(ab.title), intro: asStrNull(ab.intro), items };
+    })(),
+    business_impact: (() => {
+      const bi = toObj(p.business_impact);
+      if (!Object.keys(bi).length) return null;
+      const areas = toArr(bi.areas).map((item) => {
+        const obj = toObj(item);
+        return { title: asStr(obj.title) ?? '', text: asStr(obj.text) ?? '' };
+      }).filter((s) => s.title || s.text);
+      const strengths = mapStringList(bi.strengths);
+      const risks = mapStringList(bi.risks);
+      if (areas.length === 0 && strengths.length === 0 && risks.length === 0) return null;
+      return { title: asStrNull(bi.title), intro: asStrNull(bi.intro), areas, strengths, risks };
     })(),
     feedback_config: (() => {
       const fc = toObj(p.feedback_config);

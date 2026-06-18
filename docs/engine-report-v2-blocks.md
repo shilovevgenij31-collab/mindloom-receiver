@@ -40,6 +40,7 @@ Registry фиксирует единый typed-источник для поря�
 - graph
 - attention_route
 - attention_blind
+- business_impact
 - pattern_cycle
 - evidence_basis
 - practices
@@ -49,7 +50,6 @@ Registry фиксирует единый typed-источник для поря�
 - phrase_microscope: requires_phrase_segments
 - phrases_meaning: requires_phrase_segments
 - heatmap: requires_diff_indices
-- business_impact: requires_business_prompt_layer
 - levels_visible: requires_level_mapping
 - shift_signals: requires_previous_session_or_shift_markers
 - feedback: requires_feedback_api

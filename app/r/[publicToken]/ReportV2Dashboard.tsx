@@ -12,6 +12,9 @@ import type {
   MindloomReportV2PhraseMicroscope,
   MindloomReportV2ProtectedNeed,
   MindloomReportV2Snapshot,
+  MindloomReportV2AttentionRoute,
+  MindloomReportV2AttentionBlind,
+  MindloomReportV2BusinessImpact,
 } from '@/lib/normalize-report';
 import { SpeechCloud, type SpeechCloudItem } from '@/components/SpeechCloud';
 
@@ -3433,6 +3436,133 @@ function TrajectorySection({ trajectory }: { trajectory: MindloomReportV2['traje
   );
 }
 
+function AttentionRouteSectionExact({ ar }: { ar: NonNullable<MindloomReportV2AttentionRoute> }) {
+  const steps = ar.steps.filter((s) => s.label || s.text);
+  if (steps.length === 0) return null;
+  return (
+    <SectionShell title={ar.title ?? 'Маршрут внимания'} icon="eye" intro={ar.intro ?? 'В этом блоке показано, куда внимание может уходить первым и какой смысл из этого быстро собирается. Это не точная схема, а гипотеза по вашему материалу.'}>
+      <SharedPanel padding="1.1rem 1rem">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {steps.map((step, i) => (
+            <div key={i} style={{ display: 'flex', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 30, height: 30, borderRadius: '50%', flexShrink: 0,
+                  background: '#edf6ff', color: '#326ea6', fontSize: '0.72rem', fontWeight: 800,
+                }}>{i + 1}</div>
+                {i < steps.length - 1 && (
+                  <div style={{ width: 1, flex: 1, background: 'rgba(74,149,211,0.3)', minHeight: 18, margin: '0.2rem 0' }} />
+                )}
+              </div>
+              <div style={{ paddingBottom: i < steps.length - 1 ? '0.9rem' : '0', paddingTop: '0.35rem', flex: 1, minWidth: 0 }}>
+                {step.label && (
+                  <div style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, color: '#326ea6', marginBottom: '0.3rem' }}>
+                    {step.label}
+                  </div>
+                )}
+                <p style={{ margin: 0, fontSize: '14px', color: VS.text.body, lineHeight: 1.58 }}>
+                  {sanitizeUserText(step.text) ?? step.text}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SharedPanel>
+    </SectionShell>
+  );
+}
+
+function AttentionBlindSectionExact({ ab }: { ab: NonNullable<MindloomReportV2AttentionBlind> }) {
+  const items = ab.items.filter((item) => item.title || item.text);
+  if (items.length === 0) return null;
+  return (
+    <SectionShell title={ab.title ?? 'Что внимание может пропускать'} icon="pause" intro={ab.intro ?? 'Когда внимание сосредоточено на одной теме, другие сигналы могут становиться менее заметными. Ниже — что может выпадать из фокуса в такие моменты.'}>
+      <div className="mlm-blind-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem' }}>
+        {items.map((item, i) => {
+          const tone = (i % 4 < 2 ? 'purple' : 'yellow') as Tone;
+          const surface = toneSurface(tone);
+          return (
+            <BentoTile key={i} tone={tone} padding="0.9rem 1rem">
+              {item.title && (
+                <div style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, color: surface.text, marginBottom: '0.38rem' }}>
+                  {item.title}
+                </div>
+              )}
+              <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.6, color: VS.text.body }}>
+                {sanitizeUserText(item.text) ?? item.text}
+              </p>
+            </BentoTile>
+          );
+        })}
+      </div>
+    </SectionShell>
+  );
+}
+
+function BusinessImpactSectionExact({ bi }: { bi: NonNullable<MindloomReportV2BusinessImpact> }) {
+  const areas = bi.areas.filter((a) => a.title || a.text);
+  const strengths = (bi.strengths ?? []).filter(has);
+  const risks = (bi.risks ?? []).filter(has);
+  if (areas.length === 0 && strengths.length === 0 && risks.length === 0) return null;
+  return (
+    <SectionShell title={bi.title ?? 'Как это может влиять на решения и работу'} icon="brain" intro={bi.intro ?? 'Один и тот же паттерн может помогать в работе и одновременно создавать нагрузку. Ниже — где это может быть заметно в решениях, команде и делегировании.'}>
+      {areas.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+          {areas.map((area, i) => (
+            <BentoTile key={i} tone="beige" padding="0.9rem 1rem">
+              {area.title && (
+                <div style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, color: toneSurface('beige').text, marginBottom: '0.35rem' }}>
+                  {area.title}
+                </div>
+              )}
+              <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.6, color: VS.text.body }}>
+                {sanitizeUserText(area.text) ?? area.text}
+              </p>
+            </BentoTile>
+          ))}
+        </div>
+      )}
+      {(strengths.length > 0 || risks.length > 0) && (
+        <div className="mlm-bi-sr-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', marginTop: areas.length > 0 ? '0.75rem' : '0' }}>
+          {strengths.length > 0 && (
+            <BentoTile tone="green" padding="0.9rem 1rem">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.52rem' }}>
+                <MLIcon name="check" tone="green" size={14} />
+                <div style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, color: toneSurface('green').text }}>Сильная сторона</div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                {strengths.map((s, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '0.45rem', alignItems: 'flex-start', fontSize: '12.5px', color: '#2f5746', lineHeight: 1.55 }}>
+                    <span style={{ width: 4, height: 4, borderRadius: 999, background: toneSurface('green').deep, flexShrink: 0, marginTop: '0.45em' }} />
+                    {s}
+                  </div>
+                ))}
+              </div>
+            </BentoTile>
+          )}
+          {risks.length > 0 && (
+            <BentoTile tone="red" padding="0.9rem 1rem">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.52rem' }}>
+                <MLIcon name="warning" tone="red" size={14} />
+                <div style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, color: toneSurface('red').text }}>Риск</div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                {risks.map((r, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '0.45rem', alignItems: 'flex-start', fontSize: '12.5px', color: '#8a3a28', lineHeight: 1.55 }}>
+                    <span style={{ width: 4, height: 4, borderRadius: 999, background: toneSurface('red').deep, flexShrink: 0, marginTop: '0.45em' }} />
+                    {r}
+                  </div>
+                ))}
+              </div>
+            </BentoTile>
+          )}
+        </div>
+      )}
+    </SectionShell>
+  );
+}
+
 // ── Main export ───────────────────────────────────────────────────────────────
 
 function EvidenceLayerSectionExact({ report, activeNodes, onOpen }: {
@@ -3923,6 +4053,10 @@ export function ReportV2Dashboard({ report, createdAt }: {
         .mlm-translation-grid { display: grid; grid-template-columns: 1fr 1fr; }
         .mlm-translation-phrase { border-right: 1px solid rgba(118,92,68,0.10); }
         @media (max-width: 640px) {
+          /* Attention blind: collapse 2-col to 1-col */
+          .mlm-blind-grid { grid-template-columns: 1fr !important; }
+          /* Business impact strengths/risks: collapse 2-col to 1-col */
+          .mlm-bi-sr-grid { grid-template-columns: 1fr !important; }
           /* Heatmap info cards: [active|scale] on row1, [focus full-width] on row2 */
           .mlm-heatmap-info-grid { grid-template-columns: 1fr 1fr !important; }
           .mlm-heatmap-info-active { grid-column: 1 !important; grid-row: 1 !important; }
@@ -4091,19 +4225,28 @@ export function ReportV2Dashboard({ report, createdAt }: {
       {/* 10 — Node graph */}
       <NodeGraphSection nodeGraph={report.node_graph} activeNodes={activeNodes} />
 
-      {/* 11 — Trajectory */}
+      {/* 11 — Attention route */}
+      {report.attention_route && <AttentionRouteSectionExact ar={report.attention_route} />}
+
+      {/* 12 — Attention blind */}
+      {report.attention_blind && <AttentionBlindSectionExact ab={report.attention_blind} />}
+
+      {/* 13 — Business impact */}
+      {report.business_impact && <BusinessImpactSectionExact bi={report.business_impact} />}
+
+      {/* 14 — Trajectory */}
       <TrajectorySection trajectory={report.trajectory} />
 
-      {/* 12 — Layers */}
+      {/* 15 — Layers */}
       {layers.length > 0 && <LayersSectionExact layers={layers} onOpen={openSheet} />}
 
-      {/* 13 — Evidence layer */}
+      {/* 16 — Evidence layer */}
       <EvidenceLayerSectionExact report={report} activeNodes={activeNodes} onOpen={openSheet} />
 
-      {/* 14 — Markers */}
+      {/* 17 — Markers */}
       {markers.length > 0 && <MarkersSectionExact markers={markers} onOpen={openSheet} />}
 
-      {/* 15 — Practices */}
+      {/* 18 — Practices */}
       {practices.length > 0 && <PracticesSectionExact practices={practices} activeNodes={activeNodes} />}
 
       {/* Feedback — disabled (no backend; feedback_config.enabled always false) */}
