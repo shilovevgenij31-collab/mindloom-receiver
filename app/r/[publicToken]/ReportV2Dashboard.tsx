@@ -4060,43 +4060,41 @@ export function ReportV2Dashboard({ report, createdAt }: {
       {/* 1 — Hero */}
       <HeroSection report={report} createdAt={createdAt} />
 
-      {/* 1b — Overheat tile (moved out of Hero) */}
-      <OverheatTile report={report} activeNodes={activeNodes} />
-
-      {/* 2 — Snapshot */}
-      {snapshotData && <SnapshotSectionExact snap={snapshotData} />}
-
-      {/* 3 — How to read (now a sheet triggered from Hero button) */}
-
-      {/* 4 — Growth blocker */}
-      <GrowthBlockerSectionExact report={report} />
-
-      {/* 5 — Protected need */}
-      {protectedNeedData && <ProtectedNeedSectionExact pn={protectedNeedData} />}
-
-      {/* 6 — Phrase microscope */}
-      <PhraseMicroscopeSectionExact pm={phraseMicroscopeData ?? undefined} />
-
-      {/* 7 — Honest translation */}
-      {honestTranslationData && <HonestTranslationSectionExact ht={honestTranslationData} />}
-
-      {/* 8 — Key phrases / speech cloud */}
+      {/* 2 — Key phrases / speech cloud */}
       <MindloomPhraseCloud phrases={directPhrases} analyticalThemes={analyticalThemes} centralMeaning={phraseMicroscopeData?.summary ?? report.hero.title ?? null} />
 
-      {/* 9 — Heatmap */}
+      {/* 3 — Overheat tile */}
+      <OverheatTile report={report} activeNodes={activeNodes} />
+
+      {/* 4 — Heatmap */}
       <HeatmapSection heatmap={report.heatmap} activeNodes={activeNodes} graphNodes={report.node_graph.nodes} keyPhrases={keyPhrases} />
+
+      {/* 5 — Snapshot */}
+      {snapshotData && <SnapshotSectionExact snap={snapshotData} />}
+
+      {/* 6 — Growth blocker */}
+      <GrowthBlockerSectionExact report={report} />
+
+      {/* 7 — Protected need */}
+      {protectedNeedData && <ProtectedNeedSectionExact pn={protectedNeedData} />}
+
+      {/* 8 — Phrase microscope */}
+      <PhraseMicroscopeSectionExact pm={phraseMicroscopeData ?? undefined} />
+
+      {/* 9 — Honest translation */}
+      {honestTranslationData && <HonestTranslationSectionExact ht={honestTranslationData} />}
 
       {/* 10 — Node graph */}
       <NodeGraphSection nodeGraph={report.node_graph} activeNodes={activeNodes} />
 
-      {/* 11 — Evidence layer */}
-      <EvidenceLayerSectionExact report={report} activeNodes={activeNodes} onOpen={openSheet} />
-
-      {/* 12 — Trajectory */}
+      {/* 11 — Trajectory */}
       <TrajectorySection trajectory={report.trajectory} />
 
-      {/* 13 — Layers */}
+      {/* 12 — Layers */}
       {layers.length > 0 && <LayersSectionExact layers={layers} onOpen={openSheet} />}
+
+      {/* 13 — Evidence layer */}
+      <EvidenceLayerSectionExact report={report} activeNodes={activeNodes} onOpen={openSheet} />
 
       {/* 14 — Markers */}
       {markers.length > 0 && <MarkersSectionExact markers={markers} onOpen={openSheet} />}
