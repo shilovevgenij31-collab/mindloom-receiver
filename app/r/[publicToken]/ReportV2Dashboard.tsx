@@ -70,7 +70,7 @@ function SnapshotSectionExact({ snap }: { snap: NonNullable<MindloomReportV2['sn
   const hasContent = three_signals.length > 0 || has(first_step);
   if (!hasContent) return null;
   return (
-    <SectionShell title="Где это видно" icon="spark" intro="Этот блок показывает конкретные признаки из материала, по которым заметен главный паттерн.">
+    <SectionShell title="Как проявляется паттерн" icon="spark" intro="Здесь собраны признаки из материала, по которым видно, как проявляется паттерн.">
       <SharedPanel padding="1.18rem 1rem">
         {three_signals.length > 0 && (
           <div>
@@ -90,9 +90,9 @@ function SnapshotSectionExact({ snap }: { snap: NonNullable<MindloomReportV2['sn
         <div style={{ marginTop: '0.75rem', borderRadius: 22, padding: '1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start', background: 'linear-gradient(135deg, #edf9f3, #e3f2eb)', border: '1px solid rgba(104,169,141,0.28)' }}>
           <MLIcon name="leaf" tone="green" size={18} />
           <div>
-            <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Что можно начать замечать</div>
+            <div style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Как начать замечать паттерн</div>
             <p style={{ margin: '0.35rem 0 0', fontSize: '14px', fontWeight: 650, color: '#201d1b', lineHeight: 1.4 }}>{sanitizeUserText(first_step) ?? first_step}</p>
-            <p style={{ margin: '0.4rem 0 0', fontSize: '11.5px', color: '#4a7a62', lineHeight: 1.5 }}>Не нужно менять всё сразу. Начните замечать момент, когда паттерн включается автоматически.</p>
+            <p style={{ margin: '0.4rem 0 0', fontSize: '11.5px', color: '#4a7a62', lineHeight: 1.5 }}>Не нужно менять всё сразу. Начните замечать момент, когда этот паттерн включается.</p>
           </div>
         </div>
       )}
@@ -107,7 +107,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
   const systemGoal = report.desired_state.explicit_request ?? report.desired_state.hidden_request ?? report.desired_state.future_state;
   if (!has(quote) && !has(blocker) && !has(repeat) && !has(systemGoal)) return null;
   return (
-    <SectionShell title="Что поддерживает паттерн" icon="target" intro="Здесь показано, из-за чего паттерн включается, что он помогает почувствовать на короткое время и куда можно двигаться дальше.">
+    <SectionShell title="Что поддерживает паттерн" icon="target" intro="Здесь показано, из-за чего паттерн включается, что он даёт на короткое время и что можно попробовать вместо этого.">
       {has(quote) && (
         <div style={{ borderRadius: 28, padding: '1.2rem 1.1rem', position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg, #fff4f1 0%, #fff8e8 100%)', border: '1px solid rgba(228,111,97,0.13)' }}>
           <div style={{ position: 'absolute', top: 14, right: 16, color: 'rgba(228,111,97,0.28)' }}>
@@ -130,14 +130,14 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
         {has(repeat) && (
           <div style={{ borderRadius: VS.r.md, padding: '1rem', background: '#f5f3ff', border: '1px solid rgba(127,104,217,0.16)' }}>
             <MLIcon name="cycle" tone="purple" size={16} />
-            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#4d3aa6' }}>Что помогает почувствовать</div>
+            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#4d3aa6' }}>Что это даёт на короткое время</div>
             <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#4a4060' }}>{sanitizeUserText(repeat)}</div>
           </div>
         )}
         {has(systemGoal) && (
           <div style={{ borderRadius: VS.r.md, padding: '1rem', background: 'linear-gradient(135deg, #eef9f4, #e6f3ec)', border: '1px solid rgba(104,169,141,0.20)' }}>
             <MLIcon name="compass" tone="green" size={16} />
-            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Куда можно двигаться</div>
+            <div style={{ marginTop: '0.5rem', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Что можно попробовать вместо этого</div>
             <div style={{ marginTop: 5, fontSize: '12.5px', lineHeight: 1.6, color: '#315a49' }}>{sanitizeUserText(systemGoal)}</div>
           </div>
         )}
@@ -149,7 +149,7 @@ function GrowthBlockerSectionExact({ report }: { report: MindloomReportV2 }) {
 function ProtectedNeedSectionExact({ pn }: { pn: NonNullable<MindloomReportV2['protected_need']> }) {
   const { title, description, named, strategy_gets, sacrificed, leading_need, interpretation } = pn;
   return (
-    <SectionShell title={title ?? 'Что паттерн может защищать'} icon="shield" intro="Этот блок помогает понять, какая потребность может стоять за паттерном и к чему приводит привычный способ справляться.">
+    <SectionShell title={title ?? 'Что паттерн может защищать'} icon="shield" intro="Этот блок помогает понять, какая потребность может стоять за паттерном и что становится труднее при этом способе.">
       {has(leading_need) && (
         <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 28, padding: '1rem', background: 'linear-gradient(140deg, #eef7ff 0%, #eef9f4 100%)', border: '1px solid rgba(74,149,211,0.16)' }}>
           <div style={{ position: 'absolute', top: -36, right: -24, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(74,149,211,0.14), transparent 70%)', filter: 'blur(8px)' }} />
@@ -164,9 +164,9 @@ function ProtectedNeedSectionExact({ pn }: { pn: NonNullable<MindloomReportV2['p
         </div>
       )}
       <div style={{ display: 'grid', gap: '0.7rem', marginTop: '0.75rem' }}>
-        <TagGroup label="Что слышно в вашей речи" tone="blue" icon="speech" items={named} />
-        <TagGroup label="Что это помогает почувствовать" tone="yellow" icon="target" items={strategy_gets} />
-        <TagGroup label="К чему это приводит" tone="red" icon="warning" items={sacrificed} />
+        <TagGroup label="Какая потребность за этим слышна" tone="blue" icon="speech" items={named} />
+        <TagGroup label="Что это даёт на короткое время" tone="yellow" icon="target" items={strategy_gets} />
+        <TagGroup label="Что становится труднее" tone="red" icon="warning" items={sacrificed} />
       </div>
       {has(interpretation) && (
         <div style={{ marginTop: '0.9rem', paddingInline: '0.1rem', fontSize: '13.5px', lineHeight: 1.6, color: '#7d746b', fontStyle: 'italic' }}>
@@ -237,20 +237,19 @@ function HonestTranslationSectionExact({ ht }: { ht: NonNullable<MindloomReportV
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {visible.map((item, i) => (
           <div key={i} style={{ borderRadius: VS.r.lg, overflow: 'hidden', border: '1px solid rgba(118,92,68,0.13)', background: '#fffdf8', boxShadow: VS.shadow.card }}>
-            <div className="mlm-translation-row" style={{ padding: '0.9rem 1rem', display: 'flex', alignItems: 'flex-start', gap: '0.7rem', background: '#faf6ef' }}>
-              <div className="mlm-translation-label" style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#7d746b', flexShrink: 0, marginTop: 3 }}>Фраза</div>
-              {has(item.as_said) && <div style={{ fontSize: '14px', color: '#7d746b', lineHeight: 1.58, fontStyle: 'italic' }}>{`«${item.as_said}»`}</div>}
-            </div>
-            <div style={{ position: 'relative', height: 0 }}>
-              <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: -12, width: 24, height: 24, borderRadius: 999, display: 'grid', placeItems: 'center', background: '#edf9f3', border: '1px solid rgba(104,169,141,0.25)', color: '#68a98d', fontSize: 11, opacity: 0.82 }}>↓</div>
-            </div>
-            <div className="mlm-translation-row" style={{ padding: '1.1rem 1rem 0.95rem', display: 'flex', alignItems: 'flex-start', gap: '0.7rem', background: 'linear-gradient(135deg, #edf9f3, #e3f2eb)' }}>
-              <div className="mlm-translation-label" style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a', flexShrink: 0, marginTop: 3 }}>Что может за этим стоять</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                {has(item.more_honest) && <div style={{ fontSize: '13.5px', fontWeight: 620, color: '#1e3e30', lineHeight: 1.58 }}>{sanitizeUserText(item.more_honest) ?? item.more_honest}</div>}
-                {has(item.explanation) && item.explanation !== item.more_honest && item.explanation.trim().toLowerCase() !== item.more_honest?.trim().toLowerCase() && (
-                  <div style={{ marginTop: 7, fontSize: '12px', color: '#5f7369', lineHeight: 1.55, borderTop: '1px solid rgba(104,169,141,0.18)', paddingTop: 7 }}>{sanitizeUserText(item.explanation) ?? item.explanation}</div>
-                )}
+            <div className="mlm-translation-grid">
+              <div className="mlm-translation-row mlm-translation-phrase" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', background: '#faf6ef' }}>
+                <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#7d746b' }}>Фраза из материала</div>
+                {has(item.as_said) && <div style={{ fontSize: '14px', color: '#7d746b', lineHeight: 1.58, fontStyle: 'italic' }}>{`«${item.as_said}»`}</div>}
+              </div>
+              <div className="mlm-translation-row" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', background: 'linear-gradient(135deg, #edf9f3, #e3f2eb)' }}>
+                <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#3f6e5a' }}>Что может за этим стоять</div>
+                <div style={{ minWidth: 0 }}>
+                  {has(item.more_honest) && <div style={{ fontSize: '13.5px', fontWeight: 620, color: '#1e3e30', lineHeight: 1.58 }}>{sanitizeUserText(item.more_honest) ?? item.more_honest}</div>}
+                  {has(item.explanation) && item.explanation !== item.more_honest && item.explanation.trim().toLowerCase() !== item.more_honest?.trim().toLowerCase() && (
+                    <div style={{ marginTop: 7, fontSize: '12px', color: '#5f7369', lineHeight: 1.55, borderTop: '1px solid rgba(104,169,141,0.18)', paddingTop: 7 }}>{sanitizeUserText(item.explanation) ?? item.explanation}</div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -723,7 +722,7 @@ function edgeTypeLabel(type?: string): string {
     case 'normal': return 'Обычная';
     case 'soft': return 'Мягкая';
     case 'choice_available': return 'Выбор открыт';
-    case 'choice_blocked': return 'Выбор заблокирован';
+    case 'choice_blocked': return 'Выбор сужается';
     default: return type ?? '';
   }
 }
@@ -733,7 +732,7 @@ function buildHumanEdgeTitle(fromLabel: string, toLabel: string, edgeType: strin
   const from = fromLabel || 'Тема';
   const to = toLabel || 'Тема';
   switch (edgeType) {
-    case 'hard': return `${from} автоматически запускает ${to}.`;
+    case 'hard': return `${from} может усиливать ${to}.`;
     case 'choice_blocked': return `${from} ведёт к ${to} — выбор здесь переживается как недоступный.`;
     case 'normal': return `${from} усиливает ${to}.`;
     case 'soft': return `${from} слабо связан с ${to}.`;
@@ -1618,7 +1617,7 @@ function ReportDetailSheet({ state, onClose }: {
   const pct = (state.percent != null) ? clampInt(state.percent) : null;
 
   const edgeMeaning: Record<string, string> = {
-    hard: 'Связь срабатывает быстро и почти автоматически.',
+    hard: 'Связь срабатывает быстро и устойчиво.',
     normal: 'Связь заметно поддерживает паттерн.',
     soft: 'Связь проявляется слабее или не всегда.',
     choice_available: 'Здесь может появляться пространство выбора.',
@@ -2760,7 +2759,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
     { type: 'normal', label: 'Обычная', description: 'поддерживает паттерн' },
     { type: 'soft', label: 'Ослабленная', description: 'проявляется не всегда' },
     { type: 'choice_available', label: 'Есть выбор', description: 'можно ослаблять' },
-    { type: 'choice_blocked', label: 'Выбора нет', description: 'как автоматизм' },
+    { type: 'choice_blocked', label: 'Выбор сужается', description: 'как автоматизм' },
   ];
   const rawLegend = legend.length > 0 ? legend : defaultLegend;
   const legendItems = rawLegend.filter((item, idx) => rawLegend.findIndex(x => (x.type ?? 'normal') === (item.type ?? 'normal')) === idx);
@@ -2972,7 +2971,7 @@ function NeuroNodeGraph({ graphNodes, activeNodes, edges, centralNodeId, legend,
               : nodeLower.includes('вина') || nodeLower.includes('отдых')
                 ? 'Эта тема связана с внутренним напряжением вокруг разрешения или запрета на что-то важное.'
                 : nodeLower.includes('ценность') || nodeLower.includes('убежд')
-                  ? 'Это убеждение или ценность, которое автоматически запускает поведение и оценку ситуации.'
+                  ? 'Это убеждение или ценность, которое может запускать поведение и оценку ситуации.'
                   : nodeLower.includes('тело') || nodeLower.includes('телес') || nodeLower.includes('перегрев')
                     ? 'Здесь паттерн проявляется через тело — усталость, напряжение, физическую реакцию.'
                     : 'Это повторяющаяся тема, которая участвует в общей цепочке паттерна.';
@@ -3281,11 +3280,15 @@ function HeroSection({ report, createdAt }: { report: MindloomReportV2; createdA
             </p>
           )}
 
-          <div style={{ marginBottom: '0.9rem', borderRadius: 14, padding: '0.75rem 0.95rem', background: 'rgba(255,255,255,0.58)', border: '1px solid rgba(118,92,68,0.11)' }}>
-            <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.6, color: '#4a4038' }}>
+          <div style={{ marginBottom: '0.9rem', borderRadius: 14, padding: '0.9rem 1rem 0.9rem 1.1rem', background: '#fff8f3', border: '1.5px solid rgba(228,111,97,0.28)', boxShadow: '0 2px 10px rgba(70,53,35,0.07)', borderLeft: '3px solid #e46f61' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: '0.48rem' }}>
+              <span style={{ fontSize: 13, lineHeight: 1 }}>⚠</span>
+              <span style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, color: '#b8472e' }}>Важно знать</span>
+            </div>
+            <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.6, color: '#3e2d28' }}>
               Это психологический аналитический отчёт Mindloom по вашему материалу. Это не медицинская справка, не диагноз и не замена специалиста. Ниже — гипотеза о том, какой повторяющийся паттерн заметен, где он проявляется и с чего можно начать.
             </p>
-            <p style={{ margin: '0.45rem 0 0', fontSize: '11.5px', lineHeight: 1.55, color: '#8a8077' }}>
+            <p style={{ margin: '0.45rem 0 0', fontSize: '11.5px', lineHeight: 1.55, color: '#8a7060' }}>
               Читайте сверху вниз: сначала — главный паттерн, затем — почему он повторяется, в конце — маленькие шаги.
             </p>
           </div>
@@ -3917,15 +3920,17 @@ export function ReportV2Dashboard({ report, createdAt }: {
     }}>
       {/* Mobile report CSS */}
       <style>{`
+        .mlm-translation-grid { display: grid; grid-template-columns: 1fr 1fr; }
+        .mlm-translation-phrase { border-right: 1px solid rgba(118,92,68,0.10); }
         @media (max-width: 640px) {
           /* Heatmap info cards: [active|scale] on row1, [focus full-width] on row2 */
           .mlm-heatmap-info-grid { grid-template-columns: 1fr 1fr !important; }
           .mlm-heatmap-info-active { grid-column: 1 !important; grid-row: 1 !important; }
           .mlm-heatmap-info-scale { grid-column: 2 !important; grid-row: 1 !important; }
           .mlm-heatmap-info-focus { grid-column: 1 / -1 !important; grid-row: 2 !important; }
-          /* HonestTranslation: stack label above text */
-          .mlm-translation-row { flex-direction: column !important; gap: 0.3rem !important; }
-          .mlm-translation-label { margin-top: 0 !important; }
+          /* HonestTranslation: stack phrase above meaning */
+          .mlm-translation-grid { grid-template-columns: 1fr !important; }
+          .mlm-translation-phrase { border-right: none !important; border-bottom: 1px solid rgba(118,92,68,0.10) !important; }
         }
         @media (max-width: 500px) {
           .mlm-causal-graph-panel { height: 400px !important; min-height: 400px !important; }
@@ -3939,7 +3944,6 @@ export function ReportV2Dashboard({ report, createdAt }: {
           .mlm-heatmap-info-active, .mlm-heatmap-info-scale, .mlm-heatmap-info-focus { grid-column: 1 !important; grid-row: auto !important; }
         }
         @media (max-width: 420px) {
-          .mlm-translation-grid { grid-template-columns: 1fr !important; }
           .mlm-causal-graph-panel { height: 380px !important; min-height: 380px !important; }
           .mlm-heatmap-canvas { height: 370px !important; }
           .mlm-heat-node strong { max-width: 84px !important; font-size: 0.66rem !important; }

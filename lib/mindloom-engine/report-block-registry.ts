@@ -40,7 +40,7 @@ export const ENGINE_REPORT_BLOCK_REGISTRY: EngineReportBlockDefinition[] = [
   { id: 'disclaimer', order: 2, title: 'Границы интерпретации', status: 'visible', feedbackEnabled: false, sourceFields: ['diff', 'meta.n_segments', 'dynamics.n_snapshots'] },
   { id: 'speech_cloud', order: 3, title: 'Что повторяется в речи', status: 'visible', feedbackEnabled: true, sourceFields: ['markers.markers', 'self_portrait.frequent_frames'] },
   { id: 'main_pattern', order: 4, title: 'Самый заметный паттерн', status: 'visible', feedbackEnabled: true, sourceFields: ['cards.cards', 'graph.ranked_hypotheses'] },
-  { id: 'where_visible', order: 5, title: 'Где это видно', status: 'visible', feedbackEnabled: true, sourceFields: ['graph.nodes[].evidence', 'cards.cards[].body'] },
+  { id: 'where_visible', order: 5, title: 'Как проявляется паттерн', status: 'visible', feedbackEnabled: true, sourceFields: ['graph.nodes[].evidence', 'cards.cards[].body'] },
   { id: 'pattern_support', order: 6, title: 'Что может поддерживать паттерн', status: 'visible', feedbackEnabled: false, sourceFields: ['graph.edges', 'graph.nodes', 'cards.cards'] },
   { id: 'pattern_protection', order: 7, title: 'Что паттерн может защищать', status: 'visible', feedbackEnabled: true, sourceFields: ['graph.edges', 'graph.nodes[].evidence'] },
   { id: 'phrase_microscope', order: 8, title: 'Что слышно в этой фразе', status: 'hidden', feedbackEnabled: false, sourceFields: ['attention_route.segments[].steps', 'markers.markers[].evidence'], hiddenReason: 'requires_phrase_segments', requires: ['phrase_segments'] },

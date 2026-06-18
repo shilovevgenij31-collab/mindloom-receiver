@@ -130,11 +130,11 @@ const MINDLOOM_PROMPT_PREFIX =
   '      }\n' +
   '    ],\n' +
   '    "legend": [\n' +
-  '      { "label": "жёсткая связь", "type": "hard", "description": "Один узел автоматически запускает другой." },\n' +
+  '      { "label": "жёсткая связь", "type": "hard", "description": "Одна тема может устойчиво усиливать другую." },\n' +
   '      { "label": "обычная связь", "type": "normal", "description": "Связь заметна, но не всегда доминирует." },\n' +
   '      { "label": "ослабленная связь", "type": "soft", "description": "Связь проявляется слабее или непостоянно." },\n' +
   '      { "label": "есть выбор", "type": "choice_available", "description": "Связь можно начать ослаблять осознанным действием." },\n' +
-  '      { "label": "выбора нет", "type": "choice_blocked", "description": "Связь переживается как автоматическая." }\n' +
+  '      { "label": "выбор сужается", "type": "choice_blocked", "description": "Связь переживается как автоматическая." }\n' +
   '    ],\n' +
   '    "how_to_read": [\n' +
   '      { "title": "need_safety → запускает → defense_control", "description": "Незакрытая потребность активирует защитный механизм." }\n' +
