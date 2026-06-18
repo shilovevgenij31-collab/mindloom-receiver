@@ -13,18 +13,13 @@
       ],
       "headline_text": "Здесь звучит закрытие рамки: говорящая предварительно исключает себя из права на выражение. Это не жёсткость, а мягкое, но твёрдое «я не должна».",
       "confidence_band": "green"
-    },
-    "feedback": {
-      "block_id": "main_pattern",
-      "block_title": "Самый заметный паттерн",
-      "enabled": true
     }
   },
   "disclaimer": {
     "shown": true,
     "data": {
       "n_sessions": 1,
-      "confidence_note": "Первая сессия — только предварительная картина. Уверенность: средняя — гипотеза, требует подтверждения.",
+      "confidence_note": "ÐŸÐµÑ€Ð²Ð°Ñ ÑÐµÑÑÐ¸Ñ â€” Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¿Ñ€ÐµÐ´Ð²Ð°Ñ€Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð°Ñ ÐºÐ°Ñ€Ñ‚Ð¸Ð½Ð°. Ð£Ð²ÐµÑ€ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ: ÑÑ€ÐµÐ´Ð½ÑÑ â€” Ð³Ð¸Ð¿Ð¾Ñ‚ÐµÐ·Ð°, Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ Ð¿Ð¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ð¸Ñ.",
       "l7_earned": false
     }
   },
@@ -49,7 +44,7 @@
     },
     "feedback": {
       "block_id": "speech_cloud",
-      "block_title": "Что повторяется в речи",
+      "block_title": "Ð§Ñ‚Ð¾ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑÐµÑ‚ÑÑ Ð² Ñ€ÐµÑ‡Ð¸",
       "enabled": true
     }
   },
@@ -61,7 +56,7 @@
     },
     "feedback": {
       "block_id": "main_pattern",
-      "block_title": "Самый заметный паттерн",
+      "block_title": "Ð¡Ð°Ð¼Ñ‹Ð¹ Ð·Ð°Ð¼ÐµÑ‚Ð½Ñ‹Ð¹ Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½",
       "enabled": true
     }
   },
@@ -70,9 +65,9 @@
     "data": {
       "segments": []
     },
-    "reason": "Тепловая карта — будет доступна с реальными данными из engine (diff.indices)"
+    "reason": "Ð¢ÐµÐ¿Ð»Ð¾Ð²Ð°Ñ ÐºÐ°Ñ€Ñ‚Ð° â€” Ð±ÑƒÐ´ÐµÑ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð° Ñ Ñ€ÐµÐ°Ð»ÑŒÐ½Ñ‹Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸ Ð¸Ð· engine (diff.indices)"
   },
-  "evidence": {
+  "where_visible": {
     "shown": true,
     "data": {
       "quotes": [
@@ -104,7 +99,7 @@
     },
     "feedback": {
       "block_id": "where_visible",
-      "block_title": "Где это видно",
+      "block_title": "Ð“Ð´Ðµ ÑÑ‚Ð¾ Ð²Ð¸Ð´Ð½Ð¾",
       "enabled": true
     }
   },
@@ -123,14 +118,9 @@
           "confidence": "f4:flight"
         }
       ]
-    },
-    "feedback": {
-      "block_id": "what_protects",
-      "block_title": "Что паттерн может защищать",
-      "enabled": true
     }
   },
-  "protection_purpose": {
+  "pattern_protection": {
     "shown": true,
     "data": {
       "items": [
@@ -147,8 +137,8 @@
       ]
     },
     "feedback": {
-      "block_id": "what_protects",
-      "block_title": "Что паттерн может защищать",
+      "block_id": "pattern_protection",
+      "block_title": "Ð§Ñ‚Ð¾ Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½ Ð¼Ð¾Ð¶ÐµÑ‚ Ð·Ð°Ñ‰Ð¸Ñ‰Ð°Ñ‚ÑŒ",
       "enabled": true
     }
   },
@@ -157,7 +147,7 @@
     "data": {
       "segments": []
     },
-    "reason": "Маршрут фраз доступен только с полным attention_route из engine"
+    "reason": "ÐœÐ°Ñ€ÑˆÑ€ÑƒÑ‚ Ñ„Ñ€Ð°Ð· Ð´Ð¾ÑÑ‚ÑƒÐ¿ÐµÐ½ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ Ð¿Ð¾Ð»Ð½Ñ‹Ð¼ attention_route Ð¸Ð· engine"
   },
   "graph": {
     "shown": true,
@@ -256,11 +246,11 @@
           "weight": -0.547
         }
       ],
-      "top_pattern": "Потребность: Принятие → Защита: Самоатака → Телесная реакция: Стыд"
+      "top_pattern": "Потребность: Принятие â†’ Защита: Самоатака â†’ Телесная реакция: Стыд"
     },
     "feedback": {
       "block_id": "graph",
-      "block_title": "Как темы усиливают друг друга",
+      "block_title": "ÐšÐ°Ðº Ñ‚ÐµÐ¼Ñ‹ ÑƒÑÐ¸Ð»Ð¸Ð²Ð°ÑŽÑ‚ Ð´Ñ€ÑƒÐ³ Ð´Ñ€ÑƒÐ³Ð°",
       "enabled": true
     }
   },
@@ -290,11 +280,11 @@
     },
     "feedback": {
       "block_id": "attention_route",
-      "block_title": "Маршрут внимания",
+      "block_title": "ÐœÐ°Ñ€ÑˆÑ€ÑƒÑ‚ Ð²Ð½Ð¸Ð¼Ð°Ð½Ð¸Ñ",
       "enabled": true
     }
   },
-  "blind_spots": {
+  "attention_blind": {
     "shown": true,
     "data": {
       "items": [
@@ -317,14 +307,14 @@
     },
     "feedback": {
       "block_id": "attention_blind",
-      "block_title": "Что внимание пропускает",
+      "block_title": "Ð§Ñ‚Ð¾ Ð²Ð½Ð¸Ð¼Ð°Ð½Ð¸Ðµ Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°ÐµÑ‚",
       "enabled": true
     }
   },
   "pattern_cycle": {
     "shown": true,
     "data": {
-      "description": "Защита: Самоатака + Защита: Рационализация → скрывает → Потребность: Принятие, Потребность: Признание",
+      "description": "Защита: Самоатака + Защита: Рационализация â†’ ÑÐºÑ€Ñ‹Ð²Ð°ÐµÑ‚ â†’ Потребность: Принятие, Потребность: Признание",
       "based_on": "Защита: Самоатака"
     }
   },
@@ -333,7 +323,7 @@
     "data": {
       "segments": []
     },
-    "reason": "Карта уровней будет заполнена с реальными diff данными из engine"
+    "reason": "ÐšÐ°Ñ€Ñ‚Ð° ÑƒÑ€Ð¾Ð²Ð½ÐµÐ¹ Ð±ÑƒÐ´ÐµÑ‚ Ð·Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð° Ñ Ñ€ÐµÐ°Ð»ÑŒÐ½Ñ‹Ð¼Ð¸ diff Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸ Ð¸Ð· engine"
   },
   "evidence_basis": {
     "shown": true,
@@ -372,7 +362,7 @@
       "signals": [],
       "adaptivity": ""
     },
-    "reason": "Первая сессия — динамика недоступна (нужно ≥3 эпизодов)"
+    "reason": "ÐŸÐµÑ€Ð²Ð°Ñ ÑÐµÑÑÐ¸Ñ â€” Ð´Ð¸Ð½Ð°Ð¼Ð¸ÐºÐ° Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð° (Ð½ÑƒÐ¶Ð½Ð¾ â‰¥3 ÑÐ¿Ð¸Ð·Ð¾Ð´Ð¾Ð²)"
   },
   "practices": {
     "shown": true,
@@ -383,14 +373,14 @@
           "source": "try_this"
         },
         {
-          "text": "я просто слишком чувствительная → я чувствую глубже — это часть меня",
+          "text": "я просто слишком чувствительная â†’ я чувствую глубже — это часть меня",
           "source": "transition_map"
         }
       ]
     },
     "feedback": {
       "block_id": "practices",
-      "block_title": "Практики — маленькие шаги",
+      "block_title": "ÐŸÑ€Ð°ÐºÑ‚Ð¸ÐºÐ¸ â€” Ð¼Ð°Ð»ÐµÐ½ÑŒÐºÐ¸Ðµ ÑˆÐ°Ð³Ð¸",
       "enabled": true
     }
   },
@@ -399,10 +389,10 @@
     "data": null,
     "feedback": {
       "block_id": "business_impact",
-      "block_title": "Бизнес-влияние",
+      "block_title": "Ð‘Ð¸Ð·Ð½ÐµÑ-Ð²Ð»Ð¸ÑÐ½Ð¸Ðµ",
       "enabled": false
     },
-    "reason": "Бизнес-анализ требует дополнительного prompt layer — не входит в MVP"
+    "reason": "Ð‘Ð¸Ð·Ð½ÐµÑ-Ð°Ð½Ð°Ð»Ð¸Ð· Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ Ð´Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð³Ð¾ prompt layer â€” Ð½Ðµ Ð²Ñ…Ð¾Ð´Ð¸Ñ‚ Ð² MVP"
   },
   "meta": {
     "n_sessions": 1,
@@ -410,6 +400,6 @@
     "has_self_portrait": false,
     "care_flag": false,
     "confidence_summary": "yellow",
-    "generated_at": "2026-06-17T19:18:01.358Z"
+    "generated_at": "2026-06-18T10:08:57.849Z"
   }
 }

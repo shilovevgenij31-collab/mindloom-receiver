@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Test script for the Mindloom Engine adapter layer.
  * Mirrors the TypeScript logic from lib/mindloom-engine/ in pure JS so it runs
  * without tsx or ts-node. Output: artifacts/report-v2-from-engine-mock.json
@@ -13,23 +13,31 @@ import { dirname, join } from 'path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 
-// ── Load mock ─────────────────────────────────────────────────────────────────
+// â”€â”€ Load mock â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const mockPath = join(ROOT, 'lib', 'mindloom-engine', 'mock-engine-output.json');
 const engine = JSON.parse(readFileSync(mockPath, 'utf8'));
 
-// ── Feedback block registry ────────────────────────────────────────────────────
+
+// ── Alias map (mirrors ENGINE_REPORT_BLOCK_ALIASES in report-block-registry.ts) ──
+
+const BLOCK_ALIASES = {
+  evidence: 'where_visible',
+  protection_purpose: 'pattern_protection',
+  blind_spots: 'attention_blind',
+};
+// â”€â”€ Feedback block registry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const FEEDBACK_BLOCKS = [
-  { block_id: 'main_pattern',    block_title: 'Самый заметный паттерн',        enabled: true },
-  { block_id: 'speech_cloud',    block_title: 'Что повторяется в речи',         enabled: true },
-  { block_id: 'where_visible',   block_title: 'Где это видно',                  enabled: true },
-  { block_id: 'what_protects',   block_title: 'Что паттерн может защищать',     enabled: true },
-  { block_id: 'attention_route', block_title: 'Маршрут внимания',               enabled: true },
-  { block_id: 'attention_blind', block_title: 'Что внимание пропускает',        enabled: true },
-  { block_id: 'graph',           block_title: 'Как темы усиливают друг друга',  enabled: true },
-  { block_id: 'business_impact', block_title: 'Бизнес-влияние',                 enabled: false },
-  { block_id: 'practices',       block_title: 'Практики — маленькие шаги',      enabled: true },
+  { block_id: 'main_pattern',    block_title: 'Ð¡Ð°Ð¼Ñ‹Ð¹ Ð·Ð°Ð¼ÐµÑ‚Ð½Ñ‹Ð¹ Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½',        enabled: true },
+  { block_id: 'speech_cloud',    block_title: 'Ð§Ñ‚Ð¾ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑÐµÑ‚ÑÑ Ð² Ñ€ÐµÑ‡Ð¸',         enabled: true },
+  { block_id: 'where_visible',   block_title: 'Ð“Ð´Ðµ ÑÑ‚Ð¾ Ð²Ð¸Ð´Ð½Ð¾',                  enabled: true },
+  { block_id: 'pattern_protection',   block_title: 'Ð§Ñ‚Ð¾ Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½ Ð¼Ð¾Ð¶ÐµÑ‚ Ð·Ð°Ñ‰Ð¸Ñ‰Ð°Ñ‚ÑŒ',     enabled: true },
+  { block_id: 'attention_route', block_title: 'ÐœÐ°Ñ€ÑˆÑ€ÑƒÑ‚ Ð²Ð½Ð¸Ð¼Ð°Ð½Ð¸Ñ',               enabled: true },
+  { block_id: 'attention_blind', block_title: 'Ð§Ñ‚Ð¾ Ð²Ð½Ð¸Ð¼Ð°Ð½Ð¸Ðµ Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°ÐµÑ‚',        enabled: true },
+  { block_id: 'graph',           block_title: 'ÐšÐ°Ðº Ñ‚ÐµÐ¼Ñ‹ ÑƒÑÐ¸Ð»Ð¸Ð²Ð°ÑŽÑ‚ Ð´Ñ€ÑƒÐ³ Ð´Ñ€ÑƒÐ³Ð°',  enabled: true },
+  { block_id: 'business_impact', block_title: 'Ð‘Ð¸Ð·Ð½ÐµÑ-Ð²Ð»Ð¸ÑÐ½Ð¸Ðµ',                 enabled: false },
+  { block_id: 'practices',       block_title: 'ÐŸÑ€Ð°ÐºÑ‚Ð¸ÐºÐ¸ â€” Ð¼Ð°Ð»ÐµÐ½ÑŒÐºÐ¸Ðµ ÑˆÐ°Ð³Ð¸',      enabled: true },
 ];
 
 function getFeedback(blockId) {
@@ -46,7 +54,7 @@ function mkBlock(shown, blockId, data, reason) {
   };
 }
 
-// ── Normalize ─────────────────────────────────────────────────────────────────
+// â”€â”€ Normalize â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function labelOf(nodes, nodeId) {
   return nodes.find((n) => n.node_id === nodeId)?.display_label ?? nodeId;
@@ -155,8 +163,8 @@ function normalize(eng) {
 
   const topHyp = eng.graph?.ranked_hypotheses?.[0];
   const ranked_pattern = topHyp
-    ? topHyp.active_nodes.map((id) => labelOf(nodes, id)).join(' → ')
-    : top_nodes.slice(0, 3).map((n) => n.display_label).join(' → ');
+    ? topHyp.active_nodes.map((id) => labelOf(nodes, id)).join(' â†’ ')
+    : top_nodes.slice(0, 3).map((n) => n.display_label).join(' â†’ ');
 
   const graph = {
     top_nodes, key_edges,
@@ -199,7 +207,7 @@ function normalize(eng) {
   // practices
   const practices = [
     ...cards.filter((c) => c.id === 'try_this').map((c) => ({ text: c.body, source: 'try_this' })),
-    ...(eng.transition_map?.replacements ?? []).filter((r) => r.relevant).map((r) => ({ text: `${r.old} → ${r.new}`, source: 'transition_map' })),
+    ...(eng.transition_map?.replacements ?? []).filter((r) => r.relevant).map((r) => ({ text: `${r.old} â†’ ${r.new}`, source: 'transition_map' })),
   ];
 
   // semantic_map
@@ -242,7 +250,7 @@ function normalize(eng) {
     engine_input_id: eng.input_id,
     session_type,
     main_pattern: {
-      regime_folk: contactRegime?.display_label ?? 'Режим контакта',
+      regime_folk: contactRegime?.display_label ?? 'Ð ÐµÐ¶Ð¸Ð¼ ÐºÐ¾Ð½Ñ‚Ð°ÐºÑ‚Ð°',
       top_defense_labels: topDefenses.map((n) => n.display_label ?? n.node_id),
       contact_mode_text: contactModeCard?.body ?? '',
       confidence_band: topDefenseBand,
@@ -255,7 +263,7 @@ function normalize(eng) {
   };
 }
 
-// ── Map to ReportV2 ───────────────────────────────────────────────────────────
+// â”€â”€ Map to ReportV2 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function mapToReportV2(n) {
   const isFirst = n.session_type === 'first';
@@ -271,16 +279,16 @@ function mapToReportV2(n) {
   const l7Earned = n.attention_route.path.some((p) => p.level === 'L7' && p.earned);
 
   function confNote(band, first) {
-    const sn = first ? 'Первая сессия — только предварительная картина.' : '';
-    const bn = band === 'green' ? 'Уверенность: высокая.'
-      : band === 'yellow' ? 'Уверенность: средняя — гипотеза, требует подтверждения.'
-      : 'Уверенность: низкая — наблюдение, не интерпретация.';
+    const sn = first ? 'ÐŸÐµÑ€Ð²Ð°Ñ ÑÐµÑÑÐ¸Ñ â€” Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¿Ñ€ÐµÐ´Ð²Ð°Ñ€Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð°Ñ ÐºÐ°Ñ€Ñ‚Ð¸Ð½Ð°.' : '';
+    const bn = band === 'green' ? 'Ð£Ð²ÐµÑ€ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ: Ð²Ñ‹ÑÐ¾ÐºÐ°Ñ.'
+      : band === 'yellow' ? 'Ð£Ð²ÐµÑ€ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ: ÑÑ€ÐµÐ´Ð½ÑÑ â€” Ð³Ð¸Ð¿Ð¾Ñ‚ÐµÐ·Ð°, Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ Ð¿Ð¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ð¸Ñ.'
+      : 'Ð£Ð²ÐµÑ€ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ: Ð½Ð¸Ð·ÐºÐ°Ñ â€” Ð½Ð°Ð±Ð»ÑŽÐ´ÐµÐ½Ð¸Ðµ, Ð½Ðµ Ð¸Ð½Ñ‚ÐµÑ€Ð¿Ñ€ÐµÑ‚Ð°Ñ†Ð¸Ñ.';
     return [sn, bn].filter(Boolean).join(' ');
   }
 
   const unmetNeeds = n.needs.unmet.map((nd) => nd.label);
   const cycleDesc = n.main_pattern.top_defense_labels.length > 0 && unmetNeeds.length > 0
-    ? `${n.main_pattern.top_defense_labels.join(' + ')} → скрывает → ${unmetNeeds.join(', ')}`
+    ? `${n.main_pattern.top_defense_labels.join(' + ')} â†’ ÑÐºÑ€Ñ‹Ð²Ð°ÐµÑ‚ â†’ ${unmetNeeds.join(', ')}`
     : null;
 
   return {
@@ -289,7 +297,7 @@ function mapToReportV2(n) {
     engine_input_id: n.engine_input_id,
     session_type: n.session_type,
 
-    hero: mkBlock(true, 'main_pattern', {
+    hero: mkBlock(true, 'hero', {
       regime_label: n.main_pattern.regime_folk,
       top_defenses: n.main_pattern.top_defense_labels,
       headline_text: headlineText,
@@ -306,7 +314,7 @@ function mapToReportV2(n) {
       hasMarkers || (n.self_portrait?.frames?.length ?? 0) > 0,
       'speech_cloud',
       { markers: n.speech_markers, frequent_frames: n.self_portrait?.frames ?? [] },
-      hasMarkers ? undefined : 'Маркеры не обнаружены в первой сессии'
+      hasMarkers ? undefined : 'ÐœÐ°Ñ€ÐºÐµÑ€Ñ‹ Ð½Ðµ Ð¾Ð±Ð½Ð°Ñ€ÑƒÐ¶ÐµÐ½Ñ‹ Ð² Ð¿ÐµÑ€Ð²Ð¾Ð¹ ÑÐµÑÑÐ¸Ð¸'
     ),
 
     main_pattern: mkBlock(
@@ -315,19 +323,19 @@ function mapToReportV2(n) {
       { contact_mode_text: n.main_pattern.contact_mode_text, confidence_band: n.main_pattern.confidence_band }
     ),
 
-    heatmap: mkBlock(false, null, { segments: [] }, 'Тепловая карта — будет доступна с реальными данными из engine (diff.indices)'),
+    heatmap: mkBlock(false, null, { segments: [] }, 'Ð¢ÐµÐ¿Ð»Ð¾Ð²Ð°Ñ ÐºÐ°Ñ€Ñ‚Ð° â€” Ð±ÑƒÐ´ÐµÑ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð° Ñ Ñ€ÐµÐ°Ð»ÑŒÐ½Ñ‹Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸ Ð¸Ð· engine (diff.indices)'),
 
-    evidence: mkBlock(n.evidence_quotes.length > 0, 'where_visible', { quotes: n.evidence_quotes }),
+    where_visible: mkBlock(n.evidence_quotes.length > 0, 'where_visible', { quotes: n.evidence_quotes }),
 
-    protection_support: mkBlock(n.protections.length > 0, 'what_protects', {
+    protection_support: mkBlock(n.protections.length > 0, 'pattern_support', {
       items: n.protections.map((p) => ({ defense_label: p.defense_label, evoked_by: p.evoked_by, confidence: p.f4 ? `f4:${p.f4}` : 'single-session' })),
     }),
 
-    protection_purpose: mkBlock(n.protections.length > 0, 'what_protects', {
+    pattern_protection: mkBlock(n.protections.length > 0, 'pattern_protection', {
       items: n.protections.map((p) => ({ defense_label: p.defense_label, masks: p.masks_label, quote: p.evidence_quote })),
     }),
 
-    phrases_meaning: mkBlock(false, null, { segments: [] }, 'Маршрут фраз доступен только с полным attention_route из engine'),
+    phrases_meaning: mkBlock(false, null, { segments: [] }, 'ÐœÐ°Ñ€ÑˆÑ€ÑƒÑ‚ Ñ„Ñ€Ð°Ð· Ð´Ð¾ÑÑ‚ÑƒÐ¿ÐµÐ½ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ Ð¿Ð¾Ð»Ð½Ñ‹Ð¼ attention_route Ð¸Ð· engine'),
 
     graph: mkBlock(n.graph.top_nodes.length > 0, 'graph', {
       nodes: n.graph.top_nodes,
@@ -337,7 +345,7 @@ function mapToReportV2(n) {
 
     attention_route: mkBlock(n.attention_route.path.length > 0, 'attention_route', { path: n.attention_route.path }),
 
-    blind_spots: mkBlock(hasBlindSpots, 'attention_blind', { items: n.blind_spots }),
+    attention_blind: mkBlock(hasBlindSpots, 'attention_blind', { items: n.blind_spots }),
 
     pattern_cycle: mkBlock(
       cycleDesc !== null,
@@ -345,7 +353,7 @@ function mapToReportV2(n) {
       cycleDesc ? { description: cycleDesc, based_on: topDefense } : { description: '', based_on: '' }
     ),
 
-    levels_visible: mkBlock(false, null, { segments: [] }, 'Карта уровней будет заполнена с реальными diff данными из engine'),
+    levels_visible: mkBlock(false, null, { segments: [] }, 'ÐšÐ°Ñ€Ñ‚Ð° ÑƒÑ€Ð¾Ð²Ð½ÐµÐ¹ Ð±ÑƒÐ´ÐµÑ‚ Ð·Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð° Ñ Ñ€ÐµÐ°Ð»ÑŒÐ½Ñ‹Ð¼Ð¸ diff Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸ Ð¸Ð· engine'),
 
     evidence_basis: mkBlock(n.evidence_quotes.length > 0, null, { quotes: n.evidence_quotes }),
 
@@ -353,12 +361,12 @@ function mapToReportV2(n) {
       !isFirst && n.dynamics !== null,
       null,
       n.dynamics ? { signals: n.dynamics.shift_signals, adaptivity: n.dynamics.adaptivity } : { signals: [], adaptivity: '' },
-      isFirst ? 'Первая сессия — динамика недоступна (нужно ≥3 эпизодов)' : undefined
+      isFirst ? 'ÐŸÐµÑ€Ð²Ð°Ñ ÑÐµÑÑÐ¸Ñ â€” Ð´Ð¸Ð½Ð°Ð¼Ð¸ÐºÐ° Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð° (Ð½ÑƒÐ¶Ð½Ð¾ â‰¥3 ÑÐ¿Ð¸Ð·Ð¾Ð´Ð¾Ð²)' : undefined
     ),
 
-    practices: mkBlock(hasPractices, 'practices', { items: n.practices }, hasPractices ? undefined : 'Практики не найдены'),
+    practices: mkBlock(hasPractices, 'practices', { items: n.practices }, hasPractices ? undefined : 'ÐŸÑ€Ð°ÐºÑ‚Ð¸ÐºÐ¸ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹'),
 
-    business_impact: mkBlock(false, 'business_impact', null, 'Бизнес-анализ требует дополнительного prompt layer — не входит в MVP'),
+    business_impact: mkBlock(false, 'business_impact', null, 'Ð‘Ð¸Ð·Ð½ÐµÑ-Ð°Ð½Ð°Ð»Ð¸Ð· Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ Ð´Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð³Ð¾ prompt layer â€” Ð½Ðµ Ð²Ñ…Ð¾Ð´Ð¸Ñ‚ Ð² MVP'),
 
     meta: {
       n_sessions: isFirst ? 1 : n.attention_route.n_snapshots,
@@ -371,7 +379,7 @@ function mapToReportV2(n) {
   };
 }
 
-// ── Run ───────────────────────────────────────────────────────────────────────
+// â”€â”€ Run â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const normalized = normalize(engine);
 const report = mapToReportV2(normalized);
@@ -380,7 +388,7 @@ mkdirSync(join(ROOT, 'artifacts'), { recursive: true });
 const outPath = join(ROOT, 'artifacts', 'report-v2-from-engine-mock.json');
 writeFileSync(outPath, JSON.stringify(report, null, 2), 'utf8');
 
-// ── Summary ───────────────────────────────────────────────────────────────────
+// â”€â”€ Summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const blocks = Object.entries(report).filter(([k, v]) =>
   k !== 'meta' && k !== 'report_version' && k !== 'source' &&
@@ -393,7 +401,7 @@ const hidden = blocks.filter(([, v]) => !v.shown).map(([k]) => k);
 const feedbackEnabled = blocks.filter(([, v]) => v.feedback?.enabled).map(([k]) => k);
 
 console.log('');
-console.log('✅ Adapter OK');
+console.log('âœ… Adapter OK');
 console.log(`   engine_input_id : ${report.engine_input_id}`);
 console.log(`   session_type    : ${report.session_type}`);
 console.log(`   confidence      : ${report.meta.confidence_summary}`);
@@ -405,3 +413,5 @@ console.log(`FEEDBACK ENABLED (${feedbackEnabled.length}): ${feedbackEnabled.joi
 console.log('');
 console.log(`Output: ${outPath}`);
 console.log('');
+
+
