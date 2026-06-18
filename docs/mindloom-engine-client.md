@@ -2,7 +2,7 @@
 
 Server-side HTTP client for the Mindloom Lite Engine (Python/FastAPI).
 
-See also: [mindloom-lite-engine-runtime-audit.md](mindloom-lite-engine-runtime-audit.md)
+See also: [mindloom-lite-engine-runtime-audit.md](mindloom-lite-engine-runtime-audit.md) · [mindloom-engine-integration-architecture.md](mindloom-engine-integration-architecture.md)
 
 ---
 

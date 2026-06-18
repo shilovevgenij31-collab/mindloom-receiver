@@ -79,4 +79,4 @@ Both are processed at build time (`force-static`). No live engine calls needed.
 | `lib/mindloom-engine/compare-report-sources.ts` | Deterministic comparison utility |
 | `docs/mindloom-engine-comparison.md` | This document |
 
-Related: [mindloom-engine-client.md](mindloom-engine-client.md), [mindloom-lite-engine-runtime-audit.md](mindloom-lite-engine-runtime-audit.md)
+Related: [mindloom-engine-client.md](mindloom-engine-client.md), [mindloom-lite-engine-runtime-audit.md](mindloom-lite-engine-runtime-audit.md), [mindloom-engine-integration-architecture.md](mindloom-engine-integration-architecture.md)
